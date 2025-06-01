@@ -14,14 +14,24 @@ import { Modal as ModalForm } from "./Modal"
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react"
 import { useAppStore } from "@/Stores/useAppStore"
+import type { Recursos } from "@/types"
+import { Spinner } from "./Spinner"
 
 export const TableContainer = () => {
     const {pathname} = useLocation();
-    // const {prueba} = useAppStore()
+    const {fetchRecursos, gastos, ingresos } = useAppStore()
 
-    // useEffect(() => {
-    //     prueba()
-    // },[])
+    const data = pathname === '/gastos' ? gastos 
+        : ( pathname === '/ingresos' ? ingresos : {} as Recursos )
+
+    useEffect(() => {
+        fetchRecursos() 
+    },[])
+
+    const isEmptyData = (data : Recursos) => Object.keys(data).length === 0
+    if(isEmptyData(data)){
+        return ( <Spinner /> )
+    }
 
   return (
     <div className="flex flex-col w-full">
@@ -37,8 +47,7 @@ export const TableContainer = () => {
             </div>
         </section>
         
-        <TableData />
-
+        <TableData data={data} />
 
         <Pagination className="mt-5 justify-end">
             <PaginationContent>

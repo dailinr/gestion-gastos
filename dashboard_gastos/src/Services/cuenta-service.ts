@@ -37,7 +37,7 @@ export async function addSemana() {
     } 
     catch (error: any) {
         if (error.response) {
-            // console.log(error.response.data)
+            console.log(error.response.data)
         } 
         else {
             // Otro tipo de error (sin respuesta, por ejemplo de red)

@@ -1,16 +1,16 @@
 import { z } from 'zod'
 
-export const RecursosSemanaSchema = z.array(
-    z.object({
-        _id: z.string(),
-        etiqueta: z.string(),
-        descripcion: z.string(),
-        valor: z.number(),
-        fecha: z.string(),
-        cuenta: z.string(),
-        diaSemana: z.string()
-    })
-)
+export const RecursoSemanaSchema =  z.object({
+    _id: z.string(),
+    etiqueta: z.string(),
+    descripcion: z.string(),
+    valor: z.number(),
+    fecha: z.string(),
+    cuenta: z.string(),
+    diaSemana: z.string()
+})
+
+export const RecursosSemanaSchema = z.array(RecursoSemanaSchema)
 
 export const CategorySemanaSchema = z.array(
     z.object({
