@@ -12,9 +12,16 @@ import {
 } from "@/components/ui/pagination"
 import { Modal as ModalForm } from "./Modal"
 import { useLocation } from "react-router-dom"
+import { useEffect } from "react"
+import { useAppStore } from "@/Stores/useAppStore"
 
 export const TableContainer = () => {
     const {pathname} = useLocation();
+    // const {prueba} = useAppStore()
+
+    // useEffect(() => {
+    //     prueba()
+    // },[])
 
   return (
     <div className="flex flex-col w-full">

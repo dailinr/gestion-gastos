@@ -20,15 +20,17 @@ import { useAppStore } from "@/Stores/useAppStore"
 import { formatDateGrap } from "@/Services/formatDate"
 import { Spinner } from "./Spinner"
 
-const chartData = [
-  { day: "Lunes", ingreso: 186, gasto: 80 },
-  { day: "Martes", ingreso: 305, gasto: 200 },
-  { day: "Miercoles", ingreso: 237, gasto: 120 },
-  { day: "Jueves", ingreso: 73, gasto: 190 },
-  { day: "Friday", ingreso: 209, gasto: 130 },
-  { day: "Sabado", ingreso: 214, gasto: 140 },
-  { day: "Domingo", ingreso: 214, gasto: 140 },
-]
+// const chartData = [
+//   { day: "Lunes", ingreso: 186, gasto: 80 },
+//   { day: "Martes", ingreso: 305, gasto: 200 },
+//   { day: "Miercoles", ingreso: 237, gasto: 120 },
+//   { day: "Jueves", ingreso: 73, gasto: 190 },
+//   { day: "Friday", ingreso: 209, gasto: 130 },
+//   { day: "Sabado", ingreso: 214, gasto: 140 },
+//   { day: "Domingo", ingreso: 214, gasto: 140 },
+// ]
+
+
 
 const chartConfig = {
   ingreso: {
@@ -44,7 +46,8 @@ const chartConfig = {
 
 export function Component() {
 
-  const { cuentaActual } = useAppStore()
+  const { cuentaActual, resumeSemana } = useAppStore()
+  const chartData = resumeSemana
 
   if(!cuentaActual || !cuentaActual.cuenta){
     return ( <Spinner />)

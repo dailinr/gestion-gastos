@@ -7,7 +7,8 @@ export const categories : Category[] = [
         icon: "bx bx-cart",
         amount: 0,
         color: 'bg-[#fbcfe8]',
-        colorText: "text-[#be185d]"
+        colorText: "text-[#be185d]",
+        hex: "#fbcfe8"
     },
     {
         id: 2,
@@ -15,7 +16,8 @@ export const categories : Category[] = [
         icon: "bx bx-bus",
         amount: 0,
         color: "bg-[#c7d2fe]",
-        colorText: "text-[#312e81]"
+        colorText: "text-[#312e81]",
+        hex: "#c7d2fe"
     },
     {
         id: 3,
@@ -23,7 +25,8 @@ export const categories : Category[] = [
         icon: "bx bx-book",
         amount: 0,
         color: "bg-[#ddd6fe]",
-        colorText: "text-[#5b21b6]"
+        colorText: "text-[#5b21b6]",
+        hex: "#ddd6fe"
     },
     {
         id: 4,
@@ -31,7 +34,8 @@ export const categories : Category[] = [
         icon: "bx bx-home",
         amount: 0,
         color: 'bg-[#bbf7d0]',
-        colorText: "text-[#052e16"
+        colorText: "text-[#052e16]",
+        hex: "#bbf7d0"
     },
     {
         id: 5,
@@ -39,7 +43,8 @@ export const categories : Category[] = [
         icon: "bx bx-shopping-bag",
         amount: 0,
         color: 'bg-[#FF99D6]',
-        colorText: "text-black"
+        colorText: "text-black",
+        hex: "#FF99D6"
     },
     {
         id: 6,
@@ -47,7 +52,8 @@ export const categories : Category[] = [
         icon: "bx bx-drink",
         amount: 0,
          color: 'bg-[#FFA54B]',
-         colorText: "text-black"
+         colorText: "text-black",
+        hex: "#FFA54B"
     },
     {
         id: 7,
@@ -55,7 +61,8 @@ export const categories : Category[] = [
         icon: "bx bx-first-aid",
         amount: 0,
         color: 'bg-[#7A6860]',
-        colorText: "text-black"
+        colorText: "text-black",
+       hex: "#7A6860"
     },
     {
         id: 8,
@@ -63,7 +70,8 @@ export const categories : Category[] = [
         icon: "bx bx-bulb",
         amount: 0,
         color: 'bg-[#F66868]',
-        colorText: "text-black"
+        colorText: "text-black",
+       hex: "#F66868"
     },
     {
         id: 9,
@@ -71,7 +79,8 @@ export const categories : Category[] = [
         icon: "bx bxl-spotify",
         amount: 0,
         color: 'bg-[#7AD68C]',
-        colorText: "text-black"
+        colorText: "text-black",
+       hex: "#7AD68C"
     },
     {
         id: 10,
@@ -79,7 +88,8 @@ export const categories : Category[] = [
         icon: "bx bxs-plane-alt",
         amount: 0,
         color: 'bg-[#F4735C]',
-        colorText: "text-black"
+        colorText: "text-black",
+       hex: "#F4735C"
     },
     {
         id: 11,
@@ -87,7 +97,8 @@ export const categories : Category[] = [
         icon: "bx bxs-dog",
         amount: 0,
         color: 'bg-yellow-200',
-        colorText: "text-black"
+        colorText: "text-black",
+       hex: "yellow"
     },
     {
         id: 12,
@@ -95,29 +106,7 @@ export const categories : Category[] = [
         icon: "bx bx-plus-circle",
         amount: 0,
         color: 'bg-[#B2967D]',
-        colorText: "text-black"
+        colorText: "text-black",
+       hex: "#B2967D"
     },
-]
-
-export const cate = [
-  {
-    id: 1,
-    color: "text-red-500",
-    nombre: "Comida"
-  },
-  {
-    id: 2,
-    color: "text-green-500",
-    nombre: "Transporte"
-  },
-  {
-    id: 3,
-    color: "text-purple-500",
-    nombre: "Casa"
-  },
-  {
-    id: 4,
-    color: "text-blue-500",
-    nombre: "Universidad"
-  },
 ]

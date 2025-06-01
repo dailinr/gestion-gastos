@@ -2,9 +2,9 @@ import { z } from 'zod'
 import { CuentaSemanaSchema, RecursosSemanaSchema } from '@/Schemas/cuentaSchema'
 
 export type Recurso = {
-    id: number
-    valor : number
-    diaSemana: string
+  id: number
+  valor : number
+  diaSemana: string
 }
 
 export type Category = {
@@ -14,6 +14,7 @@ export type Category = {
   amount: number
   color: string
   colorText: string
+  hex: string
 }
 
 export type GastoReciente = {
@@ -26,9 +27,10 @@ export type GastoReciente = {
   icon: string
 }
 
-export type ResumenSemana = {
-  id: string
-  // dia: valor
+export type ResumeSemana = {
+  day: string
+  gasto: number
+  ingreso: number
 }
 
 export type CuentaActual = z.infer<typeof CuentaSemanaSchema>

@@ -1,6 +1,6 @@
 import { categories } from "@/data/categories"
 import {getSemana } from "@/Services/cuenta-service"
-import type { Category, CuentaActual, GastoReciente } from "@/types"
+import type { Category, CuentaActual, GastoReciente, ResumeSemana } from "@/types"
 import type { StateCreator } from "zustand"
 
 export type cuentaSliceType = {
@@ -10,13 +10,15 @@ export type cuentaSliceType = {
     setCategories: () => void
     gastosRecientes: GastoReciente[]
     setGastosRecientes: () => void
-    // resumeSemana: ResumenSemana[]
+    resumeSemana: ResumeSemana[]
+    setResumeSemana: () => void
 }
 
 export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => ({
     cuentaActual: {} as CuentaActual,
     categoriesSemana: [],
     gastosRecientes: [],
+    resumeSemana: [],
 
     fetchSemana: async () => {
         const cuentaActual = await getSemana()
@@ -27,19 +29,25 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
 
     setCategories: () => {
 
-        const categoriesSemana : Category[] = categories.map(category => {
-            const match = get().cuentaActual.categoriasGastos?.find(c => 
-                c.etiqueta.toLowerCase() === category.name.toLowerCase()
-            )
-            return{
-                ...category,
-                amount: match ? match.totalCategoria : 0
-            }
-        }) || [];
+        const gastos = get().cuentaActual.categoriasGastos || []; // gastos individuales
+        const nombresBase = categories.map(c => c.name.toLowerCase()); // categorias frontend
+        const sinMatch = gastos.filter(g => !nombresBase.includes(g.etiqueta.toLowerCase()));
 
-        set({
-            categoriesSemana
-        })
+        const categoriesSemana = categories.map(({ name, ...rest }) => {
+            const nombre = name.toLowerCase();
+            const match = gastos.find(g => g.etiqueta.toLowerCase() === nombre);
+
+            return {
+                name,
+                ...rest,
+                amount: 
+                    match ?  match.totalCategoria : 
+                    nombre === "otros" ? 
+                    sinMatch.reduce((sum, g) => sum + g.totalCategoria, 0) : 0 // acumulador de otros
+            };
+        });
+
+        set({ categoriesSemana });
     },
 
     setGastosRecientes: () => {
@@ -65,6 +73,36 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
         set({
             gastosRecientes
         })
+    },
+
+    setResumeSemana: () => {
+
+        const diasSemana =  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const diasSpanish = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo']
+        const normalizeDay = (day:string) => day.toLowerCase().trim();
+        const normalizedDiasSemana = diasSemana.map(normalizeDay);
+
+        const ingresos = get().cuentaActual.ingresos || [];
+        const gastos = get().cuentaActual.gastos || [];
+
+        const resumeSemana = normalizedDiasSemana.map((dia, index) => {
+            const ingresosDia = ingresos
+                .filter((ingreso) => normalizeDay(ingreso.diaSemana) === dia) // Normalizar para comparar
+                .reduce((acc, ingreso) => acc + ingreso.valor, 0); // se calcula el acumulado del dia
+            
+
+            const gastosDia = gastos
+                .filter((gasto) => normalizeDay(gasto.diaSemana) === dia) // Normalizar para comparar
+                .reduce((acc, gasto) => acc + gasto.valor, 0);
+
+            return {
+                day: diasSpanish[index],
+                gasto: gastosDia,
+                ingreso: ingresosDia
+            }
+        });
+
+        set({ resumeSemana })
     }
 
 })
