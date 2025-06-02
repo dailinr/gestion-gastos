@@ -10,7 +10,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination"
-import { Modal as ModalForm } from "./Modal"
+import {  ModalForm } from "./RecursoForm"
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react"
 import { useAppStore } from "@/Stores/useAppStore"
@@ -20,7 +20,7 @@ import { Spinner } from "./Spinner"
 export const TableContainer = () => {
     const {pathname} = useLocation();
     const {fetchRecursos, gastos, ingresos } = useAppStore()
-
+    
     const data = pathname === '/gastos' ? gastos 
         : ( pathname === '/ingresos' ? ingresos : {} as Recursos )
 

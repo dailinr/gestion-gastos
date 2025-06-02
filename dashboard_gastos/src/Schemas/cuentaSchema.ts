@@ -10,6 +10,10 @@ export const RecursoSemanaSchema =  z.object({
     diaSemana: z.string()
 })
 
+export const RecursoResponseSchema = RecursoSemanaSchema
+    .extend({ _v: z.number() })
+    .omit({ diaSemana: true})
+
 export const RecursosSemanaSchema = z.array(RecursoSemanaSchema)
 
 export const CategorySemanaSchema = z.array(

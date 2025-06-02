@@ -4,16 +4,17 @@ import { AppSidebar } from "@/components/AppSidebar"
 import { Header } from "@/components/Header";
 import { useEffect, useMemo } from "react";
 import { useAppStore } from "@/Stores/useAppStore";
+import { Toaster } from "@/components/ui/sonner";
 
 export const Layout = () => {
 
   const {pathname} = useLocation();
   const isHome = useMemo(() => pathname === '/', [pathname]);
-  const { fetchSemana} = useAppStore()
+  const { fetchSemana } = useAppStore()
 
   useEffect(() => {
     fetchSemana()
-  }, [])
+  }, [isHome])
 
   return (
     <SidebarProvider>
@@ -26,6 +27,7 @@ export const Layout = () => {
         <Outlet /> 
         
       </section>
+      <Toaster position="top-right" richColors closeButton />
 
     </SidebarProvider>
   )

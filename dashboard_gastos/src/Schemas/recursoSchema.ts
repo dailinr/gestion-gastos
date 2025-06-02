@@ -37,3 +37,10 @@ export const RecursosPaginacionSchema = z.object({
     paginacion: Paginacion,
     resultados: Resultados,
 })
+
+
+export const RecursoDraftSchema = RecursoSemanaSchema.pick({
+    etiqueta: true,
+    descripcion: true,
+    valor: true,
+})

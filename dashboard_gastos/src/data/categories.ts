@@ -110,3 +110,22 @@ export const categories : Category[] = [
        hex: "#B2967D"
     },
 ]
+
+export const categoriesIngresos = [
+    {
+        id: 1, 
+        name: "Salario",
+    },
+    {
+        id: 2, 
+        name: "Inversiones",
+    },
+    {
+        id: 3, 
+        name: "Regalos",
+    },
+    {
+        id: 4, 
+        name: "Otros",
+    },
+]
