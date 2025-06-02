@@ -1,5 +1,5 @@
 import { RecursoDraftSchema, RecursosPaginacionSchema } from '@/Schemas/recursoSchema';
-import type { RecursoDraft, ResponseGasto, ResponseIngreso } from '@/types';
+import type { RecursoData, RecursoDraft, ResponseGasto, ResponseIngreso } from '@/types';
 import axios from 'axios'
 
 export async function getRecursos(){
@@ -52,6 +52,46 @@ export async function addRecurso(data: RecursoDraft, ruta: string){
             const {data: response} = await axios.post<ResponseIngreso>(url, parsed.data);
             return response
         }
+    } 
+    catch (error: any) {
+        if (error.response) {
+            console.log(error.response.data)
+            return error.response
+        } 
+        else {
+            // Otro tipo de error (sin respuesta, por ejemplo de red)
+            console.error("Error desconocido:", error);
+            throw error;
+        }
+    }
+}
+
+export async function handleEliminar(id: RecursoData['_id'], ruta : string){
+    const isGasto = ruta === 'gasto'
+    console.log(ruta)
+
+    const url = isGasto  
+        ? `http://localhost:49151/api/gastos/eliminar-gasto/${id}`
+        : `http://localhost:49151/api/ingresos/eliminar-ingreso/${id}`
+
+    try {
+
+        if(isGasto){
+            const {data: response} = await axios.delete<ResponseGasto>(url);
+            // console.log(response)
+            return response
+        }else{
+            const {data: response} = await axios.delete<ResponseIngreso>(url);
+            // console.log(response)
+            return response
+        }
+
+        // const result = RecursosPaginacionSchema.safeParse(response)
+        // // console.log(result)
+        
+        // if(result.success){
+        //     return result.data 
+        // }
     } 
     catch (error: any) {
         if (error.response) {

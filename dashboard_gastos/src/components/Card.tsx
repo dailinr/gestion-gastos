@@ -1,6 +1,7 @@
 // import { Building } from "lucide-react";
 import type { Category } from "@/types";
 import { Spinner } from "./Spinner";
+import { useAppStore } from "@/Stores/useAppStore";
 
 type cardProps = {
   data: Category
@@ -21,12 +22,12 @@ export const Card = ({ data, type}: cardProps) => {
 
   const imgClass = `w-5 h-5 md:w-7 md:h-7 text-black`;
   const imgCategory = `w-6 h-6 md:w-10 md:h-10 text-black`;
-
+  const { cuentaActual } = useAppStore()
 
   return (
     
     <div className={type === 'card' ?  classCard : classCategory } >
-      {!data.amount && type !== "category" ? (
+      {!cuentaActual && type !== "category" ? (
         <Spinner /> 
       ) 
       :(<>

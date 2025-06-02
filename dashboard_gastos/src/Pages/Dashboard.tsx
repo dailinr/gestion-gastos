@@ -16,6 +16,7 @@ export const Dashboard = () => {
     setCategories()
     setGastosRecientes()
     setResumeSemana()
+    console.log(gastosRecientes)
   },[cuentaActual])
 
   
@@ -130,9 +131,11 @@ export const Dashboard = () => {
             <i className='bx bx-right-arrow-alt text-xl absolute right-6 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
             <h1 className="text-md font-semibold px-2 py-1">Gastos Recientes</h1>
               
-            {gastosRecientes.length === 0 ? (
+            {!cuentaActual.gastos ? (
               <Spinner />
-            ): 
+            ): (gastosRecientes.length === 0 ? 
+              <p className="text-xl text-center py-20">No hay gastos recientes</p>
+            :
             (<div className="overflow-auto px-2">
               {gastosRecientes.map(gasto => (
                 <div key={gasto._id} className="border-b border-b-gray-200 py-2 flex">
@@ -152,7 +155,7 @@ export const Dashboard = () => {
                 </div>
               ))}
             </div>)
-            }
+            )}
           </section>
   
         </div>

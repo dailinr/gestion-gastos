@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import { RecursoSemanaSchema } from './cuentaSchema'
 
-const RecursosSchemaNuevo = z.array(RecursoSemanaSchema.omit({ diaSemana: true }))
+export const RecursoSchemaNuevo = RecursoSemanaSchema.omit({ diaSemana: true })
+const RecursosSchemaNuevo = z.array(RecursoSchemaNuevo)
 
 export const Paginacion = z.object({
     totalDocs: z.number(),

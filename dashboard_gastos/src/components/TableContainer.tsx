@@ -23,6 +23,8 @@ export const TableContainer = () => {
     
     const data = pathname === '/gastos' ? gastos 
         : ( pathname === '/ingresos' ? ingresos : {} as Recursos )
+    const pageRuta = pathname === '/gastos' ? ('Gastos') : ('Ingresos')
+    const ruta = pathname === '/gastos' ? ('gasto') : ('ingreso')
 
     useEffect(() => {
         fetchRecursos() 
@@ -38,7 +40,7 @@ export const TableContainer = () => {
 
         <section className="mt-5 mb-5 md:flex space-y-3 md:space-y-0 justify-between  items-center">
             <div className="text-2xl font-semibold">
-                {pathname === '/gastos'? ( 'Gastos' ):( 'Ingresos' )}
+                {pageRuta}
             </div>
             <div className="flex gap-5 items-center ">
                 <DatePicker width="w-[280px]" bg="hover:bg-white"/>
@@ -47,7 +49,11 @@ export const TableContainer = () => {
             </div>
         </section>
         
-        <TableData data={data} />
+        {data.totalDocs === 0 ? (
+            <p className="text-2xl font-semibold py-20 text-center">
+                No hay {pageRuta.toLocaleLowerCase()} para esta semana
+            </p>
+        ): <TableData data={data} ruta={ruta} /> }
 
         <Pagination className="mt-5 justify-end">
             <PaginationContent>

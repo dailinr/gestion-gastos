@@ -35,7 +35,7 @@ export function ModalForm({ pathname }: modalProps) {
   const ruta = pathname === '/gastos' ? 'Gasto' : 'Ingreso'
   const categoriesSelect = ruta === 'Gasto' ? categories : categoriesIngresos
 
-  const {fetchAddRecurso} = useAppStore()
+  const {fetchAddRecurso, fetchRecursos} = useAppStore()
   const { handleSubmit, control,  formState: { errors },  } = useForm<RecursoDraft>({
     defaultValues: {
       valor: 0,
@@ -53,6 +53,7 @@ export function ModalForm({ pathname }: modalProps) {
     else{
       toast.error(`Error al agregar ${ruta}!`) 
     }
+    fetchRecursos()
   }
 
   return (
