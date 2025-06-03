@@ -1,4 +1,4 @@
-import { Calendar, LayoutDashboard, Inbox, Settings, ChartColumnBig, ChartSpline, BanknoteArrowDown } from "lucide-react"
+import { LayoutDashboard, ChartColumnBig, BanknoteArrowDown } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,

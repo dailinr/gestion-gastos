@@ -22,10 +22,10 @@ import {
 } from "@/components/ui/select"
 import { categories, categoriesIngresos } from "@/data/categories"
 import { useForm, Controller} from "react-hook-form"
-import type { Recurso, RecursoData, RecursoDraft, Recursos } from "@/types"
+import type { RecursoDraft, Recursos } from "@/types"
 import { useAppStore } from "@/Stores/useAppStore"
 import { toast } from "sonner"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Spinner } from "./Spinner"
 
 type modalProps = {
@@ -67,7 +67,7 @@ export function ModalForm({ pathname, type }: modalProps) {
       }
       
     } else reset();
-    
+
   }, [idActivo, data, reset]);
 
 

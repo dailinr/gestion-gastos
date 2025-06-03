@@ -7,7 +7,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { formatDateGrap, formatDateTable } from "@/Services/formatDate"
+import { formatDateGrap } from "@/Services/formatDate"
 import type { Recursos} from "@/types"
 import { ModalConfirma } from "./ModalConfirma"
 import { categories } from "@/data/categories"
