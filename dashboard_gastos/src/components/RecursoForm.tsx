@@ -22,21 +22,26 @@ import {
 } from "@/components/ui/select"
 import { categories, categoriesIngresos } from "@/data/categories"
 import { useForm, Controller} from "react-hook-form"
-import type { RecursoDraft } from "@/types"
+import type { Recurso, RecursoData, RecursoDraft, Recursos } from "@/types"
 import { useAppStore } from "@/Stores/useAppStore"
 import { toast } from "sonner"
+import { useEffect, useState } from "react"
+import { Spinner } from "./Spinner"
 
 type modalProps = {
   pathname: string
+  type: string
 }
 
-export function ModalForm({ pathname }: modalProps) {
+export function ModalForm({ pathname, type }: modalProps) {
 
+  const isEditar = type === 'editar'
   const ruta = pathname === '/gastos' ? 'Gasto' : 'Ingreso'
   const categoriesSelect = ruta === 'Gasto' ? categories : categoriesIngresos
 
-  const {fetchAddRecurso, fetchRecursos} = useAppStore()
-  const { handleSubmit, control,  formState: { errors },  } = useForm<RecursoDraft>({
+  const {fetchAddRecurso, fetchRecursos, setIdActivo, 
+    idActivo, fetchEditarRecurso, gastos, ingresos } = useAppStore()
+  const { handleSubmit, control, formState: { errors }, reset } = useForm<RecursoDraft>({
     defaultValues: {
       valor: 0,
       etiqueta: "",
@@ -44,31 +49,100 @@ export function ModalForm({ pathname }: modalProps) {
     }
   })
 
-  const registerRecurso = async (data: RecursoDraft) => {
-    const response = await fetchAddRecurso(data, ruta)
+  const data : Recursos = ruta === 'Gasto' ? gastos : ingresos
+
+  if(!data){
+    return ( <Spinner /> )
+  }
+
+  useEffect(() => {
+    if (idActivo) {
+      const recurso = data?.docs.find(r => r._id === idActivo);
+      if (recurso) {
+        reset({
+          valor: recurso.valor,
+          descripcion: recurso.descripcion,
+          etiqueta: recurso.etiqueta,
+        });
+      }
+      
+    } else reset();
     
-    if(response?.status === "success"){    
-      toast.success(`${ruta} agregado correctamente!`) 
+  }, [idActivo, data, reset]);
+
+
+  // let activeRecurso : RecursoData
+
+  // useEffect(() => setFormulario() ,[idActivo])
+
+  // const setFormulario = () => {
+  //   if(idActivo){
+      
+  //     activeRecurso = data?.docs.filter(r => r._id === idActivo)[0]
+
+  //     setValue('valor', activeRecurso.valor)
+  //     setValue('descripcion', activeRecurso.descripcion)
+  //     setValue('etiqueta', activeRecurso.etiqueta)
+  //   }
+  // }
+
+  const registerRecurso = async (data: RecursoDraft) => {
+    let response 
+
+    if(!idActivo) {
+      response = await fetchAddRecurso(data, ruta)
+
+      if(response?.status === "success"){    
+        toast.success(`${ruta} agregado correctamente!`) 
+        fetchRecursos()
+      }
+      else{
+        toast.error(`Error al agregar ${ruta}!`) 
+      }
     }
     else{
-      toast.error(`Error al agregar ${ruta}!`) 
+      const recursoActualizado = {
+        ...data,
+        _id: idActivo
+      }
+      response = await fetchEditarRecurso(recursoActualizado, ruta)
+
+      if(response?.status === "success"){    
+        toast.success(`${ruta} actualizado correctamente!`) 
+        fetchRecursos()
+      }
+      else{
+        toast.error(`Error al actualizar ${ruta}!`) 
+      }
     }
-    fetchRecursos()
+    reset()
+    setIdActivo('')
   }
+
 
   return (
     <Dialog >
+
       <DialogTrigger asChild>
-        <Button className="cursor-pointer">
-          Agregar {ruta}
-        </Button>
+        {isEditar ? (
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="size-5 text-blue-800 cursor-pointer"
+            onClick={() => setIdActivo(pathname)}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+          </svg>
+        ): 
+        (
+          <Button className="cursor-pointer">
+            Agregar {ruta}
+          </Button>
+        )}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px] bg-white">
         <form onSubmit={handleSubmit(registerRecurso)}>
 
         <DialogHeader>
-          <DialogTitle>Nuevo {ruta}</DialogTitle>
+          <DialogTitle> {isEditar ? ('Editar ') : ('Nuevo ')} {ruta}</DialogTitle>
           <DialogDescription>
             Guardalo cuando hayas terminado
           </DialogDescription>
@@ -181,13 +255,12 @@ export function ModalForm({ pathname }: modalProps) {
           </div>
           
         </div>
-        {/* {close && <DialogPrimitive.Close /> } */}
 
         <DialogFooter>
-          <DialogPrimitive.Close >
-            <Button variant="secondary" className="w-full" >Cancelar</Button>
+          <DialogPrimitive.Close>
+            <Button type="button" variant="secondary" className="w-full" >Cancelar</Button>
           </DialogPrimitive.Close>
-          <Button type="submit">Guardar {ruta}</Button>
+          <Button type="submit"> {isEditar ? ('Actualizar ') : ('Guardar ')} {ruta}</Button>
         </DialogFooter>
 
       </form>

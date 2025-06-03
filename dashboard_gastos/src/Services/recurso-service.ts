@@ -105,3 +105,38 @@ export async function handleEliminar(id: RecursoData['_id'], ruta : string){
         }
     }
 }
+
+export async function editarRecurso(id: RecursoData['_id'], data: RecursoDraft, ruta : string){
+    const isGasto = ruta.toLowerCase() === 'gasto'
+    console.log("ruta: ", ruta)
+    console.log("id: ", id)
+    console.log("data: ", data)
+
+    const url = isGasto  
+        ? `http://localhost:49151/api/gastos/editar-gasto/${id}`
+        : `http://localhost:49151/api/ingresos/editar-ingreso/${id}`
+
+    try {
+
+        if(isGasto){
+            const {data: response} = await axios.put<ResponseGasto>(url, data);
+            // console.log(response)
+            return response
+        }else{
+            const {data: response} = await axios.put<ResponseIngreso>(url, data);
+            // console.log(response)
+            return response
+        }
+    } 
+    catch (error: any) {
+        if (error.response) {
+            console.log(error.response.data)
+            return error.response
+        } 
+        else {
+            // Otro tipo de error (sin respuesta, por ejemplo de red)
+            console.error("Error desconocido:", error);
+            throw error;
+        }
+    }
+}

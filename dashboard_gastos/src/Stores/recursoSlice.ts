@@ -1,4 +1,4 @@
-import { addRecurso, getRecursos, handleEliminar } from "@/Services/recurso-service"
+import { addRecurso, editarRecurso, getRecursos, handleEliminar } from "@/Services/recurso-service"
 import type { RecursoData, RecursoDraft, Recursos, RecursosPaginacion, ResponseGasto, ResponseIngreso } from "@/types"
 import type { StateCreator } from "zustand"
 
@@ -6,13 +6,15 @@ export type recursoSliceType = {
     // recursosCompleto: RecursosPaginacion
     gastos: Recursos
     ingresos: Recursos
+    idActivo: RecursoData['_id']
     fetchRecursos: () => Promise<void>
     fetchAddRecurso: (data: RecursoDraft, ruta: string) => Promise<ResponseGasto | ResponseIngreso | undefined>
     eliminarRecurso: (id : RecursoData['_id'], ruta : string) => Promise<ResponseGasto | ResponseIngreso | undefined>
-    idActivo: RecursoData['_id']
+    setIdActivo: (id: RecursoData['_id']) => void
+    fetchEditarRecurso: (data: RecursoDraft, ruta:string) => Promise<ResponseGasto | ResponseIngreso | undefined>
 }
 
-export const createRecursoSlice : StateCreator<recursoSliceType> = (set) => ({
+export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) => ({
     // recursosCompleto: {} as RecursosPaginacion,
     gastos: {} as Recursos,
     ingresos: {} as Recursos,
@@ -33,7 +35,14 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set) => ({
     },
 
     eliminarRecurso: async (id, ruta) => {
-        
         return await handleEliminar(id, ruta)
+    },
+
+    setIdActivo: (id) => {
+        set({ idActivo: id })
+    },
+
+    fetchEditarRecurso: async ( data, ruta) => {
+        return await editarRecurso(get().idActivo, data, ruta)
     }
 })

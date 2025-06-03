@@ -45,7 +45,7 @@ export const TableContainer = () => {
             <div className="flex gap-5 items-center ">
                 <DatePicker width="w-[280px]" bg="hover:bg-white"/>
 
-                <ModalForm pathname={pathname} />
+                <ModalForm pathname={pathname} type="agregar" />
             </div>
         </section>
         
