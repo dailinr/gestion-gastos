@@ -3,7 +3,7 @@ import type { RecursoData, RecursoDraft, ResponseGasto, ResponseIngreso } from '
 import axios from 'axios'
 
 export async function getRecursos(){
-    const url = `${process.env.REACT_APP_API_URL}/cuentas/listar-semana/`
+    const url = `${import.meta.env.VITE_API_URL}/cuentas/listar-semana/`
 
     try {
         const {data: response} = await axios.get(url);
@@ -32,8 +32,8 @@ export async function addRecurso(data: RecursoDraft, ruta: string){
     const isGasto = ruta.toLowerCase() === 'gasto';
 
     const url = isGasto  
-        ? `${process.env.REACT_APP_API_URL}/gastos/add-gasto`
-        : `${process.env.REACT_APP_API_URL}/ingresos/add-ingreso`
+        ? `${import.meta.env.VITE_API_URL}/gastos/add-gasto`
+        : `${import.meta.env.VITE_API_URL}/ingresos/add-ingreso`
     
     const parsed = RecursoDraftSchema.safeParse(data)
 
@@ -71,8 +71,8 @@ export async function handleEliminar(id: RecursoData['_id'], ruta : string){
     console.log(ruta)
 
     const url = isGasto  
-        ? `${process.env.REACT_APP_API_URL}/gastos/eliminar-gasto/${id}`
-        : `${process.env.REACT_APP_API_URL}/ingresos/eliminar-ingreso/${id}`
+        ? `${import.meta.env.VITE_API_URL}/gastos/eliminar-gasto/${id}`
+        : `${import.meta.env.VITE_API_URL}/ingresos/eliminar-ingreso/${id}`
 
     try {
 
@@ -113,8 +113,8 @@ export async function editarRecurso(id: RecursoData['_id'], data: RecursoDraft, 
     console.log("data: ", data)
 
     const url = isGasto  
-        ? `${process.env.REACT_APP_API_URL}/gastos/editar-gasto/${id}`
-        : `${process.env.REACT_APP_API_URL}/ingresos/editar-ingreso/${id}`
+        ? `${import.meta.env.VITE_API_URL}/gastos/editar-gasto/${id}`
+        : `${import.meta.env.VITE_API_URL}/ingresos/editar-ingreso/${id}`
 
     try {
 

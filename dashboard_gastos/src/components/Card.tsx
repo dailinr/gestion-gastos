@@ -35,7 +35,7 @@ export const Card = ({ data, type}: cardProps) => {
           <div className={type === 'card' ? contSVG : contSVGCategory }>
           
             <div className={type === 'card' ? imgClass : imgCategory }>
-              <img src={`/${data.icon}.svg`} alt={data.icon} />
+              <img src={`${import.meta.env.BASE_URL}${data.icon}.svg`} alt={data.icon} />
             </div>
       
           </div>

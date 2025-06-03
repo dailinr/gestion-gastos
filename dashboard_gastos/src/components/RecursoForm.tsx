@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-import { DatePicker } from "./DatePicker"
+// import { DatePicker } from "./DatePicker"
 import {
   Select,
   SelectContent,
@@ -70,21 +70,6 @@ export function ModalForm({ pathname, type }: modalProps) {
 
   }, [idActivo, data, reset]);
 
-
-  // let activeRecurso : RecursoData
-
-  // useEffect(() => setFormulario() ,[idActivo])
-
-  // const setFormulario = () => {
-  //   if(idActivo){
-      
-  //     activeRecurso = data?.docs.filter(r => r._id === idActivo)[0]
-
-  //     setValue('valor', activeRecurso.valor)
-  //     setValue('descripcion', activeRecurso.descripcion)
-  //     setValue('etiqueta', activeRecurso.etiqueta)
-  //   }
-  // }
 
   const registerRecurso = async (data: RecursoDraft) => {
     let response 
@@ -215,17 +200,13 @@ export function ModalForm({ pathname, type }: modalProps) {
             )}
           </div>
           
-          {/* ====== Campo: FECHA ====== */}
+          {/* ====== Campo: FECHA ====== 
           <div className=" flex flex-col gap-2">
             <Label htmlFor="name">
               Ingresar fecha
             </Label>
-            <DatePicker width="w-full" bg="bg-background"  
-              // {...register('categoria', {
-              //   required: `El campo categoria es obligatorio` // mensaje de error
-              // })}
-            />
-          </div>
+            <DatePicker width="w-full" bg="bg-background" />
+          </div> */}
 
           {/* ====== Campo: DESCRIPCION ====== */}
           <div className=" flex flex-col gap-2">
