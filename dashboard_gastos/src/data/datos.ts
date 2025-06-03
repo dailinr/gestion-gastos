@@ -1,4 +1,4 @@
-import type { Recurso } from "@/Types";
+import type { Recurso } from "@/types";
 
 export const ingresos : Recurso[] = [
     {

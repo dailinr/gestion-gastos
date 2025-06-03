@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 import { useAppStore } from "@/Stores/useAppStore"
-import type { RecursoData } from "@/Types"
+import type { RecursoData } from "@/types"
 import { toast } from "sonner"
 
 export function ModalConfirma({ruta, id} : {ruta: string, id: RecursoData['_id']}) {

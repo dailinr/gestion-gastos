@@ -1,5 +1,5 @@
 import { RecursoDraftSchema, RecursosPaginacionSchema } from '@/Schemas/recursoSchema';
-import type { RecursoData, RecursoDraft, ResponseGasto, ResponseIngreso } from '@/Types';
+import type { RecursoData, RecursoDraft, ResponseGasto, ResponseIngreso } from '@/types';
 import axios from 'axios'
 
 export async function getRecursos(){

@@ -8,7 +8,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { formatDateGrap } from "@/Services/formatDate"
-import type { Recursos} from "@/Types"
+import type { Recursos} from "@/types"
 import { ModalConfirma } from "./ModalConfirma"
 import { categories } from "@/data/categories"
 import { ModalForm } from "./RecursoForm"

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select"
 import { categories, categoriesIngresos } from "@/data/categories"
 import { useForm, Controller} from "react-hook-form"
-import type { RecursoDraft, Recursos } from "@/Types"
+import type { RecursoDraft, Recursos } from "@/types"
 import { useAppStore } from "@/Stores/useAppStore"
 import { toast } from "sonner"
 import { useEffect } from "react"
