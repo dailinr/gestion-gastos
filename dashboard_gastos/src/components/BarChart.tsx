@@ -10,8 +10,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import type { ChartConfig } from "@/components/ui/chart"
 import {
-  ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -19,18 +19,6 @@ import {
 import { useAppStore } from "@/Stores/useAppStore"
 import { formatDateGrap } from "@/Services/formatDate"
 import { Spinner } from "./Spinner"
-
-// const chartData = [
-//   { day: "Lunes", ingreso: 186, gasto: 80 },
-//   { day: "Martes", ingreso: 305, gasto: 200 },
-//   { day: "Miercoles", ingreso: 237, gasto: 120 },
-//   { day: "Jueves", ingreso: 73, gasto: 190 },
-//   { day: "Friday", ingreso: 209, gasto: 130 },
-//   { day: "Sabado", ingreso: 214, gasto: 140 },
-//   { day: "Domingo", ingreso: 214, gasto: 140 },
-// ]
-
-
 
 const chartConfig = {
   ingreso: {

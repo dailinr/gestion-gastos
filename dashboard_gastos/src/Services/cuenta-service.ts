@@ -2,7 +2,8 @@ import axios from 'axios'
 import { CuentaSemanaSchema } from '@/Schemas/cuentaSchema'
 
 export async function getSemana() {
-    const url = `http://localhost:49151/api/cuentas/calcular-semana`
+    
+    const url = `${process.env.REACT_APP_API_URL}/cuentas/calcular-semana`
 
     try {
         const {data: response} = await axios.get(url);
@@ -28,7 +29,7 @@ export async function getSemana() {
 }
 
 export async function addSemana() {
-    const url = `http://localhost:49151/api/cuentas/add-cuenta`
+    const url = `${process.env.REACT_APP_API_URL}/cuentas/add-cuenta`
 
     try {
         await axios.get(url);

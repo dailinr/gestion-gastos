@@ -1,9 +1,9 @@
 import { RecursoDraftSchema, RecursosPaginacionSchema } from '@/Schemas/recursoSchema';
-import type { RecursoData, RecursoDraft, ResponseGasto, ResponseIngreso } from '@/types';
+import type { RecursoData, RecursoDraft, ResponseGasto, ResponseIngreso } from '../Types/index';
 import axios from 'axios'
 
 export async function getRecursos(){
-    const url = `http://localhost:49151/api/cuentas/listar-semana/`
+    const url = `${process.env.REACT_APP_API_URL}/cuentas/listar-semana/`
 
     try {
         const {data: response} = await axios.get(url);
@@ -32,8 +32,8 @@ export async function addRecurso(data: RecursoDraft, ruta: string){
     const isGasto = ruta.toLowerCase() === 'gasto';
 
     const url = isGasto  
-        ? 'http://localhost:49151/api/gastos/add-gasto' 
-        : 'http://localhost:49151/api/ingresos/add-ingreso' ;
+        ? `${process.env.REACT_APP_API_URL}/gastos/add-gasto`
+        : `${process.env.REACT_APP_API_URL}/ingresos/add-ingreso`
     
     const parsed = RecursoDraftSchema.safeParse(data)
 
@@ -71,8 +71,8 @@ export async function handleEliminar(id: RecursoData['_id'], ruta : string){
     console.log(ruta)
 
     const url = isGasto  
-        ? `http://localhost:49151/api/gastos/eliminar-gasto/${id}`
-        : `http://localhost:49151/api/ingresos/eliminar-ingreso/${id}`
+        ? `${process.env.REACT_APP_API_URL}/gastos/eliminar-gasto/${id}`
+        : `${process.env.REACT_APP_API_URL}/ingresos/eliminar-ingreso/${id}`
 
     try {
 
@@ -113,8 +113,8 @@ export async function editarRecurso(id: RecursoData['_id'], data: RecursoDraft, 
     console.log("data: ", data)
 
     const url = isGasto  
-        ? `http://localhost:49151/api/gastos/editar-gasto/${id}`
-        : `http://localhost:49151/api/ingresos/editar-ingreso/${id}`
+        ? `${process.env.REACT_APP_API_URL}/gastos/editar-gasto/${id}`
+        : `${process.env.REACT_APP_API_URL}/ingresos/editar-ingreso/${id}`
 
     try {
 

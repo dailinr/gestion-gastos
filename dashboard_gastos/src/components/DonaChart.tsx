@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
-import type { Category } from '@/types';
+import type { Category } from '../Types/index';
 
 type DonutChartProps = {
   categories: Category[]

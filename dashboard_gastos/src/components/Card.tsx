@@ -1,5 +1,5 @@
 // import { Building } from "lucide-react";
-import type { Category } from "@/types"; 
+import type { Category } from "../Types/index"; 
 import { Spinner } from "./Spinner";
 import { useAppStore } from "@/Stores/useAppStore";
 
