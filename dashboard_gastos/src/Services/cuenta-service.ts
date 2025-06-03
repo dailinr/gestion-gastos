@@ -3,7 +3,7 @@ import { CuentaSemanaSchema } from '@/Schemas/cuentaSchema'
 
 export async function getSemana() {
     
-    const url = `${import.meta.env.VITE_API_URL}/cuentas/calcular-semana`
+    const url = `${import.meta.env.VITE_API_URL}cuentas/calcular-semana`
 
     try {
         const {data: response} = await axios.get(url);
@@ -29,7 +29,7 @@ export async function getSemana() {
 }
 
 export async function addSemana() {
-    const url = `${import.meta.env.VITE_API_URL}/cuentas/add-cuenta`
+    const url = `${import.meta.env.VITE_API_URL}cuentas/add-cuenta`
 
     try {
         await axios.get(url);
