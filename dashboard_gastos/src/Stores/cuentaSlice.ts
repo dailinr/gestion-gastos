@@ -1,6 +1,6 @@
 import { categories } from "@/data/categories"
 import {getSemana } from "@/Services/cuenta-service"
-import type { Category, CuentaActual, GastoReciente, ResumeSemana } from "../Types/index"
+import type { Category, CuentaActual, GastoReciente, ResumeSemana } from "@/Types"
 import type { StateCreator } from "zustand"
 
 export type cuentaSliceType = {

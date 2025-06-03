@@ -14,7 +14,7 @@ import {  ModalForm } from "./RecursoForm"
 import { useLocation } from "react-router-dom"
 import { useEffect } from "react"
 import { useAppStore } from "@/Stores/useAppStore"
-import type { Recursos } from "../Types/index"
+import type { Recursos } from "@/Types"
 import { Spinner } from "./Spinner"
 
 export const TableContainer = () => {

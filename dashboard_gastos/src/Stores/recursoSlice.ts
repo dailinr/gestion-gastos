@@ -1,5 +1,5 @@
 import { addRecurso, editarRecurso, getRecursos, handleEliminar } from "@/Services/recurso-service"
-import type { RecursoData, RecursoDraft, Recursos, ResponseGasto, ResponseIngreso } from "../Types/index"
+import type { RecursoData, RecursoDraft, Recursos, ResponseGasto, ResponseIngreso } from "@/Types"
 import type { StateCreator } from "zustand"
 
 export type recursoSliceType = {

@@ -1,4 +1,4 @@
-import type { Category } from "../Types/index" 
+import type { Category } from "@/Types" 
 
 export const categories : Category[] = [
     {
