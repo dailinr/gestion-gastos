@@ -93,10 +93,10 @@ export const Dashboard = () => {
                 <i className='bx bx-right-arrow-alt text-xl absolute right-4 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
                 <h1 className="text-md font-semibold pt-1">Metas de Ahorro</h1>
                 <p className="text-gray-500 font-semibold mb-3 text-md">$15,900</p>
-                  <Progress value={90} />
-                  <div className="w-full h-[45px] rounded-lg bg-[#F6F6FA] text-xl flex items-center justify-center mt-4">
-                    $25,000
-                  </div>
+                <Progress value={90} />
+                <div className="w-full h-[45px] rounded-lg bg-[#F6F6FA] text-xl flex items-center justify-center mt-4">
+                  $25,000
+                </div>
               </div>
             </section>
           </div>

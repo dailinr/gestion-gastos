@@ -1,5 +1,5 @@
 import 'boxicons/css/boxicons.min.css';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { formatDate } from '@/Services/formatDate';
 // import { CogFour, Bell, Search } from "@mynaui/icons-react";
 
@@ -22,12 +22,12 @@ export const Header  = ({ section }: {section : string}) => {
                     </p>
                 </div> 
 
-                <Tabs defaultValue="account" >
+                {/* <Tabs defaultValue="account" >
                     <TabsList className="mx-auto bg-[#DFDFDF] ">
                         <TabsTrigger value="account">Semana</TabsTrigger>
                         <TabsTrigger value="password">Mes</TabsTrigger>
                     </TabsList>
-                </Tabs> 
+                </Tabs>  */}
                 </>
             ):(
                 <div className="max-w-md flex-1  ">   
