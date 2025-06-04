@@ -10,7 +10,7 @@ import {
 import { formatDateGrap } from "@/Services/formatDate"
 import type { Recursos, RecursoData } from "@/types"
 import { ModalConfirma } from "./ModalConfirma"
-import { categories } from "@/data/categories"
+import { categories, categoriesIngresos } from "@/data/categories"
 import { ModalForm } from "./RecursoForm"
 interface TableDataProps {
     data: Recursos;
@@ -19,6 +19,8 @@ interface TableDataProps {
 }
 
 export const TableData = ({ data, resourceType, pageContextPath }: TableDataProps) => {
+
+    const categoriesTable = pageContextPath === '/gastos' ? categories : categoriesIngresos;
 
   return (
     <Table>
@@ -39,7 +41,7 @@ export const TableData = ({ data, resourceType, pageContextPath }: TableDataProp
                 <TableRow key={d._id}>
                     <TableCell className="font-semibold pl-5">{formatDateGrap(d.fecha)}</TableCell>
                     <TableCell>
-                        <span className={`py-0.5 px-1 text-[0.75rem] font-medium rounded-lg ${categories.find(c => c.name === d.etiqueta)?.color}`}>{d.etiqueta}</span>
+                        <span className={`py-0.5 px-1 text-[0.75rem] font-medium rounded-lg ${categoriesTable.find(c => c.name === d.etiqueta)?.color}`}>{d.etiqueta}</span>
                     </TableCell>
                     <TableCell>{d.descripcion}</TableCell>
                     <TableCell>${d.valor}</TableCell>

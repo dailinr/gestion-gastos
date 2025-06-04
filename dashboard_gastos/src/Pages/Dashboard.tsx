@@ -1,3 +1,12 @@
+import {
+  Card as CardBoard,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Card } from "../components/Card"
 import { DonutChart } from "../components/DonaChart"
@@ -60,18 +69,23 @@ export const Dashboard = () => {
           ))}
   
           <div className="col-span-3 grid grid-cols-2 gap-4 h-full">
-              {/* Grafica resumen de gastos  */}
-            <section className="bg-white rounded-xl shadow px-4 py-2 h-full relative flex flex-col overflow-auto">
+
+            {/* Grafica resumen de gastos   */}
+            <CardBoard className=" py-2 px-4 h-full  flex flex-col overflow-auto">
               {categoriesSemana.length === 0 ? (
                 <Spinner />
               ): 
               (<>
-                <i className='bx bx-right-arrow-alt text-xl absolute right-4 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
-                <h1 className="text-md font-semibold pt-1">Resumen de Gastos</h1>
-                <p className="text-gray-500 mb-2 font-semibold text-[12px]">último mes</p>
-                <div className="flex gap-x-3 ">
+                <CardHeader className="px-0 gap-0">
+                  <CardTitle className="text-md font-semibold pt-1">Resumen de Gastos</CardTitle>
+                  <CardDescription className="text-gray-500 font-semibold mb-0 text-[12px]">última semana</CardDescription>
+                  <CardAction>
+                    <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
+                  </CardAction>
+                </CardHeader>
+
+                <CardContent className="px-0 md:flex gap-x-3">
                   <div className="w-full">
-                      {/* <img src="/grafico.jpg" alt="" />   */}
                     <DonutChart categories={categoriesSemana} />
                   </div>
                   <div className="flex flex-col mx-auto mr-0">
@@ -83,28 +97,34 @@ export const Dashboard = () => {
                       </div>
                     ))}
                   </div>
-                </div> 
-              </>)}
-            </section>
+                </CardContent>
+                </>
+              )}
+            </CardBoard>
   
             {/* Progreso de ahorros */}
-            <section className="bg-white rounded-xl shadow px-4 py-2 h-full relative flex flex-col overflow-auto">
-              <div className=" flex-1k">
-                <i className='bx bx-right-arrow-alt text-xl absolute right-4 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
-                <h1 className="text-md font-semibold pt-1">Metas de Ahorro</h1>
-                <p className="text-gray-500 font-semibold mb-3 text-md">$15,900</p>
+            <CardBoard className=" py-2 px-4 h-full  flex flex-col overflow-auto">
+              <CardHeader className="px-0 gap-0">
+                <CardTitle className="text-md font-semibold pt-1">Metas de Ahorro</CardTitle>
+                <CardDescription className="text-gray-500 font-semibold mb-3 text-md">$45,000</CardDescription>
+                <CardAction>
+                  <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
+                </CardAction>
+              </CardHeader>
+              <CardContent className="px-0">
                 <Progress value={90} />
-                <div className="w-full h-[45px] rounded-lg bg-[#F6F6FA] text-xl flex items-center justify-center mt-4">
-                  $25,000
-                </div>
-              </div>
-            </section>
-          </div>
+              </CardContent>
+              <CardFooter className="w-full h-[45px] rounded-lg bg-[#F6F6FA] text-xl flex items-center justify-center">
+                <p>$25,000</p>
+              </CardFooter>
+            </CardBoard>
+
+          </div> 
   
           <div className="bg-white col-span-3 rounded-xl shadow px-4 py-2 h-full relative flex flex-col">
             <i className='bx bx-right-arrow-alt text-xl absolute right-4 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
             <h1 className="text-md font-semibold pt-1">Gastos por Categoria</h1>
-            <p className="text-gray-500 mb-2 font-semibold text-[12px]">último mes</p>
+            <p className="text-gray-500 mb-2 font-semibold text-[12px]">última semana</p>
             <div className="flex-1 overflow-auto ">
               <div className="flex flex-wrap gap-y-4 h-full items-center justify-between ">
                 {categoriesSemana.length === 0 ? (

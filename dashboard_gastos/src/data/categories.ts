@@ -115,17 +115,21 @@ export const categoriesIngresos = [
     {
         id: 1, 
         name: "Salario",
+        color: 'bg-[#fbcfe8]',
     },
     {
         id: 2, 
         name: "Inversiones",
+        color: "bg-[#c7d2fe]",
     },
     {
         id: 3, 
         name: "Regalos",
+        color: 'bg-[#bbf7d0]',
     },
     {
         id: 4, 
         name: "Otros",
+        color: 'bg-[#B2967D]',
     },
 ]

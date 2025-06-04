@@ -11,7 +11,7 @@ type cardProps = {
 export const Card = ({ data, type}: cardProps) => {
 
   const classCard = `bg-white rounded-xl shadow p-3 md:p-5 flex md:flex-row flex-col items-center justify-between overflow-hidden h-auto md:h-[110px]}`;
-  const classCategory = 'flex-none w-1/6 flex flex-col items-center overflow-hidden  ';
+  const classCategory = 'flex-none w-1/4 md:w-1/6 flex flex-col items-center overflow-hidden  ';
 
   const contIcon = `${data.color} w-10 h-10 rounded-full flex items-center justify-center mb-1`;
 
