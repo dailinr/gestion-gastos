@@ -1,5 +1,6 @@
 import { addRecurso, editarRecurso, getRecursos, handleEliminar } from "@/Services/recurso-service"
 import type { RecursoData, RecursoDraft, Recursos, ResponseGasto, ResponseIngreso } from "@/types"
+import { toast } from "sonner"
 import type { StateCreator } from "zustand"
 
 export type recursoSliceType = {
@@ -43,6 +44,11 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
     },
 
     fetchEditarRecurso: async ( data, ruta) => {
+        const activeId = get().idActivo;
+        if (!activeId) {
+            toast.error("No hay un recurso activo seleccionado para editar.");
+            return;
+        }
         return await editarRecurso(get().idActivo, data, ruta)
     }
 })

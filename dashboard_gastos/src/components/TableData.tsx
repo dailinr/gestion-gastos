@@ -8,12 +8,17 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import { formatDateGrap } from "@/Services/formatDate"
-import type { Recursos} from "@/types"
+import type { Recursos, RecursoData } from "@/types"
 import { ModalConfirma } from "./ModalConfirma"
 import { categories } from "@/data/categories"
 import { ModalForm } from "./RecursoForm"
+interface TableDataProps {
+    data: Recursos;
+    resourceType: 'gasto' | 'ingreso'; 
+    pageContextPath: '/gastos' | '/ingresos'; 
+}
 
-export const TableData = ({ data, ruta } : { data: Recursos, ruta: string}) => {
+export const TableData = ({ data, resourceType, pageContextPath }: TableDataProps) => {
 
   return (
     <Table>
@@ -30,7 +35,7 @@ export const TableData = ({ data, ruta } : { data: Recursos, ruta: string}) => {
         </TableHeader>
 
         <TableBody>
-            {data.docs.map(d  => (
+            {data.docs.map((d: RecursoData)  => (
                 <TableRow key={d._id}>
                     <TableCell className="font-semibold pl-5">{formatDateGrap(d.fecha)}</TableCell>
                     <TableCell>
@@ -39,9 +44,11 @@ export const TableData = ({ data, ruta } : { data: Recursos, ruta: string}) => {
                     <TableCell>{d.descripcion}</TableCell>
                     <TableCell>${d.valor}</TableCell>
                     <TableCell className="flex justify-end pr-8 gap-2">
-                        <ModalConfirma ruta={ruta} id={d._id} />
-                        <ModalForm 
-                            pathname={d._id} type="editar"
+                        <ModalConfirma ruta={resourceType} id={d._id} />
+                        <ModalForm
+                            formType="editar"
+                            entityId={d._id} 
+                            pageContextPath={pageContextPath}
                         />
                     </TableCell>
                 </TableRow>

@@ -22,112 +22,131 @@ import {
 } from "@/components/ui/select"
 import { categories, categoriesIngresos } from "@/data/categories"
 import { useForm, Controller} from "react-hook-form"
-import type { RecursoDraft, Recursos } from "@/types"
+import type { RecursoData, RecursoDraft, Recursos } from "@/types"
 import { useAppStore } from "@/Stores/useAppStore"
 import { toast } from "sonner"
-import { useEffect } from "react"
-import { Spinner } from "./Spinner"
+import { useEffect, useMemo, useState } from "react"
+// import { Spinner } from "./Spinner"
 
-type modalProps = {
-  pathname: string
-  type: string
-}
+const defaultFormValues: RecursoDraft = { 
+  valor: 0,
+  etiqueta: "",
+  descripcion: "",
+};
 
-export function ModalForm({ pathname, type }: modalProps) {
+type ModalFormProps = {
+  formType: 'agregar' | 'editar';
+  pageContextPath: '/gastos' | '/ingresos'; 
+  entityId?: RecursoData['_id']; 
+};
 
-  const isEditar = type === 'editar'
-  const ruta = pathname === '/gastos' ? 'Gasto' : 'Ingreso'
-  const categoriesSelect = ruta === 'Gasto' ? categories : categoriesIngresos
+export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProps) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const isEditar = formType === 'editar';
+  
+  const resourceName = pageContextPath === '/gastos' ? 'Gasto' : 'Ingreso'; // para títulos y mensajes
+  // const resourceKeyInStore = pageContextPath === '/gastos' ? 'gastos' : 'ingresos'; //  para acceder a gastos/ingresos en el store
+  const categoriesSelect = resourceName === 'Gasto' ? categories : categoriesIngresos;
 
-  const {fetchAddRecurso, fetchRecursos, setIdActivo, 
-    idActivo, fetchEditarRecurso, gastos, ingresos } = useAppStore()
+  const { fetchAddRecurso, fetchRecursos,  setIdActivo,    
+    fetchEditarRecurso, gastos, ingresos } = useAppStore();
+
+  // Seleccionar el recurso correcto del store
+  const currentResourceStore: Recursos | undefined = useMemo(() => {
+    return pageContextPath === '/gastos' ? gastos : ingresos;
+  }, [pageContextPath, gastos, ingresos]);
+
   const { handleSubmit, control, formState: { errors }, reset } = useForm<RecursoDraft>({
-    defaultValues: {
-      valor: 0,
-      etiqueta: "",
-      descripcion: "",
-    }
-  })
+    defaultValues: defaultFormValues 
+  });
 
-  const data : Recursos = ruta === 'Gasto' ? gastos : ingresos
-
-  if(!data){
-    return ( <Spinner /> )
-  }
-
+  // Efecto para manejar la apertura/cierre del diálogo y el reseteo del formulario
   useEffect(() => {
-    if (idActivo) {
-      const recurso = data?.docs.find(r => r._id === idActivo);
-      if (recurso) {
-        reset({
-          valor: recurso.valor,
-          descripcion: recurso.descripcion,
-          etiqueta: recurso.etiqueta,
-        });
-      }
+    if (isDialogOpen) {
       
-    } else reset();
+      if (isEditar && entityId) {
+        setIdActivo(entityId);
+        const resourceToEdit = currentResourceStore?.docs.find(r => r._id === entityId);
 
-  }, [idActivo, data, reset]);
-
-
-  const registerRecurso = async (data: RecursoDraft) => {
-    let response 
-
-    if(!idActivo) {
-      response = await fetchAddRecurso(data, ruta)
-
-      if(response?.status === "success"){    
-        toast.success(`${ruta} agregado correctamente!`) 
-        fetchRecursos()
+        if (resourceToEdit) {
+          reset({
+            valor: resourceToEdit.valor,
+            descripcion: resourceToEdit.descripcion,
+            etiqueta: resourceToEdit.etiqueta,
+          });
+        } 
+        else {
+          // Resetea a vacío para evitar mostrar datos incorrectos.
+          reset(defaultFormValues);
+          if(entityId) toast.error(`${resourceName} con ID ${entityId} no encontrado para editar.`);
+        }
+      } else { // Modo Agregar
+        setIdActivo(''); 
+        reset(defaultFormValues); // Resetea a valores por defecto
       }
-      else{
-        toast.error(`Error al agregar ${ruta}!`) 
-      }
+    } 
+    else {
+      setIdActivo(''); // Cuando el diálogo se cierra, limpiamos el idActivo del store.
     }
-    else{
-      const recursoActualizado = {
-        ...data,
-        _id: idActivo
-      }
-      response = await fetchEditarRecurso(recursoActualizado, ruta)
 
-      if(response?.status === "success"){    
-        toast.success(`${ruta} actualizado correctamente!`) 
-        fetchRecursos()
+  }, [isDialogOpen, isEditar, entityId, currentResourceStore, reset, setIdActivo, resourceName]);
+    
+
+  const onSubmit = async (formData: RecursoDraft) => {
+    let response;
+
+    try {
+      if (isEditar && entityId) {  // si es para editar
+        const recursoActualizado = { ...formData, _id: entityId };
+        response = await fetchEditarRecurso(recursoActualizado, resourceName.toLowerCase() as 'gasto' | 'ingreso');
+        if (response?.status === "success") {
+          toast.success(`${resourceName} actualizado correctamente!`);
+        } else {
+          throw new Error(response?.mensaje || `Error al actualizar ${resourceName}!`);
+        }
+      } 
+      else { // Agregar nuevo
+        response = await fetchAddRecurso(formData, resourceName.toLowerCase() as 'gasto' | 'ingreso');
+        if (response?.status === "success") {
+          toast.success(`${resourceName} agregado correctamente!`);
+        } else {
+          throw new Error(response?.mensaje ||`Error al agregar ${resourceName}!`);
+        }
       }
-      else{
-        toast.error(`Error al actualizar ${ruta}!`) 
-      }
+      await fetchRecursos(); // refrescar datos en la tabla
+      setIsDialogOpen(false); // cerrar el diálogo
+
+    } catch (error: any) {
+      toast.error(error.message || `Ocurrió un error.`);
     }
-    reset()
-    setIdActivo('')
-  }
-
+  };
+    
+    
+  // if (!currentResourceStore || !currentResourceStore.docs) {
+  //     return <Spinner />; 
+  // }
 
   return (
-    <Dialog >
+    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
 
       <DialogTrigger asChild>
         {isEditar ? (
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="size-5 text-blue-800 cursor-pointer"
-            onClick={() => setIdActivo(pathname)}
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="size-5 text-blue-800 cursor-pointer">
             <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
           </svg>
         ): 
         (
           <Button className="cursor-pointer">
-            Agregar {ruta}
+            Agregar {resourceName}
           </Button>
         )}
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-[425px] bg-white">
-        <form onSubmit={handleSubmit(registerRecurso)}>
+        <form onSubmit={handleSubmit(onSubmit)}>
 
         <DialogHeader>
-          <DialogTitle> {isEditar ? ('Editar ') : ('Nuevo ')} {ruta}</DialogTitle>
+          <DialogTitle> {isEditar ? 'Editar ' : 'Nuevo '} {resourceName}</DialogTitle>
           <DialogDescription>
             Guardalo cuando hayas terminado
           </DialogDescription>
@@ -238,10 +257,10 @@ export function ModalForm({ pathname, type }: modalProps) {
         </div>
 
         <DialogFooter>
-          <DialogPrimitive.Close>
-            <Button type="button" variant="secondary" className="w-full" >Cancelar</Button>
+          <DialogPrimitive.Close asChild>
+            <Button type="button" variant="secondary" >Cancelar</Button>
           </DialogPrimitive.Close>
-          <Button type="submit"> {isEditar ? ('Actualizar ') : ('Guardar ')} {ruta}</Button>
+          <Button type="submit"> {isEditar ? 'Actualizar ' : 'Guardar '} {resourceName}</Button>
         </DialogFooter>
 
       </form>

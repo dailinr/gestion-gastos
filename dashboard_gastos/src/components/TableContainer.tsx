@@ -19,18 +19,18 @@ import { Spinner } from "./Spinner"
 
 export const TableContainer = () => {
     const {pathname} = useLocation();
-    const {fetchRecursos, gastos, ingresos } = useAppStore()
+    const {fetchRecursos, gastos, ingresos} = useAppStore()
     
-    const data = pathname === '/gastos' ? gastos 
-        : ( pathname === '/ingresos' ? ingresos : {} as Recursos )
-    const pageRuta = pathname === '/gastos' ? ('Gastos') : ('Ingresos')
-    const ruta = pathname === '/gastos' ? ('gasto') : ('ingreso')
+    // Determinar el tipo de recurso basado en el pathname real de la página
+    const pageResourceType = pathname === '/gastos' ? 'gasto' : 'ingreso';
+    const data = pageResourceType === 'gasto' ? gastos : ingresos;
+    const pageTitle = pageResourceType === 'gasto' ? 'Gastos' : 'Ingresos';
 
     useEffect(() => {
         fetchRecursos() 
     },[])
 
-    const isEmptyData = (data : Recursos) => Object.keys(data).length === 0
+    const isEmptyData = (data : Recursos) => !data || Object.keys(data).length === 0 || !data.docs;
     if(isEmptyData(data)){
         return ( <Spinner /> )
     }
@@ -40,20 +40,24 @@ export const TableContainer = () => {
 
         <section className="mt-5 mb-5 md:flex space-y-3 md:space-y-0 justify-between  items-center">
             <div className="text-2xl font-semibold">
-                {pageRuta}
+                {pageTitle}
             </div>
             <div className="flex gap-5 items-center ">
                 <DatePicker width="w-[280px]" bg="hover:bg-white"/>
 
-                <ModalForm pathname={pathname} type="agregar" />
+                <ModalForm
+                    formType="agregar"
+                    pageContextPath={location.pathname as '/gastos' | '/ingresos'} // Ruta de la página actual
+                />
             </div>
         </section>
         
         {data.totalDocs === 0 ? (
             <p className="text-2xl font-semibold py-20 text-center">
-                No hay {pageRuta.toLocaleLowerCase()} para esta semana
+                No hay {pageTitle.toLocaleLowerCase()} para esta semana
             </p>
-        ): <TableData data={data} ruta={ruta} /> }
+        ): <TableData data={data} resourceType={pageResourceType} pageContextPath={location.pathname as '/gastos' | '/ingresos'} />}
+
 
         <Pagination className="mt-5 justify-end">
             <PaginationContent>
