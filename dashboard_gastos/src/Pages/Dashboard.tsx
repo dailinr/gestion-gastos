@@ -15,6 +15,7 @@ import type { Category } from "@/types"
 import { Component as BarChart } from "../components/BarChart"
 import { useEffect} from "react"
 import { Spinner } from "@/components/Spinner"
+import { formatMoneda } from "@/Services/formatMoneda"
 
 export const Dashboard = () => {
   
@@ -105,16 +106,16 @@ export const Dashboard = () => {
             <CardBoard className=" py-2 px-4 h-full  flex flex-col overflow-auto">
               <CardHeader className="px-0 gap-0">
                 <CardTitle className="text-md font-semibold pt-1">Metas de Ahorro</CardTitle>
-                <CardDescription className="text-gray-500 font-semibold mb-3 text-md">$45,000</CardDescription>
+                <CardDescription className="text-gray-500 font-semibold mb-3 text-md">${formatMoneda(45000)}</CardDescription>
                 <CardAction>
                   <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
                 </CardAction>
               </CardHeader>
               <CardContent className="px-0">
-                <Progress value={90} />
+                <Progress value={55} />
               </CardContent>
               <CardFooter className="w-full h-[45px] rounded-lg bg-[#F6F6FA] text-xl flex items-center justify-center">
-                <p>$25,000</p>
+                <p>${formatMoneda(25000)}</p>
               </CardFooter>
             </CardBoard>
 
@@ -170,7 +171,7 @@ export const Dashboard = () => {
                     <p className="text-[14px] ">{gasto.descripcion}</p>
                     <p className="text-[12px] text-gray-500 ">{gasto.diaSemana}</p>
                   </div>
-                  <p className="text-red-600 text-sm mx-auto mr-0">-${gasto.valor}</p>
+                  <p className="text-red-600 text-sm mx-auto mr-0">-${formatMoneda(gasto.valor)}</p>
                 </div>
               ))}
             </div>)

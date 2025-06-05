@@ -12,6 +12,7 @@ import type { Recursos, RecursoData } from "@/types"
 import { ModalConfirma } from "./ModalConfirma"
 import { categories, categoriesIngresos } from "@/data/categories"
 import { ModalForm } from "./RecursoForm"
+import { formatMoneda } from "@/Services/formatMoneda"
 interface TableDataProps {
     data: Recursos;
     resourceType: 'gasto' | 'ingreso'; 
@@ -44,7 +45,7 @@ export const TableData = ({ data, resourceType, pageContextPath }: TableDataProp
                         <span className={`py-0.5 px-1 text-[0.75rem] font-medium rounded-lg ${categoriesTable.find(c => c.name === d.etiqueta)?.color}`}>{d.etiqueta}</span>
                     </TableCell>
                     <TableCell>{d.descripcion}</TableCell>
-                    <TableCell>${d.valor}</TableCell>
+                    <TableCell>${formatMoneda(d.valor)}</TableCell>
                     <TableCell className="flex justify-end pr-8 gap-2">
                         <ModalConfirma ruta={resourceType} id={d._id} />
                         <ModalForm

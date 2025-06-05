@@ -2,6 +2,7 @@
 import type { Category } from "@/types"; 
 import { Spinner } from "./Spinner";
 import { useAppStore } from "@/Stores/useAppStore";
+import { formatMoneda } from "@/Services/formatMoneda";
 // import { BanknoteArrowDown, ChartColumnBig } from "lucide-react";
 
 type cardProps = {
@@ -68,7 +69,7 @@ export const Card = ({ data, type}: cardProps) => {
 
         <div className={`${type === 'card' ? "md:text-left " : "" } text-center flex-grow`}>
           <div className={`${type === 'card' ? "md:justify-end md:text-2xl  " : ""} flex justify-center font-medium text-[13px]  break-words overflow-wrap-break-word`}>
-            {data.amount}
+            ${formatMoneda(data.amount)}
           </div>
           <div className={`${type === 'card' ? "md:justify-end md:text-sm mt-1  font-semibold" : ""} flex justify-center font-medium  text-gray-600 text-[12px] break-words overflow-wrap-break-word`}>
             {data.name}

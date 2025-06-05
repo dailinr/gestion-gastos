@@ -68,7 +68,6 @@ export async function addRecurso(data: RecursoDraft, ruta: string){
 
 export async function handleEliminar(id: RecursoData['_id'], ruta : string){
     const isGasto = ruta === 'gasto'
-    console.log(ruta)
 
     const url = isGasto  
         ? `${import.meta.env.VITE_API_URL}gastos/eliminar-gasto/${id}`

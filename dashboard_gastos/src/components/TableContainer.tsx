@@ -20,7 +20,7 @@ import { Button } from "./ui/button"
 
 export const TableContainer = () => {
     const {pathname} = useLocation();
-    const {fetchRecursos, filterGastos, filterIngresos} = useAppStore()
+    const {fetchRecursos, fetchSemana, filterGastos, filterIngresos} = useAppStore()
     
     // Determinar el tipo de recurso basado en el pathname real de la página
     const pageResourceType = pathname === '/gastos' ? 'gasto' : 'ingreso';
@@ -29,6 +29,7 @@ export const TableContainer = () => {
 
     useEffect(() => {
         fetchRecursos()
+        fetchSemana()
     },[])
 
     const isEmptyData = (data : Recursos) => !data || Object.keys(data).length === 0 || !data.docs;
