@@ -1,0 +1,97 @@
+- desde el dashboard se manejará inicialmente las cuentas
+- funcion ConseguirSemana con el enpoint "/calcular-semana"
+
+- funcion addSemana con "/add-cuenta"
+
+- funcion conseguirAcumulado "/calcular-acumulado"
+
+
+const CuentaSchema = Schema({
+
+    fechaInicial: {
+        type: Date,
+    },
+    fechaFinal: {
+        type: Date,
+    },
+    semanal: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
+});
+
+router.get("/prueba", ControladorCuenta.pruebaCuenta);
+router.get("/add-cuenta", ControladorCuenta.guardarCuenta);
+router.get("/calcular-semana", ControladorCuenta.calcularTotalSemanal);
+router.get("/calcular-acumulado", ControladorCuenta.calcularAcumulado);
+router.get("/listar-semana/:pageCuenta?/:pageDatos?", ControladorCuenta.listarPorSemana);
+
+// category.name.toLocaleLowerCase() === cuentaActual.categoriasGastos?.etiqueta?.etiquetaOriginal ? 
+              // cuentaActual.categoriasGastos?.etiqueta?.totalCategoria : category.amount)
+
+export type Recursos = Omit <z.infer<typeof RecursosSemanaSchema>, 'diaSemana'>
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+const GastoSchema = Schema({
+    etiqueta: {
+        type: String,
+        required: true,
+    },
+    descripcion: {
+        type: String,
+        required: true,
+    },
+    valor: {
+        type: Number,
+        default: 0,
+        required: true,
+    },
+    fecha: {
+        type: Date,
+        default: Date.now,
+    },
+    cuenta: {
+        type: Schema.ObjectId,
+        ref: "Cuenta"
+    }
+});
+
+router.get("/prueba", ControladorGasto.pruebaGasto);
+router.post("/add-gasto", ControladorGasto.guardar);
+router.delete("/eliminar-gasto/:id", ControladorGasto.eliminar);
+router.put("/editar-gasto/:id", ControladorGasto.editar);
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+const IngresoSchema = Schema({
+    etiqueta: {
+        type: String,
+        required: true,
+    },
+    descripcion: {
+        type: String,
+        required: true,
+    },
+    valor: {
+        type: Number,
+        default: 0,
+        required: true,
+    },
+    fecha: {
+        type: Date,
+        default: Date.now,
+    },
+    cuenta: {
+        type: Schema.ObjectId,
+        ref: "Cuenta"
+    }
+});
+
+router.get("/prueba", ControladorIngreso.pruebaIngreso);
+router.post("/add-ingreso", ControladorIngreso.guardar);
+router.delete("/eliminar-ingreso/:id", ControladorIngreso.eliminar);
+router.put("/editar-ingreso/:id", ControladorIngreso.editar);
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------

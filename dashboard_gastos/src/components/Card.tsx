@@ -2,27 +2,27 @@
 import type { Category } from "@/types"; 
 import { Spinner } from "./Spinner";
 import { useAppStore } from "@/Stores/useAppStore";
-import { BanknoteArrowDown, ChartColumnBig } from "lucide-react";
+// import { BanknoteArrowDown, ChartColumnBig } from "lucide-react";
 
 type cardProps = {
   data: Category
   type: 'card' | 'category'
 };
 
-const items = [
-  {
-    id: 'ingresos',
-    icon: ChartColumnBig,
-  },
-  {
-    id: 'gastos',
-    icon: BanknoteArrowDown,
-  },
-  {
-    id: 'acumulado',
-    icon: BanknoteArrowDown,
-  }, 
-]
+// const items = [
+//   {
+//     id: 'ingresos',
+//     icon: ChartColumnBig,
+//   },
+//   {
+//     id: 'gastos',
+//     icon: BanknoteArrowDown,
+//   },
+//   {
+//     id: 'acumulado',
+//     icon: BanknoteArrowDown,
+//   }, 
+// ]
 
 export const Card = ({ data, type}: cardProps) => {
 
