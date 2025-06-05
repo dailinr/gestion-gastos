@@ -2,11 +2,27 @@
 import type { Category } from "@/types"; 
 import { Spinner } from "./Spinner";
 import { useAppStore } from "@/Stores/useAppStore";
+import { BanknoteArrowDown, ChartColumnBig } from "lucide-react";
 
 type cardProps = {
   data: Category
-  type: string
+  type: 'card' | 'category'
 };
+
+const items = [
+  {
+    id: 'ingresos',
+    icon: ChartColumnBig,
+  },
+  {
+    id: 'gastos',
+    icon: BanknoteArrowDown,
+  },
+  {
+    id: 'acumulado',
+    icon: BanknoteArrowDown,
+  }, 
+]
 
 export const Card = ({ data, type}: cardProps) => {
 
@@ -36,6 +52,9 @@ export const Card = ({ data, type}: cardProps) => {
           
             <div className={type === 'card' ? imgClass : imgCategory }>
               <img src={`${import.meta.env.BASE_URL}${data.icon}.svg`} alt={data.icon} />
+              {/*items.map(item => (
+                <item.icon key={(items.find(i => i.id === data.id))?.id} />)
+              */}
             </div>
       
           </div>

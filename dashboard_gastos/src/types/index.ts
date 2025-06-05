@@ -8,6 +8,11 @@ export type Recurso = {
   diaSemana: string
 }
 
+export type BuscarRecurso = {
+  modo: string
+  value: string
+}
+
 export type Category = {
   id: number
   name: string

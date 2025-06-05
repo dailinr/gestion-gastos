@@ -23,7 +23,7 @@ export const Layout = () => {
 
       <section className="flex flex-col w-full h-screen py-5 px-5 md:pl-2 md:pr-6 gap-4 ">
        
-        <Header section={isHome ? 'home' : ''} /> 
+        <Header isHome={isHome} pathname={pathname} /> 
         <Outlet /> 
         
       </section>

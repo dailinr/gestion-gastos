@@ -108,9 +108,6 @@ export async function handleEliminar(id: RecursoData['_id'], ruta : string){
 
 export async function editarRecurso(id: RecursoData['_id'], data: RecursoDraft, ruta : string){
     const isGasto = ruta.toLowerCase() === 'gasto'
-    console.log("ruta: ", ruta)
-    console.log("id: ", id)
-    console.log("data: ", data)
 
     const url = isGasto  
         ? `${import.meta.env.VITE_API_URL}gastos/editar-gasto/${id}`

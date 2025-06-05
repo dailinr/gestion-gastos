@@ -16,18 +16,19 @@ import { useEffect } from "react"
 import { useAppStore } from "@/Stores/useAppStore"
 import type { Recursos } from "@/types"
 import { Spinner } from "./Spinner"
+import { Button } from "./ui/button"
 
 export const TableContainer = () => {
     const {pathname} = useLocation();
-    const {fetchRecursos, gastos, ingresos} = useAppStore()
+    const {fetchRecursos, filterGastos, filterIngresos} = useAppStore()
     
     // Determinar el tipo de recurso basado en el pathname real de la página
     const pageResourceType = pathname === '/gastos' ? 'gasto' : 'ingreso';
-    const data = pageResourceType === 'gasto' ? gastos : ingresos;
+    const data = pageResourceType === 'gasto' ? filterGastos : filterIngresos;
     const pageTitle = pageResourceType === 'gasto' ? 'Gastos' : 'Ingresos';
 
     useEffect(() => {
-        fetchRecursos() 
+        fetchRecursos()
     },[])
 
     const isEmptyData = (data : Recursos) => !data || Object.keys(data).length === 0 || !data.docs;
@@ -52,29 +53,34 @@ export const TableContainer = () => {
             </div>
         </section>
         
-        {data.totalDocs === 0 ? (
+        {(data.totalDocs === 0 || data.docs.length === 0) ? (
             <p className="text-2xl font-semibold py-20 text-center">
                 No hay {pageTitle.toLocaleLowerCase()} para esta semana
             </p>
         ): <TableData data={data} resourceType={pageResourceType} pageContextPath={location.pathname as '/gastos' | '/ingresos'} />}
 
+        <div className="flex md:flex-col mt-5">
+            <div className="w-full md:flex justify-center">
+                <Button variant="secondary" >Ver más</Button>
+            </div>
 
-        <Pagination className="mt-5 justify-end">
-            <PaginationContent>
-                <PaginationItem >
-                    <PaginationPrevious href="#" />
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationLink href="#" isActive  >1</PaginationLink>
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationEllipsis />
-                </PaginationItem>
-                <PaginationItem>
-                    <PaginationNext href="#"  />
-                </PaginationItem>
-            </PaginationContent>
-        </Pagination>
+            <Pagination className=" justify-end">
+                <PaginationContent>
+                    <PaginationItem >
+                        <PaginationPrevious href="#" />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationLink href="#" isActive  >1</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                        <PaginationNext href="#"  />
+                    </PaginationItem>
+                </PaginationContent>
+            </Pagination>
+        </div>
 
     </div>
   )

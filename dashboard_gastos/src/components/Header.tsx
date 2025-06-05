@@ -1,55 +1,104 @@
 import 'boxicons/css/boxicons.min.css';
 // import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { formatDate } from '@/Services/formatDate';
-// import { CogFour, Bell, Search } from "@mynaui/icons-react";
+import { useState } from 'react';
+import { useAppStore } from '@/Stores/useAppStore';
+import { toast } from 'sonner';
+// import { toast } from 'sonner';
 
-export const Header  = ({ section }: {section : string}) => {
-    const nombre = "Bienvenido";
-    const fechaActual = new Date()
+type headerProps = {
+  isHome: boolean
+  pathname: string
+}
+
+export const Header = ({ isHome, pathname }: headerProps) => {
+  const nombre = "Bienvenido";
+  const fechaActual = new Date()
+  const classOption = "inline-flex w-full px-1 bg-gray-200 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+  const keyRuta = pathname === '/' ? null : (pathname === '/gastos' ? 'gastos' : 'ingresos')
+  
+  const {fetchBuscar, fetchRecursos} = useAppStore()
+  const buscarOptions = [ { modo: 'Semana'} ]
+  const [buscar, setBuscar] = useState({
+    modo: 'Semana',
+    value: ''
+  })
+
+  const handleSearch = ( e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => {
+    setBuscar({
+      ...buscar,
+      [e.target.name] : e.target.value
+    })
+  }
+
+  const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if(buscar.value.trim() === ''){
+      toast.error('No has aplicado ningun filtro')
+      fetchRecursos()
+      return
+    }
+
+    fetchBuscar(buscar, keyRuta)
+  }
 
   return (
     <div className="flex-shrink-0 ">
-        <div className=" flex items-center justify-between gap-2 ">
+      <div className=" flex items-center justify-between gap-2 ">
 
-            {section === "home" ? ( 
-                <>
-                <div >
-                    <h1 className="text-black text-xl font-semibold">
-                        Hola, {nombre}!
-                    </h1>
-                    <p className='text-[#666666] text-[12px]'>
-                        {formatDate(fechaActual.toString())}
-                    </p>
-                </div> 
+        {isHome ? (
+          <>
+            <div >
+              <h1 className="text-black text-xl font-semibold">
+                Hola, {nombre}!
+              </h1>
+              <p className='text-[#666666] text-[12px]'>
+                {formatDate(fechaActual.toString())}
+              </p>
+            </div>
 
-                {/* <Tabs defaultValue="account" >
+            {/* <Tabs defaultValue="account" >
                     <TabsList className="mx-auto bg-[#DFDFDF] ">
                         <TabsTrigger value="account">Semana</TabsTrigger>
                         <TabsTrigger value="password">Mes</TabsTrigger>
                     </TabsList>
                 </Tabs>  */}
-                </>
-            ):(
-                <div className="max-w-md flex-1  ">   
-                <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                <div className="relative">
-                    <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        {/* <Search />  */}
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5.5">
-                            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                        </svg>
+          </>
+        ) :
+        (<form className="md:max-w-1/2 flex-1 " onSubmit={handleSubmit}>
+          <div className="flex ">
+            
+            <select 
+              name="modo" id="modo" value={buscar.modo}
+              onChange={handleSearch}
+              className="py-2 text-sm text-gray-700 dark:text-gray-200  shrink-0 z-10 inline-flex items-center  px-3 text-sm font-medium text-center text-gray-900 bg-gray-200 border border-gray-300 rounded-s-3xl hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" 
+            >
+              {buscarOptions.map(buscar => (
+                <option className={classOption} key={buscar.modo} value={buscar.modo}>{buscar.modo}</option>
+              ))}
+            </select>
 
-                    </div>
-                    
-                    <input type="search" id="default-search" 
-                        className="bg-white block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-200 rounded-3xl  focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                        placeholder="Search " required 
-                    />
-                </div>
-            </div> 
-            )}
+            <div className="relative w-full">
+              <input type="search" id="value" name="value"
+                className="block p-2.5 pe-10 w-full z-20 text-sm text-gray-900 bg-white rounded-e-3xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                placeholder={`Buscar por fecha, etiqueta, descripcion, valor`} required
+                onChange={handleSearch} value={buscar.value}
+              />
 
-            {/* <div className='flex gap-2'>
+              <button type="submit" className="flex gap-1.5 absolute top-0 end-0 p-2.5 px-2 text-sm font-medium h-full text-white bg-gray-900 rounded-e-lg border border-gray-900 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                </svg>
+                <span className="hidden ">Buscar</span>
+            </button>
+            </div>
+          </div>
+        </form>
+        )}
+
+
+        {/* <div className='flex gap-2'>
                 <button
                     type="button"
                     className="cursor-pointer h-10 w-10 bg-white shadow-sm text-[#444444]    hover:bg-[#DADADA] hover:text-[#444444] hover:border-[#DADADA] focus:bg-[#DADADA] focus:text-[#444444] focus:border-[#DADADA] focus:ring-4 focus:outline-none focus:ring-[#9B9B9B]/50 font-medium rounded-full text-sm p-2.5 text-center inline-flex items-center justify-center dark:border-[#9B9B9B] dark:text-[#DADADA] dark:hover:bg-[#9B9B9B] dark:hover:text-[#DADADA] dark:hover:border-[#9B9B9B] dark:focus:bg-[#9B9B9B] dark:focus:text-[#DADADA] dark:focus:border-[#9B9B9B] dark:focus:ring-[#9B9B9B]/50 "
@@ -72,7 +121,7 @@ export const Header  = ({ section }: {section : string}) => {
                     src="/perfil.avif" alt="Rounded avatar" 
                 />
             </div> */}
-        </div>
+      </div>
     </div>
   )
 }

@@ -103,6 +103,6 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
         });
 
         set({ resumeSemana })
-    }
+    },
 
 })

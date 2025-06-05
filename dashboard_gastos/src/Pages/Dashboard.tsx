@@ -25,7 +25,6 @@ export const Dashboard = () => {
     setCategories()
     setGastosRecientes()
     setResumeSemana()
-    console.log(gastosRecientes)
   },[cuentaActual])
 
   
