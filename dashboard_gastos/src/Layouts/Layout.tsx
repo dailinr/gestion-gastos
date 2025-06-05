@@ -14,7 +14,7 @@ export const Layout = () => {
 
   useEffect(() => {
     fetchSemana()
-  }, [isHome])
+  }, [])
 
   return (
     <SidebarProvider>
