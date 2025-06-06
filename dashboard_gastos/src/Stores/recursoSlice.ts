@@ -11,6 +11,7 @@ export type recursoSliceType = {
     filterGastos: Recursos
     filterIngresos: Recursos
     idActivo: RecursoData['_id']
+    isLoading: boolean
     fetchRecursos: () => Promise<void>
     fetchAddRecurso: (data: RecursoDraft, ruta: string) => Promise<ResponseGasto | ResponseIngreso | undefined>
     eliminarRecurso: (id : RecursoData['_id'], ruta : string) => Promise<ResponseGasto | ResponseIngreso | undefined>
@@ -27,17 +28,28 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
     idActivo: '',
     filterGastos: {} as Recursos,
     filterIngresos: {} as Recursos,
+    isLoading: true,
 
     fetchRecursos: async () => {
-        const recursosCompleto = await getRecursos()
-        set({ 
-            // recursosCompleto,
-            gastos: recursosCompleto?.resultados[0]?.gastos,
-            ingresos: recursosCompleto?.resultados[0]?.ingresos,
-            filterGastos: get().gastos,
-            filterIngresos: get().ingresos
-        })
+        set({ isLoading: true })
+        try {
+            const recursosCompleto = await getRecursos();
+            
+            const nuevosGastos = recursosCompleto?.resultados[0]?.gastos
+            const nuevosIngresos = recursosCompleto?.resultados[0]?.ingresos
 
+            set({
+                gastos: nuevosGastos,
+                ingresos: nuevosIngresos,
+                filterGastos: nuevosGastos,
+                filterIngresos: nuevosIngresos,
+            });
+
+        } catch (error) {
+            console.error("Error al obtener recursos:", error);
+        } finally {
+            set({ isLoading: false })
+        }
     },
 
     fetchAddRecurso: async (data, ruta)  => {
@@ -70,34 +82,33 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
             return
         }
 
-        if(buscar.value !== ''){
-            const recurso : Recursos = keyRuta === 'ingresos' ? get().ingresos : get().gastos
-            const lowerSearch = buscar.value.toLowerCase()
+        const recurso : Recursos = keyRuta === 'ingresos' ? get().ingresos : get().gastos
+        if (!recurso?.docs) return;
+        const lowerSearch = buscar.value.toLowerCase()
 
-            const filtered = recurso.docs.filter(dato => {
-                const etiqueta = dato.etiqueta?.toLowerCase() || '';
-                const descripcion = dato.descripcion?.toLowerCase() || '';
-                const fecha = formatDateTable(dato.fecha ) || ''; // Formatear fecha
-                const valor = dato.valor?.toString() || '';
+        const filtered = recurso.docs.filter(dato => {
+            const etiqueta = dato.etiqueta?.toLowerCase() || '';
+            const descripcion = dato.descripcion?.toLowerCase() || '';
+            const fecha = formatDateTable(dato.fecha ) || ''; // Formatear fecha
+            const valor = dato.valor?.toString() || '';
 
-                return (
-                    etiqueta.includes(lowerSearch) ||
-                    descripcion.includes(lowerSearch) ||
-                    fecha.includes(lowerSearch) ||
-                    valor.includes(lowerSearch)
-                )
-            })
+            return (
+                etiqueta.includes(lowerSearch) ||
+                descripcion.includes(lowerSearch) ||
+                fecha.includes(lowerSearch) ||
+                valor.includes(lowerSearch)
+            )
+        })
 
-            if(keyRuta === 'gastos'){
-                set((state) => ({ 
-                    filterGastos: {...state.gastos, docs: filtered}
-                }))
-            }
-            else{
-                set((state) => ({ 
-                    filterIngresos: {...state.ingresos, docs: filtered}
-                }))
-            }
+        if(keyRuta === 'gastos'){
+            set((state) => ({ 
+                filterGastos: {...state.gastos, docs: filtered}
+            }))
+        }
+        else{
+            set((state) => ({ 
+                filterIngresos: {...state.ingresos, docs: filtered}
+            }))
         }
     }
 })

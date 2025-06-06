@@ -12,28 +12,29 @@ import {
 } from "@/components/ui/pagination"
 import {  ModalForm } from "./RecursoForm"
 import { useLocation } from "react-router-dom"
-import { useEffect } from "react"
 import { useAppStore } from "@/Stores/useAppStore"
-import type { Recursos } from "@/types"
 import { Spinner } from "./Spinner"
 import { Button } from "./ui/button"
 
 export const TableContainer = () => {
     const {pathname} = useLocation();
-    const {fetchRecursos, filterGastos, filterIngresos} = useAppStore()
+    const {filterGastos, filterIngresos, isLoading} = useAppStore()
     
     // Determinar el tipo de recurso basado en el pathname real de la página
     const pageResourceType = pathname === '/gastos' ? 'gasto' : 'ingreso';
     const data = pageResourceType === 'gasto' ? filterGastos : filterIngresos;
     const pageTitle = pageResourceType === 'gasto' ? 'Gastos' : 'Ingresos';
 
-    useEffect(() => {
-        fetchRecursos()
-    },[])
-
-    const isEmptyData = (data : Recursos) => !data || Object.keys(data).length === 0 || !data.docs;
-    if(isEmptyData(data)){
+    if(isLoading){
         return ( <Spinner /> )
+    }
+
+    if(!data?.docs || data.docs.length === 0) {
+        return(
+            <p className="text-2xl font-semibold py-20 text-center">
+                No hay {pageTitle.toLocaleLowerCase()} para esta semana
+            </p>
+        )
     }
 
   return (
@@ -53,11 +54,10 @@ export const TableContainer = () => {
             </div>
         </section>
         
-        {(data.totalDocs === 0 || data.docs.length === 0) ? (
-            <p className="text-2xl font-semibold py-20 text-center">
-                No hay {pageTitle.toLocaleLowerCase()} para esta semana
-            </p>
-        ): <TableData data={data} resourceType={pageResourceType} pageContextPath={location.pathname as '/gastos' | '/ingresos'} />}
+        <TableData 
+            data={data} resourceType={pageResourceType} 
+            pageContextPath={location.pathname as '/gastos' | '/ingresos'} 
+        />
 
         <div className="flex md:flex-col mt-5">
             <div className="w-full md:flex justify-center">

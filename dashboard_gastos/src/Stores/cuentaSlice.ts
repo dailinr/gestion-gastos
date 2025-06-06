@@ -5,12 +5,13 @@ import type { StateCreator } from "zustand"
 
 export type cuentaSliceType = {
     cuentaActual: CuentaActual
-    fetchSemana: () => Promise<void>
+    // isLoading: boolean
     categoriesSemana: Category[]
-    setCategories: () => void
     gastosRecientes: GastoReciente[]
-    setGastosRecientes: () => void
     resumeSemana: ResumeSemana[]
+    fetchSemana: () => Promise<void>
+    setCategories: () => void
+    setGastosRecientes: () => void
     setResumeSemana: () => void
 }
 
@@ -19,6 +20,7 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
     categoriesSemana: [],
     gastosRecientes: [],
     resumeSemana: [],
+    // isLoading: true,
 
     fetchSemana: async () => {
         const cuentaActual = await getSemana()

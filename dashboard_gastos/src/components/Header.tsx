@@ -1,10 +1,9 @@
 import 'boxicons/css/boxicons.min.css';
 // import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useState, useEffect } from 'react';
 import { formatDate } from '@/Services/formatDate';
-import { useState } from 'react';
 import { useAppStore } from '@/Stores/useAppStore';
-import { toast } from 'sonner';
-// import { toast } from 'sonner';
+import { useDebounce } from '@/hooks/useDebounce';
 
 type headerProps = {
   isHome: boolean
@@ -17,12 +16,14 @@ export const Header = ({ isHome, pathname }: headerProps) => {
   const classOption = "inline-flex w-full px-1 bg-gray-200 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
   const keyRuta = pathname === '/' ? null : (pathname === '/gastos' ? 'gastos' : 'ingresos')
   
-  const {fetchBuscar, fetchRecursos} = useAppStore()
+  const {fetchBuscar} = useAppStore()
   const buscarOptions = [ { modo: 'Semana'} ]
   const [buscar, setBuscar] = useState({
     modo: 'Semana',
     value: ''
   })
+
+  const debouncedSearchValue = useDebounce(buscar.value, 300); // 300ms de delay
 
   const handleSearch = ( e: React.ChangeEvent<HTMLSelectElement> | React.ChangeEvent<HTMLInputElement>) => {
     setBuscar({
@@ -31,14 +32,17 @@ export const Header = ({ isHome, pathname }: headerProps) => {
     })
   }
 
+  useEffect(() => {
+    // salir si estamos en el home o si el input inicial está vacío
+    if (pathname === '/') return; 
+
+    // Llama a fetchBuscar siempre, se encargará de filtrar o de resetear la lista si el input está vacío
+    fetchBuscar({ modo: buscar.modo, value: debouncedSearchValue }, keyRuta);
+
+  }, [debouncedSearchValue, buscar.modo, keyRuta, fetchBuscar, pathname]);
+
   const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if(buscar.value.trim() === ''){
-      toast.error('No has aplicado ningun filtro')
-      fetchRecursos()
-      return
-    }
 
     fetchBuscar(buscar, keyRuta)
   }
@@ -59,11 +63,11 @@ export const Header = ({ isHome, pathname }: headerProps) => {
             </div>
 
             {/* <Tabs defaultValue="account" >
-                    <TabsList className="mx-auto bg-[#DFDFDF] ">
-                        <TabsTrigger value="account">Semana</TabsTrigger>
-                        <TabsTrigger value="password">Mes</TabsTrigger>
-                    </TabsList>
-                </Tabs>  */}
+                  <TabsList className="mx-auto bg-[#DFDFDF] ">
+                      <TabsTrigger value="account">Semana</TabsTrigger>
+                      <TabsTrigger value="password">Mes</TabsTrigger>
+                  </TabsList>
+              </Tabs>  */}
           </>
         ) :
         (<form className="md:max-w-1/2 flex-1 " onSubmit={handleSubmit}>
@@ -81,18 +85,18 @@ export const Header = ({ isHome, pathname }: headerProps) => {
 
             <div className="relative w-full">
               <input type="search" id="value" name="value"
-                className="block p-2.5 pe-10 w-full z-20 text-sm text-gray-900 bg-white rounded-e-3xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+                className="block p-2.5 pe-10 w-full z-20 text-sm text-gray-900 bg-white rounded-e-3xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-gray-500"
                 placeholder={`Buscar por fecha, etiqueta, descripcion, valor`} required
                 onChange={handleSearch} value={buscar.value}
               />
 
-              <button type="submit" className="flex gap-1.5 absolute top-0 end-0 p-2.5 px-2 text-sm font-medium h-full text-white bg-gray-900 rounded-e-lg border border-gray-900 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                <svg className="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+              <div className="absolute inset-y-0 end-0 flex  items-center px-3 pointer-events-none">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="gray" className="size-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                 </svg>
-                <span className="hidden ">Buscar</span>
-            </button>
+              </div>
             </div>
+            
           </div>
         </form>
         )}
