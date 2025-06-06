@@ -29,13 +29,7 @@ export const TableContainer = () => {
         return ( <Spinner /> )
     }
 
-    if(!data?.docs || data.docs.length === 0) {
-        return(
-            <p className="text-2xl font-semibold py-20 text-center">
-                No hay {pageTitle.toLocaleLowerCase()} para esta semana
-            </p>
-        )
-    }
+    const isEmptyData = !data?.docs || data.docs.length === 0
 
   return (
     <div className="flex flex-col w-full">
@@ -45,7 +39,7 @@ export const TableContainer = () => {
                 {pageTitle}
             </div>
             <div className="flex gap-5 items-center ">
-                <DatePicker width="w-[280px]" bg="hover:bg-white"/>
+                {!isEmptyData && <DatePicker width="w-[280px]" bg="hover:bg-white"/> }
 
                 <ModalForm
                     formType="agregar"
@@ -53,34 +47,42 @@ export const TableContainer = () => {
                 />
             </div>
         </section>
-        
-        <TableData 
-            data={data} resourceType={pageResourceType} 
-            pageContextPath={location.pathname as '/gastos' | '/ingresos'} 
-        />
 
-        <div className="flex md:flex-col mt-5">
-            <div className="w-full md:flex justify-center">
-                <Button variant="secondary" >Ver más</Button>
+        {isEmptyData ? (
+            <p className="text-2xl font-semibold py-20 text-center">
+                No hay {pageTitle.toLocaleLowerCase()} disponibles
+            </p>
+        ):
+            <TableData 
+                data={data} resourceType={pageResourceType} 
+                pageContextPath={location.pathname as '/gastos' | '/ingresos'} 
+            />
+        }
+
+        {!isEmptyData &&
+            <div className="flex md:flex-col mt-5">
+                <div className="w-full md:flex justify-center">
+                    <Button variant="secondary" >Ver más</Button>
+                </div>
+
+                <Pagination className=" justify-end">
+                    <PaginationContent>
+                        <PaginationItem >
+                            <PaginationPrevious href="#" />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationLink href="#" isActive  >1</PaginationLink>
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationEllipsis />
+                        </PaginationItem>
+                        <PaginationItem>
+                            <PaginationNext href="#"  />
+                        </PaginationItem>
+                    </PaginationContent>
+                </Pagination>
             </div>
-
-            <Pagination className=" justify-end">
-                <PaginationContent>
-                    <PaginationItem >
-                        <PaginationPrevious href="#" />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationLink href="#" isActive  >1</PaginationLink>
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationEllipsis />
-                    </PaginationItem>
-                    <PaginationItem>
-                        <PaginationNext href="#"  />
-                    </PaginationItem>
-                </PaginationContent>
-            </Pagination>
-        </div>
+        }
 
     </div>
   )

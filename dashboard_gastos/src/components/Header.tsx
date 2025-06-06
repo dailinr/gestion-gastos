@@ -16,8 +16,8 @@ export const Header = ({ isHome, pathname }: headerProps) => {
   const classOption = "inline-flex w-full px-1 bg-gray-200 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
   const keyRuta = pathname === '/' ? null : (pathname === '/gastos' ? 'gastos' : 'ingresos')
   
-  const {fetchBuscar} = useAppStore()
-  const buscarOptions = [ { modo: 'Semana'} ]
+  const {fetchBuscar, fetchBuscarGlobal} = useAppStore()
+  const buscarOptions = [ { modo: 'Semana'}, { modo: 'Todas'} ]
   const [buscar, setBuscar] = useState({
     modo: 'Semana',
     value: ''
@@ -33,19 +33,34 @@ export const Header = ({ isHome, pathname }: headerProps) => {
   }
 
   useEffect(() => {
+
     // salir si estamos en el home o si el input inicial está vacío
-    if (pathname === '/') return; 
+    if (pathname === '/' || !debouncedSearchValue){ 
+      // Si se borra el input, resetea la vista de semana
+      if (buscar.modo === 'Semana') {
+        fetchBuscar({ modo: 'Semana', value: '' }, keyRuta);
+      }
+      else{
+        fetchBuscarGlobal('', keyRuta);
+      }
+      return;
+    }
 
-    // Llama a fetchBuscar siempre, se encargará de filtrar o de resetear la lista si el input está vacío
-    fetchBuscar({ modo: buscar.modo, value: debouncedSearchValue }, keyRuta);
+    if (buscar.modo === 'Semana') {  
+      fetchBuscar({ modo: buscar.modo, value: debouncedSearchValue }, keyRuta);
+    } 
+    else {
+      fetchBuscarGlobal(debouncedSearchValue, keyRuta);
+    }
 
-  }, [debouncedSearchValue, buscar.modo, keyRuta, fetchBuscar, pathname]);
+  }, [debouncedSearchValue, buscar.modo, keyRuta, fetchBuscar, fetchBuscarGlobal]);
 
-  const handleSubmit = ( e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    fetchBuscar(buscar, keyRuta)
-  }
+  useEffect(() => {
+    setBuscar({
+      modo: 'Semana',
+      value: ''
+    })
+  }, [pathname])
 
   return (
     <div className="flex-shrink-0 ">
@@ -70,7 +85,7 @@ export const Header = ({ isHome, pathname }: headerProps) => {
               </Tabs>  */}
           </>
         ) :
-        (<form className="md:max-w-1/2 flex-1 " onSubmit={handleSubmit}>
+        (<form className="md:max-w-1/2 flex-1 ">
           <div className="flex ">
             
             <select 
@@ -86,7 +101,7 @@ export const Header = ({ isHome, pathname }: headerProps) => {
             <div className="relative w-full">
               <input type="search" id="value" name="value"
                 className="block p-2.5 pe-10 w-full z-20 text-sm text-gray-900 bg-white rounded-e-3xl border-s-gray-50 border-s-2 border border-gray-300 focus:ring-gray-500 focus:border-gray-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-gray-500"
-                placeholder={`Buscar por fecha, etiqueta, descripcion, valor`} required
+                placeholder={`Buscar por etiqueta, descripcion o valor`} required
                 onChange={handleSearch} value={buscar.value}
               />
 
@@ -96,7 +111,7 @@ export const Header = ({ isHome, pathname }: headerProps) => {
                 </svg>
               </div>
             </div>
-            
+
           </div>
         </form>
         )}

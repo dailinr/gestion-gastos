@@ -1,4 +1,4 @@
-import { RecursoDraftSchema, RecursosPaginacionSchema } from '@/Schemas/recursoSchema';
+import { RecursoDraftSchema, RecursosPaginacionSchema, RecursosSchema } from '@/Schemas/recursoSchema';
 import type { RecursoData, RecursoDraft, ResponseGasto, ResponseIngreso } from '@/types';
 import axios from 'axios'
 
@@ -21,7 +21,6 @@ export async function getRecursos(){
             console.log(error.response.data)
         } 
         else {
-            // Otro tipo de error (sin respuesta, por ejemplo de red)
             console.error("Error desconocido:", error);
             throw error;
         }
@@ -59,7 +58,6 @@ export async function addRecurso(data: RecursoDraft, ruta: string){
             return error.response
         } 
         else {
-            // Otro tipo de error (sin respuesta, por ejemplo de red)
             console.error("Error desconocido:", error);
             throw error;
         }
@@ -84,13 +82,6 @@ export async function handleEliminar(id: RecursoData['_id'], ruta : string){
             // console.log(response)
             return response
         }
-
-        // const result = RecursosPaginacionSchema.safeParse(response)
-        // // console.log(result)
-        
-        // if(result.success){
-        //     return result.data 
-        // }
     } 
     catch (error: any) {
         if (error.response) {
@@ -98,7 +89,6 @@ export async function handleEliminar(id: RecursoData['_id'], ruta : string){
             return error.response
         } 
         else {
-            // Otro tipo de error (sin respuesta, por ejemplo de red)
             console.error("Error desconocido:", error);
             throw error;
         }
@@ -130,8 +120,33 @@ export async function editarRecurso(id: RecursoData['_id'], data: RecursoDraft, 
             return error.response
         } 
         else {
-            // Otro tipo de error (sin respuesta, por ejemplo de red)
             console.error("Error desconocido:", error);
+            throw error;
+        }
+    }
+}
+
+export async function buscarGlobal(query: string, tipo: string | null){
+
+    const url = `${import.meta.env.VITE_API_URL}cuentas/buscar?q=${query}&tipo=${tipo}&page=1&limit=10`;
+    try {
+        
+        const {data: response} = await axios.get(url); 
+        // console.log(response)
+
+        const result = RecursosSchema.safeParse(response.resultados)
+        // console.log(result)
+
+        if(result.success){
+            return result.data 
+        }
+    }
+    catch (error: any) {
+        if (error.response) {
+            console.log(error.response.data)
+        } 
+        else {
+            console.error("Error en la búsqueda global:", error);
             throw error;
         }
     }

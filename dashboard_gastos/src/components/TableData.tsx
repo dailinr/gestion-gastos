@@ -13,6 +13,7 @@ import { ModalConfirma } from "./ModalConfirma"
 import { categories, categoriesIngresos } from "@/data/categories"
 import { ModalForm } from "./RecursoForm"
 import { formatMoneda } from "@/Services/formatMoneda"
+
 interface TableDataProps {
     data: Recursos;
     resourceType: 'gasto' | 'ingreso'; 

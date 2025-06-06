@@ -1,5 +1,4 @@
-import { formatDateTable } from "@/Services/formatDate"
-import { addRecurso, editarRecurso, getRecursos, handleEliminar } from "@/Services/recurso-service"
+import { addRecurso, buscarGlobal, editarRecurso, getRecursos, handleEliminar } from "@/Services/recurso-service"
 import type { BuscarRecurso, RecursoData, RecursoDraft, Recursos, ResponseGasto, ResponseIngreso } from "@/types"
 import { toast } from "sonner"
 import type { StateCreator } from "zustand"
@@ -18,6 +17,7 @@ export type recursoSliceType = {
     setIdActivo: (id: RecursoData['_id']) => void
     fetchEditarRecurso: (data: RecursoDraft, ruta:string) => Promise<ResponseGasto | ResponseIngreso | undefined>
     fetchBuscar: (buscar : BuscarRecurso, keyRuta: string | null) => void
+    fetchBuscarGlobal: (query: string, tipo: string | null) => Promise<void>
 }
 
 export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) => ({
@@ -89,13 +89,13 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
         const filtered = recurso.docs.filter(dato => {
             const etiqueta = dato.etiqueta?.toLowerCase() || '';
             const descripcion = dato.descripcion?.toLowerCase() || '';
-            const fecha = formatDateTable(dato.fecha ) || ''; // Formatear fecha
+            // const fecha = formatDateTable(dato.fecha ) || ''; // Formatear fecha
             const valor = dato.valor?.toString() || '';
 
             return (
                 etiqueta.includes(lowerSearch) ||
                 descripcion.includes(lowerSearch) ||
-                fecha.includes(lowerSearch) ||
+                // fecha.includes(lowerSearch) ||
                 valor.includes(lowerSearch)
             )
         })
@@ -110,5 +110,29 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
                 filterIngresos: {...state.ingresos, docs: filtered}
             }))
         }
-    }
+    },
+
+    fetchBuscarGlobal: async (query, tipo) => {
+        if (!tipo) return;
+
+        if(query.trim() == ''){
+            set({ 
+                filterIngresos: get().ingresos, filterGastos: get().gastos
+            })
+            return
+        }
+
+        set({ isLoading: true });
+        const resultados = await buscarGlobal(query, tipo)
+
+        if (tipo === 'gastos') {
+            set({ filterGastos: resultados });
+        } 
+        else {
+            set({ filterIngresos: resultados });
+        }
+        
+        set({ isLoading: false });
+        
+    },
 })
