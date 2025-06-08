@@ -9,7 +9,9 @@ export const Paginacion = z.object({
     totalPages: z.number(),
     currentPage: z.number(),
     hasPrevPage: z.boolean(),
-    hasNextPage: z.boolean()
+    hasNextPage: z.boolean(),
+    prevPage:  z.number().nullable(), // Puede ser number o null
+    nextPage: z.number().nullable()
 })
 
 export const PaginacionRecurso = Paginacion.omit({ currentPage: true });

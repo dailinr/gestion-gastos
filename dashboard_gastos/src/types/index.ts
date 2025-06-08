@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { CuentaSemanaSchema, RecursoResponseSchema } from '@/Schemas/cuentaSchema'
-import type { RecursoDraftSchema, RecursoSchemaNuevo, RecursosPaginacionSchema, RecursosSchema } from '@/Schemas/recursoSchema'
+import type { Paginacion, RecursoDraftSchema, RecursoSchemaNuevo, RecursosPaginacionSchema, RecursosSchema } from '@/Schemas/recursoSchema'
 
 export type Recurso = {
   id: number
@@ -54,6 +54,7 @@ export type ResponseGasto = {
 export type CuentaActual = z.infer<typeof CuentaSemanaSchema>
 
 export type RecursosPaginacion = z.infer<typeof RecursosPaginacionSchema>
+export type PaginationTypes = z.infer<typeof Paginacion>
 export type Recursos = z.infer<typeof RecursosSchema>
 export type RecursoData = z.infer<typeof RecursoSchemaNuevo>
 export type RecursoDraft = z.infer<typeof RecursoDraftSchema>

@@ -1,17 +1,19 @@
 import { addRecurso, buscarGlobal, editarRecurso, getRecursos, handleEliminar } from "@/Services/recurso-service"
-import type { BuscarRecurso, RecursoData, RecursoDraft, Recursos, ResponseGasto, ResponseIngreso } from "@/types"
+import type { BuscarRecurso, RecursoData, RecursoDraft, Recursos, RecursosPaginacion, ResponseGasto, ResponseIngreso } from "@/types"
 import { toast } from "sonner"
 import type { StateCreator } from "zustand"
 
 export type recursoSliceType = {
-    // recursosCompleto: RecursosPaginacion
+    recursosCompleto: RecursosPaginacion
+    currentPage: number
     gastos: Recursos
     ingresos: Recursos
     filterGastos: Recursos
     filterIngresos: Recursos
     idActivo: RecursoData['_id']
     isLoading: boolean
-    fetchRecursos: () => Promise<void>
+    fetchRecursos: (page: number) => Promise<void>
+    // setCurrentPage: (page: number) => Promise<void>
     fetchAddRecurso: (data: RecursoDraft, ruta: string) => Promise<ResponseGasto | ResponseIngreso | undefined>
     eliminarRecurso: (id : RecursoData['_id'], ruta : string) => Promise<ResponseGasto | ResponseIngreso | undefined>
     setIdActivo: (id: RecursoData['_id']) => void
@@ -21,7 +23,8 @@ export type recursoSliceType = {
 }
 
 export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) => ({
-    // recursosCompleto: {} as RecursosPaginacion,
+    recursosCompleto: {} as RecursosPaginacion,
+    currentPage: 1,
     gastos: {} as Recursos,
     ingresos: {} as Recursos,
     recursos: {} as RecursoDraft,
@@ -30,15 +33,17 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
     filterIngresos: {} as Recursos,
     isLoading: true,
 
-    fetchRecursos: async () => {
+    fetchRecursos: async (page) => {
         set({ isLoading: true })
         try {
-            const recursosCompleto = await getRecursos();
+            const recursosCompleto = await getRecursos(page);
             
             const nuevosGastos = recursosCompleto?.resultados[0]?.gastos
             const nuevosIngresos = recursosCompleto?.resultados[0]?.ingresos
 
             set({
+                currentPage: page,
+                recursosCompleto,
                 gastos: nuevosGastos,
                 ingresos: nuevosIngresos,
                 filterGastos: nuevosGastos,
@@ -51,6 +56,28 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
             set({ isLoading: false })
         }
     },
+
+    // setCurrentPage: async (page) => {
+    //     set({ isLoading: true });
+    //     try {
+    //         const recursosCompleto = await getRecursos(page);
+    //         const nuevosGastos = recursosCompleto?.resultados[0]?.gastos;
+    //         const nuevosIngresos = recursosCompleto?.resultados[0]?.ingresos;
+
+    //         set({
+    //             currentPage: page,
+    //             recursosCompleto,
+    //             gastos: nuevosGastos,
+    //             ingresos: nuevosIngresos,
+    //             filterGastos: nuevosGastos,
+    //             filterIngresos: nuevosIngresos,
+    //         });
+    //     } catch (error) {
+    //         console.error("Error al cambiar de página:", error);
+    //     } finally {
+    //         set({ isLoading: false });
+    //     }
+    // },
 
     fetchAddRecurso: async (data, ruta)  => {
         return await addRecurso(data, ruta)

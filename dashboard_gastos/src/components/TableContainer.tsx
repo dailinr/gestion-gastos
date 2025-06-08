@@ -1,89 +1,68 @@
 import { TableData } from "./TableData"
 import { DatePicker } from './DatePicker'
-// import { Button } from "./ui/button"
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from "@/components/ui/pagination"
-import {  ModalForm } from "./RecursoForm"
+import { ModalForm } from "./RecursoForm"
 import { useLocation } from "react-router-dom"
 import { useAppStore } from "@/Stores/useAppStore"
 import { Spinner } from "./Spinner"
 import { Button } from "./ui/button"
+import { Paginacion } from "./Paginacion"
 
 export const TableContainer = () => {
-    const {pathname} = useLocation();
-    const {filterGastos, filterIngresos, isLoading} = useAppStore()
-    
-    // Determinar el tipo de recurso basado en el pathname real de la página
-    const pageResourceType = pathname === '/gastos' ? 'gasto' : 'ingreso';
-    const data = pageResourceType === 'gasto' ? filterGastos : filterIngresos;
-    const pageTitle = pageResourceType === 'gasto' ? 'Gastos' : 'Ingresos';
+   const { pathname } = useLocation();
+   const { filterGastos, filterIngresos, isLoading, recursosCompleto } = useAppStore()
 
-    if(isLoading){
-        return ( <Spinner /> )
-    }
+   // Determinar el tipo de recurso basado en el pathname real de la página
+   const pageResourceType = pathname === '/gastos' ? 'gasto' : 'ingreso';
+   const data = pageResourceType === 'gasto' ? filterGastos : filterIngresos;
+   const pageTitle = pageResourceType === 'gasto' ? 'Gastos' : 'Ingresos';
+   const paginacion = recursosCompleto.paginacion
 
-    const isEmptyData = !data?.docs || data.docs.length === 0
+   if (isLoading) {
+      return (<Spinner />)
+   }
 
-  return (
-    <div className="flex flex-col w-full">
+   const isEmptyData = !data?.docs || data.docs.length === 0
 
-        <section className="mt-5 mb-5 md:flex space-y-3 md:space-y-0 justify-between  items-center">
+   return (
+      <div className="flex flex-col w-full ">
+
+         <section className="mt-5 mb-5 md:flex space-y-3 md:space-y-0 justify-between  items-center">
             <div className="text-2xl font-semibold">
-                {pageTitle}
+               {pageTitle}
             </div>
             <div className="flex gap-5 items-center ">
-                {!isEmptyData && <DatePicker width="w-[280px]" bg="hover:bg-white"/> }
+               {!isEmptyData && <DatePicker width="w-[280px]" bg="hover:bg-white" />}
 
-                <ModalForm
-                    formType="agregar"
-                    pageContextPath={location.pathname as '/gastos' | '/ingresos'} // Ruta de la página actual
-                />
+               <ModalForm
+                  formType="agregar"
+                  pageContextPath={location.pathname as '/gastos' | '/ingresos'} // Ruta de la página actual
+               />
             </div>
-        </section>
+         </section>
 
-        {isEmptyData ? (
+         {isEmptyData ? (
             <p className="text-2xl font-semibold py-20 text-center">
-                No hay {pageTitle.toLocaleLowerCase()} disponibles
+               No hay {pageTitle.toLocaleLowerCase()} disponibles
             </p>
-        ):
-            <TableData 
-                data={data} resourceType={pageResourceType} 
-                pageContextPath={location.pathname as '/gastos' | '/ingresos'} 
+         ) :
+            <TableData
+               data={data} resourceType={pageResourceType}
+               pageContextPath={location.pathname as '/gastos' | '/ingresos'}
             />
-        }
+         }
+         
+         <div className="flex md:flex-col my-5">
 
-        {!isEmptyData &&
-            <div className="flex md:flex-col mt-5">
-                <div className="w-full md:flex justify-center">
-                    <Button variant="secondary" >Ver más</Button>
-                </div>
+            {data.hasNextPage &&
+               <div className="w-full md:flex justify-center">
+                  <Button variant="secondary" >Ver más</Button>
+               </div>
+            }
 
-                <Pagination className=" justify-end">
-                    <PaginationContent>
-                        <PaginationItem >
-                            <PaginationPrevious href="#" />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationLink href="#" isActive  >1</PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationEllipsis />
-                        </PaginationItem>
-                        <PaginationItem>
-                            <PaginationNext href="#"  />
-                        </PaginationItem>
-                    </PaginationContent>
-                </Pagination>
-            </div>
-        }
+           <Paginacion paginacion={paginacion} />
 
-    </div>
-  )
+         </div>
+
+      </div>
+   )
 }

@@ -13,7 +13,7 @@ export const Layout = () => {
   const { fetchSemana, fetchRecursos } = useAppStore()
 
   useEffect(() => {
-    Promise.all([fetchSemana(), fetchRecursos()]);
+    Promise.all([fetchSemana(), fetchRecursos(1)]);
   }, [])
 
   return (
