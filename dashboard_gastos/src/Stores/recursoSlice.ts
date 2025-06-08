@@ -57,27 +57,6 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
         }
     },
 
-    // setCurrentPage: async (page) => {
-    //     set({ isLoading: true });
-    //     try {
-    //         const recursosCompleto = await getRecursos(page);
-    //         const nuevosGastos = recursosCompleto?.resultados[0]?.gastos;
-    //         const nuevosIngresos = recursosCompleto?.resultados[0]?.ingresos;
-
-    //         set({
-    //             currentPage: page,
-    //             recursosCompleto,
-    //             gastos: nuevosGastos,
-    //             ingresos: nuevosIngresos,
-    //             filterGastos: nuevosGastos,
-    //             filterIngresos: nuevosIngresos,
-    //         });
-    //     } catch (error) {
-    //         console.error("Error al cambiar de página:", error);
-    //     } finally {
-    //         set({ isLoading: false });
-    //     }
-    // },
 
     fetchAddRecurso: async (data, ruta)  => {
         return await addRecurso(data, ruta)
