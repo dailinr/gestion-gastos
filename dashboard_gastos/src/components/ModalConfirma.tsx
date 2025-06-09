@@ -15,7 +15,7 @@ import { toast } from "sonner"
 
 export function ModalConfirma({ruta, id} : {ruta: string, id: RecursoData['_id']}) {
 
-    const {eliminarRecurso, setCurrentPage, currentPage} = useAppStore()
+    const {eliminarRecurso, setCurrentPage, currentPage, fetchSemana} = useAppStore()
     
     const handleEliminar = async (id : RecursoData['_id']) => {
         const response = await eliminarRecurso(id, ruta)
@@ -26,7 +26,8 @@ export function ModalConfirma({ruta, id} : {ruta: string, id: RecursoData['_id']
         else{
             toast.error(`Falló al eliminar ${ruta}`)
         }
-        setCurrentPage(currentPage)
+        await setCurrentPage(currentPage)
+        await fetchSemana()
     }
 
   return (

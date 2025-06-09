@@ -154,3 +154,30 @@ export async function buscarGlobal(query: string, tipo: string | null){
         }
     }
 }
+
+export async function filteredDate(date: Date, tipo: string | null) {
+    const fechaISO = date.toISOString()
+    const url = `${import.meta.env.VITE_API_URL}cuentas/filtered-date?date=${fechaISO}&tipo=${tipo}&page=1&limit=10`;
+    
+    try {
+        
+        const {data: response} = await axios.get(url); 
+        // console.log(response)
+
+        const result = RecursosSchema.safeParse(response.resultados)
+        // console.log(result)
+
+        if(result.success){
+            return result.data 
+        }
+    }
+    catch (error: any) {
+        if (error.response) {
+            console.log(error.response.data)
+        } 
+        else {
+            console.error("Error en filtrar por fecha", error);
+            throw error;
+        }
+    }
+}

@@ -49,7 +49,7 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
   const categoriesSelect = resourceName === 'Gasto' ? categories : categoriesIngresos;
 
   const { fetchAddRecurso, setCurrentPage,  setIdActivo,    
-    fetchEditarRecurso, gastos, ingresos, currentPage } = useAppStore();
+    fetchEditarRecurso, gastos, ingresos, currentPage, fetchSemana } = useAppStore();
 
   // Seleccionar el recurso correcto del store
   const currentResourceStore: Recursos | undefined = useMemo(() => {
@@ -114,6 +114,7 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
         }
       }
       await setCurrentPage(currentPage); // refrescar datos en la tabla
+      await fetchSemana()
       setIsDialogOpen(false); // cerrar el diálogo
 
     } catch (error: any) {

@@ -41,7 +41,12 @@ export const TableContainer = () => {
                {pageTitle}
             </div>
             <div className="flex gap-5 items-center ">
-               {!isEmptyData && <DatePicker width="w-[280px]" bg="hover:bg-white" />}
+               
+               <DatePicker 
+                  tipo={pageTitle.toLocaleLowerCase()}
+                  width="w-[280px]" bg="hover:bg-white" 
+                  pathname={pathname}
+               />
 
                <ModalForm
                   formType="agregar"

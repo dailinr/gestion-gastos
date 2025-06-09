@@ -12,11 +12,19 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { useAppStore } from "@/Stores/useAppStore"
 
-export function DatePicker({width, bg} : {width: string, bg: string}) {
-  // const fechaActualMilisegundos = Date.now()
-  // const fechaActualObj = new Date(fechaActualMilisegundos)
+export function DatePicker({width, bg, tipo} : {width: string, bg: string, tipo: string, pathname: string}) {
+  
+  const { filterDate } = useAppStore()
   const [date, setDate] = React.useState<Date>()
+
+  // Llamar a filterDate cuando cambia `date`
+  React.useEffect(() => {
+    if (date instanceof Date && !isNaN(date.getTime())) {
+      filterDate(date, tipo)
+    }
+  }, [date])
 
   return (
     <Popover>

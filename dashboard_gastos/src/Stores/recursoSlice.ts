@@ -1,4 +1,4 @@
-import { addRecurso, buscarGlobal, editarRecurso, getRecursos, handleEliminar } from "@/Services/recurso-service"
+import { addRecurso, buscarGlobal, editarRecurso, filteredDate, getRecursos, handleEliminar } from "@/Services/recurso-service"
 import type { BuscarRecurso, RecursoData, RecursoDraft, Recursos, RecursosPaginacion, ResponseGasto, ResponseIngreso } from "@/types"
 import { toast } from "sonner"
 import type { StateCreator } from "zustand"
@@ -20,6 +20,7 @@ export type recursoSliceType = {
     fetchEditarRecurso: (data: RecursoDraft, ruta:string) => Promise<ResponseGasto | ResponseIngreso | undefined>
     fetchBuscar: (buscar : BuscarRecurso, keyRuta: string | null) => void
     fetchBuscarGlobal: (query: string, tipo: string | null) => Promise<void>
+    filterDate: (date: Date, tipo: string | null) => Promise<void>
 }
 
 export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) => ({
@@ -159,6 +160,20 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
         }
         
         set({ isLoading: false });
-        
     },
+
+    filterDate: async (date, tipo) => {
+        set({ isLoading: true })
+
+        const resultados = await filteredDate(date, tipo)
+
+        if (tipo === 'gastos') {
+            set({ filterGastos: resultados });
+        } 
+        else {
+            set({ filterIngresos: resultados });
+        }
+        
+        set({ isLoading: false }); 
+    }
 })
