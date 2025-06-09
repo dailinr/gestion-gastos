@@ -8,15 +8,14 @@ import {
 } from "@/components/ui/pagination"
 import { Button } from "./ui/button"
 // import {  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { useAppStore } from "@/Stores/useAppStore"
 import type { PaginationTypes } from "@/types"
 
-type paginacionProps = {
-    paginacion: PaginationTypes
+type PaginacionProps = {
+    paginacion: PaginationTypes,
+    setCurrentPage: (page: number) => Promise<void>
 }
 
-export const Paginacion = ({paginacion } : paginacionProps) => {
-    const { setCurrentPage} = useAppStore()
+export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
 
   return (
     <Pagination>

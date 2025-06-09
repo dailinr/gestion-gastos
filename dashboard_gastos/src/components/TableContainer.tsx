@@ -6,10 +6,12 @@ import { useAppStore } from "@/Stores/useAppStore"
 import { Spinner } from "./Spinner"
 import { Button } from "./ui/button"
 import { Paginacion } from "./Paginacion"
+import { useEffect } from "react"
 
 export const TableContainer = () => {
    const { pathname } = useLocation();
-   const { filterGastos, filterIngresos, isLoading, recursosCompleto } = useAppStore()
+   const { filterGastos, filterIngresos,  recursosCompleto,
+      setCurrentPage, currentPage, isLoading} = useAppStore()
 
    // Determinar el tipo de recurso basado en el pathname real de la página
    const pageResourceType = pathname === '/gastos' ? 'gasto' : 'ingreso';
@@ -17,11 +19,19 @@ export const TableContainer = () => {
    const pageTitle = pageResourceType === 'gasto' ? 'Gastos' : 'Ingresos';
    const paginacion = recursosCompleto.paginacion
 
+   useEffect(() => {
+      if(!isLoading){
+         if(currentPage !== paginacion.totalPages) setCurrentPage(paginacion.totalPages)
+            else return 
+      }
+      
+   }, [pathname])
+   
+   const isEmptyData = !data?.docs || data.docs.length === 0
+
    if (isLoading) {
       return (<Spinner />)
    }
-
-   const isEmptyData = !data?.docs || data.docs.length === 0
 
    return (
       <div className="flex flex-col w-full ">
@@ -59,7 +69,10 @@ export const TableContainer = () => {
                </div>
             }
 
-           <Paginacion paginacion={paginacion} />
+            <Paginacion 
+               paginacion={paginacion}
+               setCurrentPage={setCurrentPage}
+            />
 
          </div>
 
