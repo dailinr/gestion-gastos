@@ -2,8 +2,11 @@ import { RecursoDraftSchema, RecursosPaginacionSchema, RecursosSchema } from '@/
 import type { RecursoData, RecursoDraft, ResponseGasto, ResponseIngreso } from '@/types';
 import axios from 'axios'
 
-export async function getRecursos(page: number){
-    const url = `${import.meta.env.VITE_API_URL}cuentas/listar-semana/${page}`
+export async function getRecursos(page: number | null){
+
+    const url = page 
+        ? `${import.meta.env.VITE_API_URL}cuentas/listar-semana/${page}` 
+        : `${import.meta.env.VITE_API_URL}cuentas/listar-semana/` 
 
     try {
         const {data: response} = await axios.get(url);

@@ -16,7 +16,7 @@ type paginacionProps = {
 }
 
 export const Paginacion = ({paginacion } : paginacionProps) => {
-    const { fetchRecursos} = useAppStore()
+    const { setCurrentPage} = useAppStore()
 
   return (
     <Pagination>
@@ -28,7 +28,7 @@ export const Paginacion = ({paginacion } : paginacionProps) => {
               size="icon"
               variant="ghost"
               aria-label="Página anterior"
-              onClick={() => paginacion.hasPrevPage && paginacion.prevPage && fetchRecursos(paginacion.prevPage)}
+              onClick={() => paginacion.hasPrevPage && paginacion.prevPage && setCurrentPage(paginacion.prevPage)}
               disabled={!paginacion.hasPrevPage}
             >
                {'<'}
@@ -42,7 +42,7 @@ export const Paginacion = ({paginacion } : paginacionProps) => {
               isActive={paginacion.currentPage === 1}
               onClick={(e) => {
                 e.preventDefault();
-                fetchRecursos(1);
+                setCurrentPage(1);
               }}
             >
               1
@@ -71,7 +71,7 @@ export const Paginacion = ({paginacion } : paginacionProps) => {
             //       return (
             //         <DropdownMenuItem
             //           key={page}
-            //           onClick={() => fetchRecursos(page)}
+            //           onClick={() => setCurrentPage(page)}
             //           className={paginacion.currentPage === page ? "bg-muted" : ""}
             //         >
             //           Página {page}
@@ -91,7 +91,7 @@ export const Paginacion = ({paginacion } : paginacionProps) => {
                 isActive={paginacion.currentPage === paginacion.totalPages}
                 onClick={(e) => {
                   e.preventDefault();
-                  fetchRecursos(paginacion.totalPages);
+                  setCurrentPage(paginacion.totalPages);
                 }}
               >
                 {paginacion.totalPages}
@@ -105,7 +105,7 @@ export const Paginacion = ({paginacion } : paginacionProps) => {
               size="icon"
               variant="ghost"
               aria-label="Página siguiente"
-              onClick={() => paginacion.hasNextPage && paginacion.nextPage && fetchRecursos(paginacion.nextPage)}
+              onClick={() => paginacion.hasNextPage && paginacion.nextPage && setCurrentPage(paginacion.nextPage)}
               disabled={!paginacion.hasNextPage}
             >
                {'>'}

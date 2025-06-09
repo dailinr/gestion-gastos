@@ -10,10 +10,10 @@ export const Layout = () => {
 
   const {pathname} = useLocation();
   const isHome = useMemo(() => pathname === '/', [pathname]);
-  const { fetchSemana, fetchRecursos } = useAppStore()
+  const { fetchSemana, fetchRecursos, } = useAppStore()
 
   useEffect(() => {
-    Promise.all([fetchSemana(), fetchRecursos(1)]);
+    Promise.all([fetchSemana(), fetchRecursos()]);
   }, [])
 
   return (
