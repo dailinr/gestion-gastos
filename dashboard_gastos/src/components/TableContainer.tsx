@@ -6,30 +6,36 @@ import { useAppStore } from "@/Stores/useAppStore"
 import { Spinner } from "./Spinner"
 import { Button } from "./ui/button"
 import { Paginacion } from "./Paginacion"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 export const TableContainer = () => {
    const { pathname } = useLocation();
    const { filterGastos, filterIngresos,  recursosCompleto,
-      setCurrentPage, currentPage, isLoading} = useAppStore()
+      setCurrentPage, currentPage, isLoading, filterDate} = useAppStore()
 
    // Determinar el tipo de recurso basado en el pathname real de la página
    const pageResourceType = pathname === '/gastos' ? 'gasto' : 'ingreso';
    const data = pageResourceType === 'gasto' ? filterGastos : filterIngresos;
    const pageTitle = pageResourceType === 'gasto' ? 'Gastos' : 'Ingresos';
-   const paginacion = recursosCompleto.paginacion
+
+   const [date, setDate] = useState<Date>()
+   
+   // Llamar a filterDate cuando cambia `date`
+   useEffect(() => {
+      filterDate(date, pageTitle.toLocaleLowerCase())
+   }, [date])
 
    useEffect(() => {
-      if(!isLoading){
-         if(currentPage !== paginacion.totalPages) setCurrentPage(paginacion.totalPages)
-            else return 
+      setDate(undefined)
+      if(!isLoading && recursosCompleto){
+         if(currentPage !== recursosCompleto.paginacion.totalPages) setCurrentPage(recursosCompleto.paginacion.totalPages)
+         return 
       }
-      
    }, [pathname])
    
    const isEmptyData = !data?.docs || data.docs.length === 0
 
-   if (isLoading) {
+   if (isLoading || !recursosCompleto) {
       return (<Spinner />)
    }
 
@@ -43,9 +49,8 @@ export const TableContainer = () => {
             <div className="flex gap-5 items-center ">
                
                <DatePicker 
-                  tipo={pageTitle.toLocaleLowerCase()}
                   width="w-[280px]" bg="hover:bg-white" 
-                  pathname={pathname}
+                  date={date} setDate={setDate}
                />
 
                <ModalForm
@@ -73,12 +78,12 @@ export const TableContainer = () => {
                   <Button variant="secondary" >Ver más</Button>
                </div>
             }
-
+            
             <Paginacion 
-               paginacion={paginacion}
+               paginacion={recursosCompleto.paginacion}
                setCurrentPage={setCurrentPage}
             />
-
+            
          </div>
 
       </div>

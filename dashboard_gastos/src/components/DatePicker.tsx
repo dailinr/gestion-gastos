@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 
@@ -12,19 +11,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { useAppStore } from "@/Stores/useAppStore"
 
-export function DatePicker({width, bg, tipo} : {width: string, bg: string, tipo: string, pathname: string}) {
-  
-  const { filterDate } = useAppStore()
-  const [date, setDate] = React.useState<Date>()
+type DatePickerProps = {
+  width: string
+  bg: string
+  date: Date | undefined
+  setDate: React.Dispatch<React.SetStateAction<Date | undefined>>
+}
 
-  // Llamar a filterDate cuando cambia `date`
-  React.useEffect(() => {
-    if (date instanceof Date && !isNaN(date.getTime())) {
-      filterDate(date, tipo)
-    }
-  }, [date])
+export function DatePicker({width, bg, date, setDate} : DatePickerProps) {
 
   return (
     <Popover>

@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
-// import { DatePicker } from "./DatePicker"
 import {
   Select,
   SelectContent,
@@ -26,7 +25,7 @@ import type { RecursoData, RecursoDraft, Recursos } from "@/types"
 import { useAppStore } from "@/Stores/useAppStore"
 import { toast } from "sonner"
 import { useEffect, useMemo, useState } from "react"
-// import { Spinner } from "./Spinner"
+// import { DatePicker } from "./DatePicker"
 
 const defaultFormValues: RecursoDraft = { 
   valor: 0,
@@ -43,9 +42,9 @@ type ModalFormProps = {
 export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const isEditar = formType === 'editar';
+  // const [date, setDate] = useState<Date>()
   
   const resourceName = pageContextPath === '/gastos' ? 'Gasto' : 'Ingreso'; // para títulos y mensajes
-  // const resourceKeyInStore = pageContextPath === '/gastos' ? 'gastos' : 'ingresos'; //  para acceder a gastos/ingresos en el store
   const categoriesSelect = resourceName === 'Gasto' ? categories : categoriesIngresos;
 
   const { fetchAddRecurso, setCurrentPage,  setIdActivo,    
@@ -122,10 +121,6 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
     }
   };
     
-    
-  // if (!currentResourceStore || !currentResourceStore.docs) {
-  //     return <Spinner />; 
-  // }
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -220,12 +215,12 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
             )}
           </div>
           
-          {/* ====== Campo: FECHA ====== 
-          <div className=" flex flex-col gap-2">
+          {/* ====== Campo: FECHA ======  */}
+          {/* <div className=" flex flex-col gap-2">
             <Label htmlFor="name">
               Ingresar fecha
             </Label>
-            <DatePicker width="w-full" bg="bg-background" />
+            <DatePicker width="w-full" bg="bg-background" date={date} setDate={setDate} />
           </div> */}
 
           {/* ====== Campo: DESCRIPCION ====== */}

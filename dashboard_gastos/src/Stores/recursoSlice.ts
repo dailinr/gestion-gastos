@@ -20,7 +20,7 @@ export type recursoSliceType = {
     fetchEditarRecurso: (data: RecursoDraft, ruta:string) => Promise<ResponseGasto | ResponseIngreso | undefined>
     fetchBuscar: (buscar : BuscarRecurso, keyRuta: string | null) => void
     fetchBuscarGlobal: (query: string, tipo: string | null) => Promise<void>
-    filterDate: (date: Date, tipo: string | null) => Promise<void>
+    filterDate: (date: Date | undefined, tipo: string | null) => Promise<void>
 }
 
 export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) => ({
@@ -163,17 +163,25 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
     },
 
     filterDate: async (date, tipo) => {
-        set({ isLoading: true })
-
-        const resultados = await filteredDate(date, tipo)
-
-        if (tipo === 'gastos') {
-            set({ filterGastos: resultados });
-        } 
-        else {
-            set({ filterIngresos: resultados });
-        }
         
-        set({ isLoading: false }); 
+        if(!date){
+            set({ 
+                filterIngresos: get().ingresos, filterGastos: get().gastos
+            })
+            return
+        }
+
+        if (date instanceof Date && !isNaN(date.getTime())) {
+            set({ isLoading: true })
+            const resultados = await filteredDate(date, tipo)
+            
+            if (tipo === 'gastos') {
+                set({ filterGastos: resultados });
+            } 
+            else {
+                set({ filterIngresos: resultados });
+            }
+            set({ isLoading: false }); 
+        }
     }
 })

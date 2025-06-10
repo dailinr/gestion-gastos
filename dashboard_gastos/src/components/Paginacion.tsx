@@ -9,6 +9,7 @@ import {
 import { Button } from "./ui/button"
 // import {  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import type { PaginationTypes } from "@/types"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 
 type PaginacionProps = {
     paginacion: PaginationTypes,
@@ -49,37 +50,34 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
           </PaginationItem>
 
           {/* Mostrar puntos suspensivos si hay más de 3 páginas */}
-          {paginacion.totalPages > 3 && paginacion.currentPage < paginacion.totalPages - 1 && (
-            // <DropdownMenu>
-            //   <DropdownMenuTrigger asChild>
-            //     <Button
-            //         variant="ghost"
-            //         size="icon"
-            //         className="h-8 w-8"
-            //         aria-label="pages"
-            //     >  
-            //         <PaginationEllipsis className="h-4 w-4" />
-            //     </Button>
-            //     {/* <PaginationItem>
-            //       <PaginationEllipsis className="cursor-pointer" />
-            //     </PaginationItem> */}
-            //   </DropdownMenuTrigger>
-            //   <DropdownMenuContent align="center">
-            //     {Array.from({ length: paginacion.totalPages - 2 }, (_, i) => {
-            //       const page = i + 2;
-            //       return (
-            //         <DropdownMenuItem
-            //           key={page}
-            //           onClick={() => setCurrentPage(page)}
-            //           className={paginacion.currentPage === page ? "bg-muted" : ""}
-            //         >
-            //           Página {page}
-            //         </DropdownMenuItem>
-            //       );
-            //     })}
-            //   </DropdownMenuContent>
-            // </DropdownMenu>
-            <PaginationEllipsis />
+          {paginacion.totalPages > 3  && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    className="h-8 w-8"
+                    aria-label="pages"
+                >  
+                    <PaginationEllipsis className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center" className="bg-white h-24 rounded-md shadow overflow-y-auto">
+                {Array.from({ length: paginacion.totalPages - 2 }, (_, i) => {
+                  const page = i + 2;
+                  return (
+                    <DropdownMenuItem
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`${paginacion.currentPage === page ? "bg-gray-300" : ""} w-full px-3 cursor-pointer hover:bg-gray-200`}
+                    >
+                      {page}
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            
           )}
 
           {/* Última página */}
