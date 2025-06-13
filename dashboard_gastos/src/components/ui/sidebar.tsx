@@ -27,7 +27,7 @@ import {
 const SIDEBAR_COOKIE_NAME = "sidebar_state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "210px"
-const SIDEBAR_WIDTH_MOBILE = "18rem"
+// const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "4rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
@@ -158,7 +158,7 @@ function Sidebar({
   children,
   ...props
 }: React.ComponentProps<"div"> & {
-  side?: "left" | "right"
+  side?: "left" | "right"| "top" | "bottom"
   variant?: "sidebar" | "floating" | "inset"
   collapsible?: "offcanvas" | "icon" | "none"
 }) {
@@ -183,22 +183,24 @@ function Sidebar({
     return (
       <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
         <SheetContent
+          // CAMBIO 1: Forzamos la posición a "bottom"
+          side="bottom"
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
-          style={
-            {
-              "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-            } as React.CSSProperties
-          }
-          side={side}
+          // CAMBIO 2: Clases para estilo de barra inferior
+          className="flex h-auto w-full flex-col border-t bg-background p-0 text-foreground [&>button]:hidden"
         >
           <SheetHeader className="sr-only">
-            <SheetTitle>Sidebar</SheetTitle>
-            <SheetDescription>Displays the mobile sidebar.</SheetDescription>
+            <SheetTitle>Mobile Navigation</SheetTitle>
+            <SheetDescription>
+              Main navigation bar for mobile devices.
+            </SheetDescription>
           </SheetHeader>
-          <div className="flex h-full w-full flex-col">{children}</div>
+          {/* CAMBIO 3: El div contenedor ahora es flexible y horizontal */}
+          <div className="flex w-full flex-row items-center justify-around p-2">
+            {children}
+          </div>
         </SheetContent>
       </Sheet>
     )

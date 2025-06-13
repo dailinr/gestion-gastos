@@ -11,7 +11,6 @@ import {
   SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-
 import { NavLink } from "react-router-dom"
 
 // Menu items con sus rutas reales

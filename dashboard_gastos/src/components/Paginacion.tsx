@@ -62,7 +62,7 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
                     <PaginationEllipsis className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="bg-white h-24 rounded-md shadow overflow-y-auto">
+              <DropdownMenuContent side="top" align="center" className=" bg-white h-24 rounded-md shadow overflow-y-auto">
                 {Array.from({ length: paginacion.totalPages - 2 }, (_, i) => {
                   const page = i + 2;
                   return (

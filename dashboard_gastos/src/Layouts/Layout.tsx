@@ -1,10 +1,14 @@
 import { Outlet, useLocation } from "react-router-dom" 
 import { SidebarProvider } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/AppSidebar"
 import { Header } from "@/components/Header";
 import { useEffect, useMemo } from "react";
 import { useAppStore } from "@/Stores/useAppStore";
 import { Toaster } from "@/components/ui/sonner";
+import { useIsMobile } from "@/hooks/use-mobile";  
+
+// Los componentes de navegación
+import { AppSidebar } from "@/components/AppSidebar"; 
+import { MobileNav } from "@/components/MovileNav"; 
 
 export const Layout = () => {
 
@@ -12,21 +16,30 @@ export const Layout = () => {
   const isHome = useMemo(() => pathname === '/', [pathname]);
   const { fetchSemana, fetchRecursos} = useAppStore()
 
+  const isMobile = useIsMobile()
+
   useEffect(() => {
     Promise.all([fetchSemana(), fetchRecursos()]);
   }, [])
 
   return (
     <SidebarProvider>
-    
-      <AppSidebar/>
 
-      <section className="flex flex-col w-full h-screen py-4 px-5 md:pl-2 md:px-6 gap-4 ">
-       
+      {!isMobile && <AppSidebar />}
+
+      <main className="flex flex-col w-full h-screen py-4 px-5  md:pl-2 md:px-6 gap-4 ">
         <Header isHome={isHome} pathname={pathname} /> 
-        <Outlet /> 
+        {isMobile ?
+          <div className="pb-20 flex-1">
+            <Outlet />
+          </div>
+        :
+          <Outlet />
+        } 
+      </main>
+      
+      {isMobile && <MobileNav />}
         
-      </section>
       <Toaster position="top-right" richColors closeButton />
 
     </SidebarProvider>
