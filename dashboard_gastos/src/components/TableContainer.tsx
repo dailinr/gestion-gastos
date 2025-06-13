@@ -28,7 +28,7 @@ export const TableContainer = () => {
    useEffect(() => {
       setDate(undefined)
       if(!isLoading && recursosCompleto){
-         if(currentPage !== recursosCompleto.paginacion.totalPages) setCurrentPage(recursosCompleto.paginacion.totalPages)
+         if(currentPage !== recursosCompleto.paginacion.totalPages) setCurrentPage(recursosCompleto.paginacion.totalPages, 1)
          return 
       }
    }, [pathname])
@@ -73,9 +73,13 @@ export const TableContainer = () => {
          
          <div className="flex md:flex-col my-5">
 
-            {data.hasNextPage &&
-               <div className="w-full md:flex justify-center">
-                  <Button variant="secondary" >Ver más</Button>
+            {data.hasNextPage && data.nextPage &&
+               <div className="w-full md:flex justify-center mb-5">
+                  <Button variant="secondary" 
+                     onClick={() => data.hasNextPage && data.nextPage && setCurrentPage(currentPage, data.nextPage)}   
+                  >
+                     Ver más
+                  </Button>
                </div>
             }
             

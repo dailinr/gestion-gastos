@@ -13,7 +13,7 @@ export type recursoSliceType = {
     idActivo: RecursoData['_id']
     isLoading: boolean
     fetchRecursos: () => Promise<void>
-    setCurrentPage: (page: number) => Promise<void>
+    setCurrentPage: (page: number, dataPage: number) => Promise<void>
     fetchAddRecurso: (data: RecursoDraft, ruta: string) => Promise<ResponseGasto | ResponseIngreso | undefined>
     eliminarRecurso: (id : RecursoData['_id'], ruta : string) => Promise<ResponseGasto | ResponseIngreso | undefined>
     setIdActivo: (id: RecursoData['_id']) => void
@@ -37,13 +37,14 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
     fetchRecursos: async () => {
         set({ isLoading: true })
         try {
-            const recursosCompleto = await getRecursos(null);
+            const recursosCompleto = await getRecursos(null, 1);
             
             const nuevosGastos = recursosCompleto?.resultados[0]?.gastos
             const nuevosIngresos = recursosCompleto?.resultados[0]?.ingresos
 
             set({
                 recursosCompleto,
+                currentPage: recursosCompleto?.paginacion.totalPages,
                 gastos: nuevosGastos,
                 ingresos: nuevosIngresos,
                 filterGastos: nuevosGastos,
@@ -57,21 +58,79 @@ export const createRecursoSlice : StateCreator<recursoSliceType> = (set, get) =>
         }
     },
 
-    setCurrentPage: async (page) => {
+    setCurrentPage: async (page, dataPage) => {
         set({ isLoading: true });
-        try {
-            const recursosCompleto = await getRecursos(page);
-            const nuevosGastos = recursosCompleto?.resultados[0]?.gastos;
-            const nuevosIngresos = recursosCompleto?.resultados[0]?.ingresos;
 
-            set({
-                currentPage: page,
-                recursosCompleto,
-                gastos: nuevosGastos,
-                ingresos: nuevosIngresos,
-                filterGastos: nuevosGastos,
-                filterIngresos: nuevosIngresos,
+        try {
+            const recursosCompleto = await getRecursos(page, dataPage);
+            const nuevosIngresos: Recursos = recursosCompleto?.resultados[0]?.ingresos || {} as Recursos;
+            const nuevosGastos: Recursos = recursosCompleto?.resultados[0]?.gastos || {} as Recursos;
+
+            set((state) => {
+                // detectar si se ha cambiado de semana (page)
+                const esNuevaSemana = dataPage === 1;
+
+                // si es nueva page entonces se setea los recursos "normal" de lo contrario se aumulan
+                const ingresosAcumulados = esNuevaSemana ? nuevosIngresos.docs : [
+                    ...state.ingresos.docs,
+                    ...nuevosIngresos.docs.filter(n => !state.ingresos.docs.some(e => e._id === n._id))
+                ];
+
+                const gastosAcumulados = esNuevaSemana ? nuevosGastos.docs : [
+                    ...state.gastos.docs,
+                    ...nuevosGastos.docs.filter(n => !state.gastos.docs.some(e => e._id === n._id))
+                ];
+
+                const ingresosPaginacion : Recursos = {
+                    docs: ingresosAcumulados,
+                    totalDocs: nuevosIngresos.totalDocs,
+                    totalPages: nuevosIngresos.totalPages,
+                    page: nuevosIngresos.page,
+                    limit: nuevosIngresos.limit,
+                    hasPrevPage: nuevosIngresos.hasPrevPage,
+                    hasNextPage: nuevosIngresos.hasNextPage,
+                    prevPage: nuevosIngresos.prevPage,
+                    nextPage: nuevosIngresos.nextPage,
+                }
+
+                const gastosPaginacion : Recursos = {
+                    docs: gastosAcumulados,
+                    totalDocs: nuevosGastos.totalDocs,
+                    totalPages: nuevosGastos.totalPages,
+                    page: nuevosGastos.page,
+                    limit: nuevosGastos.limit,
+                    hasPrevPage: nuevosGastos.hasPrevPage,
+                    hasNextPage: nuevosGastos.hasNextPage,
+                    prevPage: nuevosGastos.prevPage,
+                    nextPage: nuevosGastos.nextPage,
+                }
+
+                return {
+                    currentPage: page,
+                    recursosCompleto,
+
+                    ingresos: {
+                        ...state.ingresos,
+                        ...ingresosPaginacion
+                    },
+
+                    gastos: {
+                        ...state.gastos,
+                        ...gastosPaginacion
+                    },
+
+                    filterIngresos: {
+                        ...state.ingresos,
+                        ...ingresosPaginacion
+                    },
+
+                    filterGastos: {
+                        ...state.gastos,
+                        ...gastosPaginacion
+                    }
+                };
             });
+
         } catch (error) {
             console.error("Error al cambiar de página:", error);
         } finally {

@@ -13,7 +13,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 
 type PaginacionProps = {
     paginacion: PaginationTypes,
-    setCurrentPage: (page: number) => Promise<void>
+    setCurrentPage: (page: number, dataPage: number) => Promise<void>
 }
 
 export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
@@ -28,7 +28,7 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
               size="icon"
               variant="ghost"
               aria-label="Página anterior"
-              onClick={() => paginacion.hasPrevPage && paginacion.prevPage && setCurrentPage(paginacion.prevPage)}
+              onClick={() => paginacion.hasPrevPage && paginacion.prevPage && setCurrentPage(paginacion.prevPage, 1)}
               disabled={!paginacion.hasPrevPage}
             >
                {'<'}
@@ -42,7 +42,7 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
               isActive={paginacion.currentPage === 1}
               onClick={(e) => {
                 e.preventDefault();
-                setCurrentPage(1);
+                setCurrentPage(1, 1);
               }}
             >
               1
@@ -68,8 +68,8 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
                   return (
                     <DropdownMenuItem
                       key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`${paginacion.currentPage === page ? "bg-gray-300" : ""} w-full px-3 cursor-pointer hover:bg-gray-200`}
+                      onClick={() => setCurrentPage(page, 1)}
+                      className={`${paginacion.currentPage === page ? "bg-gray-300" : ""} w-full px-5 cursor-pointer hover:bg-gray-200`}
                     >
                       {page}
                     </DropdownMenuItem>
@@ -88,7 +88,7 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
                 isActive={paginacion.currentPage === paginacion.totalPages}
                 onClick={(e) => {
                   e.preventDefault();
-                  setCurrentPage(paginacion.totalPages);
+                  setCurrentPage(paginacion.totalPages, 1);
                 }}
               >
                 {paginacion.totalPages}
@@ -102,7 +102,7 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
               size="icon"
               variant="ghost"
               aria-label="Página siguiente"
-              onClick={() => paginacion.hasNextPage && paginacion.nextPage && setCurrentPage(paginacion.nextPage)}
+              onClick={() => paginacion.hasNextPage && paginacion.nextPage && setCurrentPage(paginacion.nextPage, 1)}
               disabled={!paginacion.hasNextPage}
             >
                {'>'}

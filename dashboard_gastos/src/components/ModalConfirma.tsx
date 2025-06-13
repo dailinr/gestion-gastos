@@ -26,7 +26,7 @@ export function ModalConfirma({ruta, id} : {ruta: string, id: RecursoData['_id']
         else{
             toast.error(`Falló al eliminar ${ruta}`)
         }
-        await setCurrentPage(currentPage)
+        await setCurrentPage(currentPage, 1)
         await fetchSemana()
     }
 

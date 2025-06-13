@@ -2,22 +2,25 @@ import { RecursoDraftSchema, RecursosPaginacionSchema, RecursosSchema } from '@/
 import type { RecursoData, RecursoDraft, ResponseGasto, ResponseIngreso } from '@/types';
 import axios from 'axios'
 
-export async function getRecursos(page: number | null){
+export async function getRecursos(page: number | null, dataPage: number){
 
     const url = page 
-        ? `${import.meta.env.VITE_API_URL}cuentas/listar-semana/${page}` 
+        ? `${import.meta.env.VITE_API_URL}cuentas/listar-semana/${page}/${dataPage}` 
         : `${import.meta.env.VITE_API_URL}cuentas/listar-semana/` 
 
     try {
+
         const {data: response} = await axios.get(url);
         // console.log(response)
 
         const result = RecursosPaginacionSchema.safeParse(response)
         // console.log(result)
-        
-        if(result.success){
-            return result.data 
+
+        if (result.success) {
+            return result.data
         }
+
+        throw new Error("Respuesta no tiene la forma esperada");
     } 
     catch (error: any) {
         if (error.response) {
