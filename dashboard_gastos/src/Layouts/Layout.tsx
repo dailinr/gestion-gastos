@@ -21,7 +21,7 @@ export const Layout = () => {
     
       <AppSidebar/>
 
-      <section className="flex flex-col w-full h-screen py-5 px-5 md:pl-2 md:pr-6 gap-4 ">
+      <section className="flex flex-col w-full h-screen py-4 px-5 md:pl-2 md:px-6 gap-4 ">
        
         <Header isHome={isHome} pathname={pathname} /> 
         <Outlet /> 

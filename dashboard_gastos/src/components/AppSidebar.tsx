@@ -31,20 +31,15 @@ const items = [
     url: "/gastos",
     icon: BanknoteArrowDown,
   },
-  // {
-  //   title: "Configuración",
-  //   url: "/configuracion",
-  //   icon: Settings,
-  // },
 ]
 
 export function AppSidebar() {
   return (
-    <Sidebar collapsible="icon" className="h-full p-4 ">
+    <Sidebar collapsible="icon"  variant="floating" >
       
-      <SidebarContent className="rounded-lg shadow p-2">
-        <SidebarTrigger />
-        <SidebarGroup className="group-data-[collapsible=icon]:hidden ">
+      <SidebarContent className="rounded-md">
+        <SidebarTrigger  />
+        <SidebarGroup >
           <SidebarGroupLabel>Control gastos</SidebarGroupLabel>
           <SidebarGroupContent>
 
@@ -55,6 +50,7 @@ export function AppSidebar() {
                     <SidebarMenuItem>
                       <SidebarMenuButton
                         asChild isActive={isActive}
+                        tooltip={item.title}
                       >
                         <a className="py-5">
                           <item.icon className="w-5 h-5" />
