@@ -60,7 +60,7 @@ export async function addRecurso(data: RecursoDraft, ruta: string){
     } 
     catch (error: any) {
         if (error.response) {
-            console.log(error.response.data)
+            console.log("error: ", error.response.data)
             return error.response
         } 
         else {
@@ -159,11 +159,9 @@ export async function buscarGlobal(query: string, tipo: string | null){
 }
 
 export async function filteredDate(date: Date, tipo: string | null) {
-    const fechaISO = date.toISOString()
-    const url = `${import.meta.env.VITE_API_URL}cuentas/filtered-date?date=${fechaISO}&tipo=${tipo}&page=1&limit=10`;
+    const url = `${import.meta.env.VITE_API_URL}cuentas/filtered-date?date=${date}&tipo=${tipo}&page=1&limit=10`;
     
     try {
-        
         const {data: response} = await axios.get(url); 
         // console.log(response)
 

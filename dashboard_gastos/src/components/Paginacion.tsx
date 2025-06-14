@@ -49,6 +49,22 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
             </PaginationLink>
           </PaginationItem>
 
+          {/* Página 1 */}
+          {paginacion.totalPages > 2 && (
+            <PaginationItem>
+              <PaginationLink
+                href="#"
+                isActive={paginacion.currentPage === 2}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setCurrentPage(2, 1);
+                }}
+              >
+                2
+              </PaginationLink>
+            </PaginationItem>
+          )}
+
           {/* Mostrar puntos suspensivos si hay más de 3 páginas */}
           {paginacion.totalPages > 3  && (
             <DropdownMenu>
@@ -62,14 +78,16 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
                     <PaginationEllipsis className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent side="top" align="center" className=" bg-white h-24 rounded-md shadow overflow-y-auto">
-                {Array.from({ length: paginacion.totalPages - 2 }, (_, i) => {
-                  const page = i + 2;
+              <DropdownMenuContent side="top" align="center" 
+                className={` ${ paginacion.totalPages - 3 > 4 ? ' h-50' : ''} bg-white  rounded-md shadow overflow-y-auto`}
+              >
+                {Array.from({ length: paginacion.totalPages - 3 }, (_, i) => {
+                  const page = i + 3;
                   return (
                     <DropdownMenuItem
                       key={page}
                       onClick={() => setCurrentPage(page, 1)}
-                      className={`${paginacion.currentPage === page ? "bg-gray-300" : ""} w-full px-5 cursor-pointer hover:bg-gray-200`}
+                      className={`${paginacion.currentPage === page ? "bg-gray-300" : ""} w-full px-7 py-2 md:py-1 md:px-5 cursor-pointer hover:bg-gray-200`}
                     >
                       {page}
                     </DropdownMenuItem>

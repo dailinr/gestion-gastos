@@ -73,7 +73,7 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
         }) || [];
 
         set({
-            gastosRecientes
+            gastosRecientes: gastosRecientes.slice(0, 5)
         })
     },
 

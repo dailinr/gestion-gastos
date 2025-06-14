@@ -46,4 +46,6 @@ export const RecursoDraftSchema = RecursoSemanaSchema.pick({
     etiqueta: true,
     descripcion: true,
     valor: true,
+}).extend({
+  fecha: z.date()
 })

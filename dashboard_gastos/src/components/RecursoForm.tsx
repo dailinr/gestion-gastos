@@ -25,12 +25,13 @@ import type { RecursoData, RecursoDraft, Recursos } from "@/types"
 import { useAppStore } from "@/Stores/useAppStore"
 import { toast } from "sonner"
 import { useEffect, useMemo, useState } from "react"
-// import { DatePicker } from "./DatePicker"
+import { FieldDatePicker } from "./FieldDatePicker"
 
 const defaultFormValues: RecursoDraft = { 
   valor: 0,
   etiqueta: "",
   descripcion: "",
+  fecha: new Date()
 };
 
 type ModalFormProps = {
@@ -215,13 +216,30 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
             )}
           </div>
           
-          {/* ====== Campo: FECHA ======  */}
-          {/* <div className=" flex flex-col gap-2">
-            <Label htmlFor="name">
-              Ingresar fecha
-            </Label>
-            <DatePicker width="w-full" bg="bg-background" date={date} setDate={setDate} />
-          </div> */}
+         {/* ====== Campo: FECHA ====== */}
+<div className="flex flex-col gap-2">
+  <Label htmlFor="fecha">Ingresar fecha</Label>
+  <Controller
+    name="fecha"
+    control={control}
+    rules={{
+      required: "La fecha es obligatoria",
+      validate: (value) => {
+        if (!value) return "La fecha es obligatoria"
+        if (value > new Date()) return "La fecha no puede ser futura"
+        return true
+      }
+    }}
+    render={({ field }) => (
+      <FieldDatePicker
+        value={field.value}
+        onChange={field.onChange}
+        error={errors.fecha?.message}
+      />
+    )}
+  />
+</div>
+
 
           {/* ====== Campo: DESCRIPCION ====== */}
           <div className=" flex flex-col gap-2">
