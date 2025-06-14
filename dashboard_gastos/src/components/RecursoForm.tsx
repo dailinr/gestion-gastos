@@ -73,6 +73,7 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
             valor: resourceToEdit.valor,
             descripcion: resourceToEdit.descripcion,
             etiqueta: resourceToEdit.etiqueta,
+            fecha: new Date(resourceToEdit.fecha)
           });
         } 
         else {
@@ -98,7 +99,9 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
     try {
       if (isEditar && entityId) {  // si es para editar
         const recursoActualizado = { ...formData, _id: entityId };
+        console.log("recurso: ", recursoActualizado)
         response = await fetchEditarRecurso(recursoActualizado, resourceName.toLowerCase() as 'gasto' | 'ingreso');
+        console.log("response: ", response)
         if (response?.status === "success") {
           toast.success(`${resourceName} actualizado correctamente!`);
         } else {
@@ -217,29 +220,28 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
           </div>
           
          {/* ====== Campo: FECHA ====== */}
-<div className="flex flex-col gap-2">
-  <Label htmlFor="fecha">Ingresar fecha</Label>
-  <Controller
-    name="fecha"
-    control={control}
-    rules={{
-      required: "La fecha es obligatoria",
-      validate: (value) => {
-        if (!value) return "La fecha es obligatoria"
-        if (value > new Date()) return "La fecha no puede ser futura"
-        return true
-      }
-    }}
-    render={({ field }) => (
-      <FieldDatePicker
-        value={field.value}
-        onChange={field.onChange}
-        error={errors.fecha?.message}
-      />
-    )}
-  />
-</div>
-
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="fecha">Ingresar fecha</Label>
+            <Controller
+              name="fecha"
+              control={control}
+              rules={{
+                required: "La fecha es obligatoria",
+                validate: (value) => {
+                  if (!value) return "La fecha es obligatoria"
+                  if (value > new Date()) return "La fecha no puede ser futura"
+                  return true
+                }
+              }}
+              render={({ field }) => (
+                <FieldDatePicker
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.fecha?.message}
+                />
+              )}
+            />
+          </div>
 
           {/* ====== Campo: DESCRIPCION ====== */}
           <div className=" flex flex-col gap-2">

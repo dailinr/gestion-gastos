@@ -46,8 +46,7 @@ export async function addRecurso(data: RecursoDraft, ruta: string){
         throw new Error("Datos inválidos");
     }
 
-    try {
-
+    try{
         if(isGasto){
             const {data: response} = await axios.post<ResponseGasto>(url, parsed.data);
             // console.log(response)
@@ -108,8 +107,13 @@ export async function editarRecurso(id: RecursoData['_id'], data: RecursoDraft, 
         ? `${import.meta.env.VITE_API_URL}gastos/editar-gasto/${id}`
         : `${import.meta.env.VITE_API_URL}ingresos/editar-ingreso/${id}`
 
-    try {
+    const parsed = RecursoDraftSchema.safeParse(data)
 
+     if(!parsed.success){
+        throw new Error("Datos inválidos");
+    }
+
+    try{
         if(isGasto){
             const {data: response} = await axios.put<ResponseGasto>(url, data);
             // console.log(response)
