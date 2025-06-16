@@ -1,9 +1,10 @@
 import 'boxicons/css/boxicons.min.css';
-// import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useState, useEffect } from 'react';
 import { formatDate } from '@/Services/formatDate';
 import { useAppStore } from '@/Stores/useAppStore';
 import { useDebounce } from '@/hooks/useDebounce';
+import { formatMoneda } from '@/Services/formatMoneda';
 
 type headerProps = {
   isHome: boolean
@@ -16,7 +17,7 @@ export const Header = ({ isHome, pathname }: headerProps) => {
   const classOption = "inline-flex w-full px-1 bg-gray-200 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
   const keyRuta = pathname === '/' ? null : (pathname === '/gastos' ? 'gastos' : 'ingresos')
   
-  const {fetchBuscar, fetchBuscarGlobal} = useAppStore()
+  const {fetchBuscar, fetchBuscarGlobal, cuentaActual} = useAppStore()
   const buscarOptions = [ { modo: 'Semana'}, { modo: 'Todas'} ]
   const [buscar, setBuscar] = useState({
     modo: 'Semana',
@@ -72,20 +73,21 @@ export const Header = ({ isHome, pathname }: headerProps) => {
               <h1 className="text-black text-xl font-semibold">
                 Hola, {nombre}!
               </h1>
-              <p className='text-[#666666] text-[12px]'>
+              <p className='text-[#666666] text-[0.75rem]'>
                 {formatDate(fechaActual.toString())}
               </p>
             </div>
 
-            {/* <Tabs defaultValue="account" >
+            <Tabs defaultValue="account" className='hidden md:block' >
                   <TabsList className="mx-auto bg-[#DFDFDF] ">
-                      <TabsTrigger value="account">Semana</TabsTrigger>
-                      <TabsTrigger value="password">Mes</TabsTrigger>
+                      <TabsTrigger value="account">Dashboard resumen Semana</TabsTrigger>
+                      {/* <TabsTrigger value="password">Mes</TabsTrigger> */}
                   </TabsList>
-              </Tabs>  */}
+              </Tabs> 
           </>
         ) :
-        (<form className="md:max-w-1/2 flex-1 ">
+        (<>
+        <form className="md:max-w-1/2 flex-1 ">
           <div className="flex ">
             
             <select 
@@ -114,9 +116,17 @@ export const Header = ({ isHome, pathname }: headerProps) => {
 
           </div>
         </form>
+
+        {/* mostrar solo en modo escritorio */}
+        <div className='hidden md:block lg:block'> 
+          <h2 className='text-lg '>Total semanal: {''}
+            <span className='font-semibold'>${formatMoneda(keyRuta === 'gastos' ? 
+              cuentaActual.totalGastos : cuentaActual.totalIngresos)}</span>
+          </h2>
+        </div>
+        </>
         )}
-
-
+        
         {/* <div className='flex gap-2'>
           <button
               type="button"

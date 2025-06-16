@@ -79,7 +79,7 @@ export const Paginacion = ({ paginacion, setCurrentPage }: PaginacionProps) => {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" align="center" 
-                className={` ${ paginacion.totalPages - 3 > 4 ? ' h-50' : ''} bg-white  rounded-md shadow overflow-y-auto`}
+                className={` max-h-50 bg-white  rounded-md shadow overflow-y-auto`}
               >
                 {Array.from({ length: paginacion.totalPages - 3 }, (_, i) => {
                   const page = i + 3;

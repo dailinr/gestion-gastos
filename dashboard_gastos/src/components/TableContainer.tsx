@@ -7,6 +7,7 @@ import { Spinner } from "./Spinner"
 import { Button } from "./ui/button"
 import { Paginacion } from "./Paginacion"
 import { useEffect, useState } from "react"
+import { formatMoneda } from "@/Services/formatMoneda"
 
 export const TableContainer = () => {
    const { pathname } = useLocation();
@@ -38,13 +39,21 @@ export const TableContainer = () => {
    if (isLoading || !recursosCompleto) {
       return (<Spinner />)
    }
-
+   
    return (
       <div className="flex flex-col w-full ">
 
          <section className="mt-5 mb-5 md:flex space-y-3 md:space-y-0 justify-between  items-center">
             <div className="text-2xl font-semibold">
                {pageTitle}
+
+               <div className='md:hidden block lg:hidden mt-1'>
+                  <h2 className='text-lg font-normal'>Total semanal: {''}
+                  <span className='font-semibold'>${formatMoneda(pageResourceType === 'gasto' ? 
+                     recursosCompleto.resultados[0].totalGastos 
+                     :  recursosCompleto.resultados[0].totalIngresos)}</span>
+                  </h2>
+               </div>
             </div>
             <div className="flex gap-5 items-center ">
                

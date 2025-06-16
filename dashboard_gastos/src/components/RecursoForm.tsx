@@ -99,9 +99,8 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
     try {
       if (isEditar && entityId) {  // si es para editar
         const recursoActualizado = { ...formData, _id: entityId };
-        console.log("recurso: ", recursoActualizado)
         response = await fetchEditarRecurso(recursoActualizado, resourceName.toLowerCase() as 'gasto' | 'ingreso');
-        console.log("response: ", response)
+        
         if (response?.status === "success") {
           toast.success(`${resourceName} actualizado correctamente!`);
         } else {
