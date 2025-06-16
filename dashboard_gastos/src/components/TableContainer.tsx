@@ -16,7 +16,6 @@ export const TableContainer = () => {
 
    // Determinar el tipo de recurso basado en el pathname real de la página
    const pageResourceType = pathname === '/gastos' ? 'gasto' : 'ingreso';
-   const data = pageResourceType === 'gasto' ? filterGastos : filterIngresos;
    const pageTitle = pageResourceType === 'gasto' ? 'Gastos' : 'Ingresos';
 
    const [date, setDate] = useState<Date>()
@@ -30,15 +29,17 @@ export const TableContainer = () => {
       setDate(undefined)
       if(!isLoading && recursosCompleto){
          if(currentPage !== recursosCompleto.paginacion.totalPages) setCurrentPage(recursosCompleto.paginacion.totalPages, 1)
-         return 
+         
       }
+      return 
    }, [pathname])
-   
-   const isEmptyData = !data?.docs || data.docs.length === 0
 
    if (isLoading || !recursosCompleto) {
       return (<Spinner />)
    }
+   
+   const data = pageResourceType === 'gasto' ? filterGastos : filterIngresos;
+   const isEmptyData = !data?.docs || data.docs.length === 0
    
    return (
       <div className="flex flex-col w-full ">
@@ -46,7 +47,6 @@ export const TableContainer = () => {
          <section className="mt-5 mb-5 md:flex space-y-3 md:space-y-0 justify-between  items-center">
             <div className="text-2xl font-semibold">
                {pageTitle}
-
                <div className='md:hidden block lg:hidden mt-1'>
                   <h2 className='text-lg font-normal'>Total semanal: {''}
                   <span className='font-semibold'>${formatMoneda(pageResourceType === 'gasto' ? 
@@ -55,8 +55,8 @@ export const TableContainer = () => {
                   </h2>
                </div>
             </div>
+
             <div className="flex gap-5 items-center ">
-               
                <DatePicker 
                   width="w-[280px]" bg="hover:bg-white" 
                   date={date} setDate={setDate}
@@ -81,7 +81,6 @@ export const TableContainer = () => {
          }
          
          <div className="flex md:flex-col my-5">
-
             {data.hasNextPage && data.nextPage &&
                <div className="w-full md:flex justify-center mb-5">
                   <Button variant="secondary" 
@@ -96,9 +95,7 @@ export const TableContainer = () => {
                paginacion={recursosCompleto.paginacion}
                setCurrentPage={setCurrentPage}
             />
-            
          </div>
-
       </div>
    )
 }

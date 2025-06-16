@@ -16,6 +16,7 @@ import { Component as BarChart } from "../components/BarChart"
 import { useEffect} from "react"
 import { Spinner } from "@/components/Spinner"
 import { formatMoneda } from "@/Services/formatMoneda"
+import { CardCategories } from "@/components/CardCategories"
 
 export const Dashboard = () => {
   
@@ -65,7 +66,8 @@ export const Dashboard = () => {
       <div className="h-full overflow-auto">
         <div className="grid grid-rows-[6.875rem_12.5rem_minmax(0,_1fr)] grid-cols-3 gap-4 h-full">
           {cards.map(card => (
-            <Card key={card.id} data={card} type="card" />
+            // <CardValues key={card.id} data={card} />
+            <Card key={card.id} data={card} />
           ))}
   
           <div className="col-span-3 grid grid-cols-2 gap-4 h-full">
@@ -131,7 +133,7 @@ export const Dashboard = () => {
                   <Spinner />
                 ): 
                 (categoriesSemana.map(category => {
-                  return <Card key={category.id} data={category} type="category" />;
+                  return <CardCategories key={category.id} data={category} />
                 }))}
               </div>
             </div>
