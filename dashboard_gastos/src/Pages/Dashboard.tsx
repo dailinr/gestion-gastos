@@ -24,17 +24,17 @@ export const Dashboard = () => {
     gastosRecientes, setGastosRecientes, setResumeSemana } = useAppStore()
 
   useEffect(() => {
+    
     setCategories()
     setGastosRecientes()
     setResumeSemana()
   },[cuentaActual])
-
   
   const cards : Category[] = cuentaActual ? [
     {
       id: 1,
       name: "Ingresos",
-      icon: "business-finance-corporate-22-svgrepo-com",
+      icon: "business-finance-corporate-26-svgrepo-com",
       amount: cuentaActual.totalIngresos,
       color: "bg-[#C7E9F9]",
       colorText: "text-[#C7E9F9]",
@@ -43,7 +43,7 @@ export const Dashboard = () => {
     {
       id: 2,
       name: "Gastos",
-      icon: "business-finance-corporate-26-svgrepo-com",
+      icon: "business-finance-corporate-11-svgrepo-com",
       amount: cuentaActual.totalGastos,
       color: "bg-[#FFD9D9]",
       colorText: "text-[#FFD9D9]",
@@ -52,7 +52,7 @@ export const Dashboard = () => {
     {
       id: 3,
       name: "Acumulado",
-      icon: "finance-svgrepo-com",
+      icon: "business-finance-corporate-22-svgrepo-com",
       amount: cuentaActual.totalSemanal,
       color: "bg-[#CFF3AF]",
       colorText: "text-[#CFF3AF]",
@@ -74,7 +74,7 @@ export const Dashboard = () => {
 
             {/* Grafica resumen de gastos   */}
             <CardBoard className=" py-2 px-4 h-full  flex flex-col overflow-auto">
-              {categoriesSemana.length === 0 ? (
+              {!cuentaActual.gastos ? (
                 <Spinner />
               ): 
               (<>
@@ -129,7 +129,7 @@ export const Dashboard = () => {
             <p className="text-gray-500 mb-2 font-semibold text-[0.75rem]">última semana</p>
             <div className="flex-1 overflow-auto ">
               <div className="flex flex-wrap gap-y-4 h-full items-center justify-between ">
-                {categoriesSemana.length === 0 ? (
+                { !cuentaActual.gastos ? (
                   <Spinner />
                 ): 
                 (categoriesSemana.map(category => {

@@ -49,9 +49,13 @@ export const TableContainer = () => {
                {pageTitle}
                <div className='md:hidden block lg:hidden mt-1'>
                   <h2 className='text-lg font-normal'>Total semanal: {''}
-                  <span className='font-semibold'>${formatMoneda(pageResourceType === 'gasto' ? 
-                     recursosCompleto.resultados[0].totalGastos 
-                     :  recursosCompleto.resultados[0].totalIngresos)}</span>
+                  <span className='font-semibold'>
+                     ${formatMoneda((pageResourceType === 'gasto'
+                           ? recursosCompleto.resultados?.[0]?.totalGastos 
+                           : recursosCompleto.resultados?.[0]?.totalIngresos)
+                        ?? 0
+                     )}
+                  </span>
                   </h2>
                </div>
             </div>
@@ -81,7 +85,7 @@ export const TableContainer = () => {
          }
          
          <div className="flex md:flex-col my-5">
-            {data.hasNextPage && data.nextPage &&
+            {data && data.hasNextPage && data.nextPage &&
                <div className="w-full md:flex justify-center mb-5">
                   <Button variant="secondary" 
                      onClick={() => data.hasNextPage && data.nextPage && setCurrentPage(currentPage, data.nextPage)}   
@@ -91,10 +95,12 @@ export const TableContainer = () => {
                </div>
             }
             
-            <Paginacion 
-               paginacion={recursosCompleto.paginacion}
-               setCurrentPage={setCurrentPage}
-            />
+            {recursosCompleto.paginacion && 
+               <Paginacion 
+                  paginacion={recursosCompleto.paginacion}
+                  setCurrentPage={setCurrentPage}
+               />
+            }
          </div>
       </div>
    )

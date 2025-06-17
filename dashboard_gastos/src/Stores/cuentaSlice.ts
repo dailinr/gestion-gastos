@@ -79,13 +79,16 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
 
     setResumeSemana: () => {
 
-        const diasSemana =  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        const cuenta = get().cuentaActual;
+        if (!cuenta) return;
+
+        // const diasSemana =  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
         const diasSpanish = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo']
         const normalizeDay = (day:string) => day.toLowerCase().trim();
-        const normalizedDiasSemana = diasSemana.map(normalizeDay);
+        const normalizedDiasSemana = diasSpanish.map(normalizeDay);
 
-        const ingresos = get().cuentaActual.ingresos || [];
-        const gastos = get().cuentaActual.gastos || [];
+        const ingresos = cuenta.ingresos || [];
+        const gastos = cuenta.gastos || [];
 
         const resumeSemana = normalizedDiasSemana.map((dia, index) => {
             const ingresosDia = ingresos
@@ -104,7 +107,8 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
             }
         });
 
-        set({ resumeSemana })
+        set({ resumeSemana });
+
     },
 
 })

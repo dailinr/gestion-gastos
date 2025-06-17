@@ -37,7 +37,7 @@ export function Component() {
   const { cuentaActual, resumeSemana } = useAppStore()
   const chartData = resumeSemana
 
-  if(!cuentaActual || !cuentaActual.cuenta){
+  if( !cuentaActual.cuenta || !resumeSemana ){
     return ( <Spinner />)
   }
 

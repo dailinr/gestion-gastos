@@ -9,13 +9,6 @@ import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Tooltip,
@@ -162,7 +155,7 @@ function Sidebar({
   variant?: "sidebar" | "floating" | "inset"
   collapsible?: "offcanvas" | "icon" | "none"
 }) {
-  const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
+  const { state} = useSidebar()
 
   if (collapsible === "none") {
     return (
@@ -179,32 +172,6 @@ function Sidebar({
     )
   }
 
-  if (isMobile) {
-    return (
-      <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
-        <SheetContent
-          // CAMBIO 1: Forzamos la posición a "bottom"
-          side="bottom"
-          data-sidebar="sidebar"
-          data-slot="sidebar"
-          data-mobile="true"
-          // CAMBIO 2: Clases para estilo de barra inferior
-          className="flex h-auto w-full flex-col border-t bg-background p-0 text-foreground [&>button]:hidden"
-        >
-          <SheetHeader className="sr-only">
-            <SheetTitle>Mobile Navigation</SheetTitle>
-            <SheetDescription>
-              Main navigation bar for mobile devices.
-            </SheetDescription>
-          </SheetHeader>
-          {/* CAMBIO 3: El div contenedor ahora es flexible y horizontal */}
-          <div className="flex w-full flex-row items-center justify-around p-2">
-            {children}
-          </div>
-        </SheetContent>
-      </Sheet>
-    )
-  }
 
   return (
     <div
