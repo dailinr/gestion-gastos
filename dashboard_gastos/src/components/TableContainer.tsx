@@ -27,8 +27,8 @@ export const TableContainer = () => {
 
    useEffect(() => {
       setDate(undefined)
-      if(!isLoading && recursosCompleto){
-         if(currentPage !== recursosCompleto.paginacion.totalPages) setCurrentPage(recursosCompleto.paginacion.totalPages, 1)
+      if(!isLoading && recursosCompleto.paginacion){
+         if(currentPage !== recursosCompleto?.paginacion?.totalPages) setCurrentPage(recursosCompleto?.paginacion?.totalPages, 1)
          
       }
       return 

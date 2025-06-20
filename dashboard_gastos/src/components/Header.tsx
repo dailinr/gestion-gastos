@@ -63,6 +63,10 @@ export const Header = ({ isHome, pathname }: headerProps) => {
     })
   }, [pathname])
 
+  if(pathname === '/ahorros'){
+    return
+  }
+
   return (
     <div className="flex-shrink-0 ">
       <div className=" flex items-center justify-between gap-2 ">
@@ -118,12 +122,15 @@ export const Header = ({ isHome, pathname }: headerProps) => {
         </form>
 
         {/* mostrar solo en modo escritorio */}
-        <div className='hidden md:block lg:block'> 
-          <h2 className='text-lg '>Total semanal: {''}
-            <span className='font-semibold'>${formatMoneda(keyRuta === 'gastos' ? 
-              cuentaActual.totalGastos : cuentaActual.totalIngresos)}</span>
-          </h2>
-        </div>
+        {pathname === '/gastos' || pathname === 'ingresos' && ( 
+          <div className='hidden md:block lg:block'> 
+            <h2 className='text-lg '>Total semanal: {''}
+              <span className='font-semibold'>${formatMoneda(keyRuta === 'gastos' ? 
+                cuentaActual.totalGastos : cuentaActual.totalIngresos)}</span>
+            </h2>
+          </div>
+        )}
+
         </>
         )}
         

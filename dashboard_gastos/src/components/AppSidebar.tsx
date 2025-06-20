@@ -30,6 +30,11 @@ const items = [
     url: "/gastos",
     icon: BanknoteArrowDown,
   },
+  {
+    title: "Ahorros",
+    url: "/ahorros",
+    icon: BanknoteArrowDown,
+  },
 ]
 
 export function AppSidebar() {

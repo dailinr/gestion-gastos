@@ -14,12 +14,16 @@ export const Layout = () => {
 
   const {pathname} = useLocation();
   const isHome = useMemo(() => pathname === '/', [pathname]);
-  const { fetchSemana, fetchRecursos} = useAppStore()
+  
+  const { fetchSemana, fetchRecursos, fetchMetaExist } = useAppStore()
 
   const isMobile = useIsMobile()
 
   useEffect(() => {
-    Promise.all([fetchSemana(), fetchRecursos()]);
+    Promise.all([
+      fetchSemana(), fetchRecursos(),
+      fetchMetaExist()
+    ]);
   }, [])
 
   return (

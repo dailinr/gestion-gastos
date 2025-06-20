@@ -26,6 +26,7 @@ import { useAppStore } from "@/Stores/useAppStore"
 import { toast } from "sonner"
 import { useEffect, useMemo, useState } from "react"
 import { FieldDatePicker } from "./FieldDatePicker"
+import { formatMoneda } from "@/Services/formatMoneda"
 
 const defaultFormValues: RecursoDraft = { 
   valor: 0,
@@ -43,13 +44,13 @@ type ModalFormProps = {
 export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const isEditar = formType === 'editar';
-  // const [date, setDate] = useState<Date>()
+  const [prevAmount, setPrevAmount] = useState(0);
   
   const resourceName = pageContextPath === '/gastos' ? 'Gasto' : 'Ingreso'; // para títulos y mensajes
   const categoriesSelect = resourceName === 'Gasto' ? categories : categoriesIngresos;
 
-  const { fetchAddRecurso, setCurrentPage,  setIdActivo,    
-    fetchEditarRecurso, filterGastos, filterIngresos, currentPage, fetchSemana } = useAppStore();
+  const { fetchAddRecurso, setCurrentPage,  setIdActivo,
+    fetchEditarRecurso, filterGastos, filterIngresos, currentPage, fetchSemana, cuentaActual } = useAppStore();
 
   // Seleccionar el recurso correcto del store
   const currentResourceStore: Recursos | undefined = useMemo(() => {
@@ -66,7 +67,9 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
       
       if (isEditar && entityId) {
         setIdActivo(entityId);
+        
         const resourceToEdit = currentResourceStore?.docs.find(r => r._id === entityId);
+        if(resourceToEdit) setPrevAmount(resourceToEdit.valor);
 
         if (resourceToEdit) {
           reset({
@@ -147,7 +150,10 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
         <DialogHeader>
           <DialogTitle> {isEditar ? 'Editar ' : 'Nuevo '} {resourceName}</DialogTitle>
           <DialogDescription>
-            Guardalo cuando hayas terminado
+            {pageContextPath === '/gastos' 
+              ? `Dinero disponible: <span className="font-bold">$${formatMoneda(cuentaActual.totalSemanal)}</span>`
+              : 'Guardalo cuando hayas terminado' 
+            }
           </DialogDescription>
         </DialogHeader>
 
@@ -165,6 +171,29 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
                   value: 1,
                   message: "El valor debe ser mayor que 0",
                 },
+                validate: (valorActual) => {
+                  if (pageContextPath === '/gastos') {
+                    const disponible = cuentaActual.totalSemanal + prevAmount ;
+                    if (valorActual > disponible) {
+                      return "El gasto no puede ser mayor a su dinero disponible";
+                    }
+                  }
+                  else {
+                    if(entityId){
+                      const acumActual = cuentaActual.totalSemanal - prevAmount ;
+                      if ((acumActual + valorActual) < 0) {
+                        return "El ingreso actualizado no puede ser menor al dinero disponible"
+                      }
+                    }
+                  }
+                  return true;
+                },
+                // ...(pageContextPath === '/gastos' && {
+                //   max: {
+                //     value: // no puedo acceder al valor actual,
+                //     message: "El gasto no puede ser mayor a su dinero disponible"
+                //   }
+                // }),
               }}
               render={({ field }) => (
                 <Input

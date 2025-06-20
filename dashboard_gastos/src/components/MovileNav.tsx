@@ -18,6 +18,11 @@ const items = [
     url: "/gastos",
     icon: BanknoteArrowDown,
   },
+  {
+    title: "Ahorros",
+    url: "/ahorros",
+    icon: BanknoteArrowDown,
+  },
 ]
 
 export function MobileNav() {
@@ -25,7 +30,7 @@ export function MobileNav() {
     // Contenedor fijo en la parte inferior de la pantalla
     <nav className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t">
       {/* Grid para distribuir los elementos equitativamente */}
-      <div className="grid h-full grid-cols-3 ">
+      <div className="grid h-full grid-cols-4 ">
         {items.map((item) => (
           <NavLink
             key={`mobile-${item.title}`} to={item.url}

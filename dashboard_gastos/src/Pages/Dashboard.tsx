@@ -1,6 +1,7 @@
 import {
-  Card as CardBoard,
   CardAction,
+  Card as CardBoard,
+  // CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -17,11 +18,14 @@ import { useEffect} from "react"
 import { Spinner } from "@/components/Spinner"
 import { formatMoneda } from "@/Services/formatMoneda"
 import { CardCategories } from "@/components/CardCategories"
+import { Link } from "react-router-dom"
 
 export const Dashboard = () => {
   
   const { cuentaActual, categoriesSemana, setCategories, 
-    gastosRecientes, setGastosRecientes, setResumeSemana } = useAppStore()
+    loadingAhorros, metaExist, reporteCompleto, progressAhorro,
+    gastosRecientes, setGastosRecientes, setResumeSemana, 
+  } = useAppStore()
 
   useEffect(() => {
     
@@ -81,9 +85,9 @@ export const Dashboard = () => {
                 <CardHeader className="px-0 gap-0">
                   <CardTitle className="text-md font-semibold pt-1">Resumen de Gastos</CardTitle>
                   <CardDescription className="text-gray-500 font-semibold mb-0 text-[12px]">última semana</CardDescription>
-                  <CardAction>
+                  {/* <CardAction>
                     <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
-                  </CardAction>
+                  </CardAction> */}
                 </CardHeader>
 
                 <CardContent className="px-0 md:flex gap-x-3">
@@ -106,25 +110,40 @@ export const Dashboard = () => {
   
             {/* Progreso de ahorros */}
             <CardBoard className=" py-2 px-4 h-full  flex flex-col overflow-auto">
-              <CardHeader className="px-0 gap-0">
-                <CardTitle className="text-md font-semibold pt-1">Metas de Ahorro</CardTitle>
-                <CardDescription className="text-gray-500 font-semibold mb-3 text-md">${formatMoneda(45000)}</CardDescription>
-                <CardAction>
-                  <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
-                </CardAction>
-              </CardHeader>
-              <CardContent className="px-0">
-                <Progress value={55} />
-              </CardContent>
-              <CardFooter className="w-full h-[2.813rem] rounded-lg bg-[#F6F6FA] text-xl flex items-center justify-center">
-                <p>${formatMoneda(25000)}</p>
-              </CardFooter>
+              { loadingAhorros ? (
+                <Spinner />
+              ):
+              (
+                <>
+                <CardHeader className="px-0 gap-0">
+                  <CardTitle className="text-md font-semibold pt-1">Metas de Ahorro</CardTitle>
+                  {metaExist && <CardDescription className="text-gray-500 font-semibold mb-3 text-md">${formatMoneda(reporteCompleto?.meta?.valor)}</CardDescription>}
+                  <CardAction>
+                    <Link to="/ahorros"> <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'/> </Link>
+                  </CardAction>
+                </CardHeader>
+                {metaExist ?  <>
+                  <CardContent className="px-0">
+                    <Progress value={progressAhorro} /> 
+                  </CardContent>
+                  <CardFooter className="w-full h-[2.813rem] rounded-lg bg-[#efeff9] text-xl flex items-center justify-center">
+                    <p>${formatMoneda(reporteCompleto?.sumaReportes)}</p>
+                  </CardFooter>
+                </>
+                :
+                  <div className="text-center pt-6">
+                    <p className="font-semibold text-gray-600 ">No has definido una meta</p>
+                  </div>
+                }
+                </>
+              )}
+              
             </CardBoard>
 
           </div> 
   
-          <div className="bg-white col-span-3 rounded-xl shadow px-4 py-2 h-full relative flex flex-col">
-            <i className='bx bx-right-arrow-alt text-xl absolute right-4 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
+          <div className="bg-white col-span-3 rounded-xl shadow-2xl px-4 py-2 h-full relative flex flex-col">
+            {/* <i className='bx bx-right-arrow-alt text-xl absolute right-4 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i> */}
             <h1 className="text-md font-semibold pt-1">Gastos por Categoria</h1>
             <p className="text-gray-500 mb-2 font-semibold text-[0.75rem]">última semana</p>
             <div className="flex-1 overflow-auto ">
@@ -149,8 +168,10 @@ export const Dashboard = () => {
             <BarChart />
           </section>
   
-          <section className="w-full h-full shadow-2xl flex flex-col bg-white rounded-xl px-2 py-2 relative ">
-            <i className='bx bx-right-arrow-alt text-xl absolute right-6 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
+          <section className="w-full h-full shadow-xl flex flex-col bg-white rounded-xl px-2 py-2 relative ">
+            <Link to={"/gastos"} >
+              <i className='bx bx-right-arrow-alt text-xl absolute right-6 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
+            </Link>
             <h1 className="text-md font-semibold px-2 py-1">Gastos Recientes</h1>
               
             {!cuentaActual.gastos ? (

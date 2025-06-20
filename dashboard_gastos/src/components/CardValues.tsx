@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-export const CardValues = ({ data}: { data: Category}) => {
+export const CardValues = ({ data }: { data: Category}) => {
   return (
     <Card>
         <CardHeader>
