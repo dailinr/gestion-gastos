@@ -31,7 +31,7 @@ export const ReportesAhorro = () => {
   return (
     reporteCompleto?.aportes.length === 0 ? (
 
-      <div className="flex flex-col justify-center relative items-center h-full space-y-4">
+      <div className="flex flex-col justify-center relative pt-6 items-center h-full space-y-4">
         <h1 className="text-2xl font-semibold text-gray-700">
           No tienes aportes para esta meta de ahorro
         </h1>

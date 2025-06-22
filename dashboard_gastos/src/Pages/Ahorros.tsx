@@ -69,27 +69,17 @@ export const Ahorros = () => {
                     {meta.cumplida ? 'cumplida' : 'en proceso'}
                   </CardAction>
                 </CardHeader>
-                <CardContent className="">
-                  <p>
-                    Total aportes: {''}
-                    <span className="text-lg font-semibold">${formatMoneda(meta.sumaAportes)}</span>
-                  </p>
-                  <p>
-                    Meta de ahorro: {''}
-                    <span className="text-lg font-semibold">${formatMoneda(meta.valor)}</span>
-                  </p>
-                  <p>
-                    Diferencia: {''}
-                    <span className="text-lg font-semibold">${formatMoneda(meta.diferencia)}</span>
-                  </p>
-                  
+                <CardContent>
+                  <p>Total aportes: {''}<span className="text-lg font-semibold">${formatMoneda(meta.sumaAportes)}</span></p>
+                  <p>Meta de ahorro: {''}<span className="text-lg font-semibold">${formatMoneda(meta.valor)}</span></p>
+                  <p>Diferencia: {''}<span className="text-lg font-semibold">${formatMoneda(meta.diferencia)}</span></p>
                 </CardContent>
                 <CardFooter>
                   <div className="container space-x-2 space-y-2" >
                     <Button size="sm" onClick={() => setMetaElegida(meta._id)} disabled={metaElegida === meta._id}>Ver</Button>
                     <Button size="sm" variant="destructive" >Eliminar</Button>
                     {metaDashboard?._id !== meta._id && 
-                      <Button size="sm" variant="blue" onClick={() => setDashboard(meta._id)} >Meta dashboard</Button>
+                      <Button size="sm" variant="blue" onClick={() => setDashboard(meta._id)}>Mostrar en dashboard</Button>
                     }
                   </div>
                 </CardFooter>
@@ -101,8 +91,8 @@ export const Ahorros = () => {
         <div className="lg:border-l-2 px-2 relative  flex flex-col overflow-hidden">
           {metaElegida === ''? (
 
-            <div className="flex flex-col justify-center items-center h-full space-y-4">
-              <h1 className="text-2xl font-semibold text-gray-700">
+            <div className="flex flex-col py-6 justify-center items-center h-full space-y-4">
+              <h1 className="text-2xl font-semibold text-center text-gray-700">
                 Elige una meta de ahorro para ver aquí
               </h1>
             </div>
