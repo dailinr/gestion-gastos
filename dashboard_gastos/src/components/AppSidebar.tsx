@@ -1,4 +1,4 @@
-import { LayoutDashboard, ChartColumnBig, BanknoteArrowDown } from "lucide-react"
+import { LayoutDashboard, ChartColumnBig, BanknoteArrowDown, HandCoins } from "lucide-react"
 import {
   Sidebar,
   SidebarContent,
@@ -33,7 +33,7 @@ const items = [
   {
     title: "Ahorros",
     url: "/ahorros",
-    icon: BanknoteArrowDown,
+    icon: HandCoins,
   },
 ]
 

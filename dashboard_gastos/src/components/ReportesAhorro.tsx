@@ -35,19 +35,14 @@ export const ReportesAhorro = () => {
         <h1 className="text-2xl font-semibold text-gray-700">
           No tienes aportes para esta meta de ahorro
         </h1>
-        {/* <Button
-        // onClick={fetchAhorros}
-        >
-          Agrega uno
-        </Button> */}
         <DialogAhorro />
       </div>
     ) :
       (
-        <div className='px-3 relative h-full'>
-          <h1 className="text-2xl font-semibold mb-4">Aportes para aporte de ahorro</h1>
+        <div className=' flex flex-col overflow-hidden'>
+          <h1 className="text-2xl font-semibold mb-4 px-5">Aportes para meta de ahorro</h1>
 
-          <section>
+          <section className='overflow-y-auto flex-1 px-5'>
             {reporteCompleto?.aportes.map(aporte => (
               <Card key={aporte._id} >
                 <CardHeader>

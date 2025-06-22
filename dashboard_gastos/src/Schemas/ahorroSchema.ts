@@ -29,6 +29,9 @@ export const AporteAhorroSchema = z.object({
 export const AporteDraftSchema = AporteAhorroSchema
     .omit({ _id: true, fecha: true}).extend({ fecha: z.date() })
 
+export const MetaDraftSchema = MetaAhorroSchema
+    .pick({ valor: true, motivo: true }).extend({ fecha: z.date() })
+
 export const AportesAhorroSchema = z.array(AporteAhorroSchema)
 
 export const ReporteAhorrosSchema = z.object({
@@ -36,6 +39,12 @@ export const ReporteAhorrosSchema = z.object({
     aportes: AportesAhorroSchema,
     cumplida: z.boolean(),
     sumaAportes: z.number()
+})
+
+export const AddMetaResponseSchema = object({
+    status: z.string(),
+    message: z.string(),
+    ahorro: MetaAhorroSchema.omit({ diferencia: true })
 })
 
 export const AddAporteResponseSchema = object({

@@ -15,13 +15,14 @@ import { formatDate } from "@/Services/formatDate";
 import { formatMoneda } from "@/Services/formatMoneda";
 import { ReportesAhorro } from "@/components/ReportesAhorro";
 import { toast } from "sonner";
+import { DialogMeta } from "@/components/FormMetaAhorro";
 
 export const Ahorros = () => {
 
   const { metaExist, metaDashboard, metasAhorro, metaElegida, 
     setMetaElegida, loadingAhorros, setMetaDashboard } = useAppStore()
 
-  if(!metasAhorro || loadingAhorros){
+  if(loadingAhorros){
     return (  <Spinner /> )
   }
 
@@ -46,15 +47,19 @@ export const Ahorros = () => {
       
     metaExist ? (
 
-      (!metasAhorro || loadingAhorros ? (
+      (loadingAhorros ? (
         <Spinner />
-      ):
-      (<div className="w-full grid lg:grid-cols-[35%_1fr] h-full gap-x-6 ">
+      )
+      :(
+      <div className="w-full h-full grid lg:grid-cols-[38%_1fr] gap-x-4">
 
-        <div className="px-2 py-4">
-          <h1 className="text-2xl font-semibold mb-4">Metas de ahorro</h1>
-
-          <section className="space-y-3">
+        <div className="flex flex-col overflow-hidden">
+          <div className="flex justify-between px-4">
+            <h1 className="text-2xl font-semibold mb-4">Metas de ahorro</h1>
+            {metasAhorro.length < 3 &&  <DialogMeta /> }
+          </div>
+          
+          <section className="space-y-3 overflow-y-auto flex-1  px-4 ">
             {metasAhorro.map(meta => (
               <Card key={meta._id} >
                 <CardHeader>
@@ -93,7 +98,7 @@ export const Ahorros = () => {
           </section>
         </div>
 
-        <div className="lg:border-l-2 p-4">
+        <div className="lg:border-l-2 px-2 relative  flex flex-col overflow-hidden">
           {metaElegida === ''? (
 
             <div className="flex flex-col justify-center items-center h-full space-y-4">
@@ -111,15 +116,11 @@ export const Ahorros = () => {
       ))
     ):
     (
-      <div className="flex flex-col justify-center items-center space-y-4">
-        <h1 className="text-3xl font-semibold text-gray-700">
-          No tienes metas de ahorros
+      <div className="flex flex-col h-full items-center justify-center  space-y-4">
+        <h1 className="text-2xl lg:text-3xl font-semibold text-center text-gray-700">
+          No tienes metas de ahorros 
         </h1>
-        <Button 
-        // onClick={fetchAhorros}  
-        >
-          Crea una nueva
-        </Button>
+        <DialogMeta /> 
       </div>
     )
   )

@@ -42,7 +42,7 @@ export const TableContainer = () => {
    const isEmptyData = !data?.docs || data.docs.length === 0
    
    return (
-      <div className="flex flex-col w-full ">
+      <div className="flex flex-col w-full">
 
          <section className="mt-5 mb-5 md:flex space-y-3 md:space-y-0 justify-between  items-center">
             <div className="text-2xl font-semibold">
