@@ -1,7 +1,5 @@
 import { useAppStore } from '@/Stores/useAppStore'
 import { Spinner } from './Spinner'
-import { Button } from 'react-day-picker'
-import { useEffect } from 'react'
 import {
   Card,
   // CardAction,
@@ -14,12 +12,11 @@ import {
 import { formatDate } from '@/Services/formatDate'
 import { formatMoneda } from '@/Services/formatMoneda'
 import { DialogAhorro } from './FormAhorro'
+import { useEffect } from 'react'
 
 export const ReportesAhorro = () => {
 
-  const { reporteCompleto, loadingReportes, metaElegida,
-    fetchReportes
-  } = useAppStore()
+  const { metaElegida, reporteCompleto, loadingReportes, fetchReportes } = useAppStore()
 
   useEffect(() => {
     if (metaElegida !== '') {
@@ -34,22 +31,23 @@ export const ReportesAhorro = () => {
   return (
     reporteCompleto?.aportes.length === 0 ? (
 
-      <div className="flex flex-col justify-center items-center h-full space-y-4">
+      <div className="flex flex-col justify-center relative items-center h-full space-y-4">
         <h1 className="text-2xl font-semibold text-gray-700">
-          No tienes aportes para esta aporte de ahorro
+          No tienes aportes para esta meta de ahorro
         </h1>
-        <Button
+        {/* <Button
         // onClick={fetchAhorros}
         >
           Agrega uno
-        </Button>
+        </Button> */}
+        <DialogAhorro />
       </div>
     ) :
       (
         <div className='px-3 relative h-full'>
           <h1 className="text-2xl font-semibold mb-4">Aportes para aporte de ahorro</h1>
 
-          <section className='overflow-auto'>
+          <section>
             {reporteCompleto?.aportes.map(aporte => (
               <Card key={aporte._id} >
                 <CardHeader>
@@ -61,14 +59,15 @@ export const ReportesAhorro = () => {
                     aporte de ahorro: {''}
                     <span className="text-lg font-semibold">${formatMoneda(aporte.valor)}</span>
                   </p>
-                  {/* <Button onClick={() => setaporteElegida(aporte._id)}>Ver</Button>  */}
                 </CardContent>
-                {/* <CardFooter></CardFooter> */}
               </Card>
             ))}
           </section>
 
-          <DialogAhorro />
+          {!reporteCompleto?.meta?.cumplida && 
+            <DialogAhorro />
+          }
+          
         </div>
       )
   )

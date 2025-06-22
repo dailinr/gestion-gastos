@@ -44,7 +44,7 @@ type ModalFormProps = {
 export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProps) {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const isEditar = formType === 'editar';
-  const [prevAmount, setPrevAmount] = useState(0);
+  const [prevAmount, setPrevAmount] = useState(0); // para validar valores de ingresos y gastos
   
   const resourceName = pageContextPath === '/gastos' ? 'Gasto' : 'Ingreso'; // para títulos y mensajes
   const categoriesSelect = resourceName === 'Gasto' ? categories : categoriesIngresos;
@@ -188,12 +188,6 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
                   }
                   return true;
                 },
-                // ...(pageContextPath === '/gastos' && {
-                //   max: {
-                //     value: // no puedo acceder al valor actual,
-                //     message: "El gasto no puede ser mayor a su dinero disponible"
-                //   }
-                // }),
               }}
               render={({ field }) => (
                 <Input

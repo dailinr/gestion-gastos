@@ -6,6 +6,7 @@ import {
   CardAction,
   CardContent,
   CardDescription,
+  CardFooter,
   // CardFooter,
   CardHeader,
   CardTitle,
@@ -16,9 +17,8 @@ import { ReportesAhorro } from "@/components/ReportesAhorro";
 
 export const Ahorros = () => {
 
-  const { metaExist, metasAhorro,
-    metaElegida, setMetaElegida, loadingAhorros 
-  } = useAppStore()
+  const { metaExist, metaDashboard, metasAhorro, metaElegida, 
+    setMetaElegida, loadingAhorros, setMetaDashboard } = useAppStore()
 
   if(!metasAhorro || loadingAhorros){
     return (  <Spinner /> )
@@ -31,12 +31,12 @@ export const Ahorros = () => {
       (!metasAhorro || loadingAhorros ? (
         <Spinner />
       ):
-      (<div className="w-full grid lg:grid-cols-[35%_1fr] h-full gap-x-6">
+      (<div className="w-full grid lg:grid-cols-[35%_1fr] h-full gap-x-6 ">
 
         <div className="px-2 py-4">
           <h1 className="text-2xl font-semibold mb-4">Metas de ahorro</h1>
 
-          <section>
+          <section className="space-y-3">
             {metasAhorro.map(meta => (
               <Card key={meta._id} >
                 <CardHeader>
@@ -46,14 +46,27 @@ export const Ahorros = () => {
                     {meta.cumplida ? 'cumplida' : 'sin cumplir'}
                   </CardAction>
                 </CardHeader>
-                <CardContent className="flex justify-between items-center">
-                  <p >
+                <CardContent className="">
+                  <p>
+                    Total aportes: {''}
+                    <span className="text-lg font-semibold">${formatMoneda(meta.sumaAportes)}</span>
+                  </p>
+                  <p>
                     Meta de ahorro: {''}
                     <span className="text-lg font-semibold">${formatMoneda(meta.valor)}</span>
                   </p>
-                  <Button onClick={() => setMetaElegida(meta._id)}>Ver</Button>
+                  <p>
+                    Diferencia: {''}
+                    <span className="text-lg font-semibold">${formatMoneda(meta.diferencia)}</span>
+                  </p>
+                  
                 </CardContent>
-                {/* <CardFooter></CardFooter> */}
+                <CardFooter className="space-x-4">
+                  <Button onClick={() => setMetaElegida(meta._id)} disabled={metaElegida === meta._id}>Ver</Button>
+                  {metaDashboard?._id !== meta._id && 
+                    <Button variant="blue" onClick={() => setMetaDashboard(meta._id)} >Mostrar en Dashboard</Button>
+                  }
+                </CardFooter>
             </Card>
             ))}
           </section>

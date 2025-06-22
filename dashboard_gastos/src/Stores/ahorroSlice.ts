@@ -1,5 +1,5 @@
-import { metaExist, reporteAhorros } from "@/Services/ahorro-service"
-import type { MetaAhorro, ReporteCompleto } from "@/types"
+import { addAporteAhorro, metaExist, reporteAhorros } from "@/Services/ahorro-service"
+import type { AporteDraft, AporteResponse, MetaAhorro, ReporteCompleto } from "@/types"
 import type { StateCreator } from "zustand"
 
 export type ahorroSliceType = {
@@ -8,12 +8,15 @@ export type ahorroSliceType = {
    metaElegida: MetaAhorro['_id']
    progressAhorro: number
    reporteCompleto: ReporteCompleto
+   metaDashboard: MetaAhorro
    loadingAhorros: boolean
    loadingReportes: boolean
    setMetaElegida: (meta: MetaAhorro['_id']) => void
    fetchMetaExist: () => Promise<void>
    fetchReportes: () => Promise<void>
-   // fetchAddAportes: () => Promise<void>
+   fetchAddAportes: (data: AporteDraft) => Promise<AporteResponse | undefined>
+   setMetaDashboard: (id: MetaAhorro['_id']) => Promise<void>
+   setProgress: () => void
 }
 
 export const createAhorroSlice: StateCreator<ahorroSliceType> = (set, get) => ({
@@ -24,24 +27,22 @@ export const createAhorroSlice: StateCreator<ahorroSliceType> = (set, get) => ({
    progressAhorro: 0,
    loadingAhorros: true,
    loadingReportes: true,
+   metaDashboard: {} as MetaAhorro,
 
    fetchMetaExist: async () => {
       set({ loadingAhorros: true })
-      const response = await metaExist()
+      const response = await metaExist(undefined)
 
       set({
          metaExist: response?.existe,
-         metasAhorro: response?.metasAhorro
+         metasAhorro: response?.metasAhorro,
+         metaDashboard: response?.metaDashboard
       })
 
-      if (get().metaExist && get().metasAhorro) {
-         const meta = get().metasAhorro.find(meta => meta.cumplida === false)
-
-         if (meta) {
-            set({ metaElegida: meta._id })
-            await get().fetchReportes()
-         }
+      if(get().metaExist){
+         get().setProgress()
       }
+   
       set({ loadingAhorros: false })
    },
 
@@ -54,19 +55,39 @@ export const createAhorroSlice: StateCreator<ahorroSliceType> = (set, get) => ({
 
       if (get().metaElegida !== '') {
          const response = await reporteAhorros(get().metaElegida)
-
+         console.log(response)
          set({ reporteCompleto: response })
-
-         if(get().reporteCompleto){
-            let progreso = (get().reporteCompleto.sumaReportes / get().reporteCompleto?.meta?.valor) * 100
-            let progresoInt = Math.trunc(progreso)
-            set({ progressAhorro : progresoInt })
-         }
       }
       set({ loadingReportes: false })
    },
 
-   // fetchAddAportes: async () => {
-   //     await addMetaAhorro()
-   // }
+   fetchAddAportes: async (data) => {
+      return await addAporteAhorro(data)
+   },
+
+   setMetaDashboard: async(id) => {
+      set({ loadingAhorros: true })
+      const response = await metaExist(id)
+
+      set({
+         metaExist: response?.existe,
+         metasAhorro: response?.metasAhorro,
+         metaDashboard: response?.metaDashboard
+      })
+
+      if(get().metaExist){
+         get().setProgress()
+      }
+   
+      set({ loadingAhorros: false })
+      // const metaDashboard = get().metasAhorro.find(meta => meta._id === (id ? id : get().metaDashboard))
+   },
+
+   setProgress: () => {
+      if(get().metaDashboard){
+         let progreso = (get().metaDashboard.sumaAportes / get().metaDashboard.valor) * 100
+         let progresoInt = Math.trunc(progreso)
+         set({ progressAhorro : progresoInt })
+      }
+   }
 })

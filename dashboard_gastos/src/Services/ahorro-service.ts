@@ -1,20 +1,18 @@
-import { ReporteAhorrosSchema, ResponseMetaSchema } from "@/Schemas/ahorroSchema";
-import type { MetaAhorro } from "@/types";
+import { AporteDraftSchema, ReporteAhorrosSchema, ResponseMetaSchema } from "@/Schemas/ahorroSchema";
+import type { AporteDraft, AporteResponse, MetaAhorro } from "@/types";
 import axios from "axios";
 
-export async function addMetaAhorro() {
-    console.log("desde add meta ahorro")
-}
-
-export async function metaExist() {
-    const url = `${import.meta.env.VITE_API_URL}ahorros/meta-exist`
-
+export async function metaExist(idDashboard: string | undefined) {
+    const url = idDashboard === undefined
+        ? `${import.meta.env.VITE_API_URL}ahorros/meta-exist`
+        : `${import.meta.env.VITE_API_URL}ahorros/meta-exist?idDashboard=${idDashboard}`
+    
     try {
         const {data: response} = await axios.get(url)
         // console.log(response)
 
         const result = ResponseMetaSchema.safeParse(response)
-        // console.log(result)
+        // console.log("resul: ", result)
 
         if(result.success){
             return result.data
@@ -52,6 +50,35 @@ export async function reporteAhorros (id: MetaAhorro['_id']) {
         } 
         else {
             // Otro tipo de error (sin respuesta, por ejemplo de red)
+            console.error("Error desconocido:", error);
+            throw error;
+        }
+    }
+}
+
+export async function addAporteAhorro(data: AporteDraft) {
+
+    const url = `${import.meta.env.VITE_API_URL}ahorros/add-aporte`
+
+    const parsed = AporteDraftSchema.safeParse(data)
+    // console.log(parsed)
+
+    if(!parsed.success){
+        throw new Error("Datos invalidos")
+    }
+
+    try {
+        const {data: response } = await axios.post<AporteResponse>(url, parsed.data)
+        // console.log(response)
+
+        return response
+    } 
+    catch (error: any) {
+        if (error.response) {
+            console.log("error: ", error.response.data)
+            return error.response
+        } 
+        else {
             console.error("Error desconocido:", error);
             throw error;
         }

@@ -23,7 +23,7 @@ import { Link } from "react-router-dom"
 export const Dashboard = () => {
   
   const { cuentaActual, categoriesSemana, setCategories, 
-    loadingAhorros, metaExist, reporteCompleto, progressAhorro,
+    loadingAhorros, metaDashboard, progressAhorro,
     gastosRecientes, setGastosRecientes, setResumeSemana, 
   } = useAppStore()
 
@@ -117,17 +117,17 @@ export const Dashboard = () => {
                 <>
                 <CardHeader className="px-0 gap-0">
                   <CardTitle className="text-md font-semibold pt-1">Metas de Ahorro</CardTitle>
-                  {metaExist && <CardDescription className="text-gray-500 font-semibold mb-3 text-md">${formatMoneda(reporteCompleto?.meta?.valor)}</CardDescription>}
+                  {metaDashboard && <CardDescription className="text-gray-500 font-semibold mb-3 text-md">${formatMoneda(metaDashboard.valor)}</CardDescription>}
                   <CardAction>
                     <Link to="/ahorros"> <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'/> </Link>
                   </CardAction>
                 </CardHeader>
-                {metaExist ?  <>
+                {metaDashboard ?  <>
                   <CardContent className="px-0">
                     <Progress value={progressAhorro} /> 
                   </CardContent>
                   <CardFooter className="w-full h-[2.813rem] rounded-lg bg-[#efeff9] text-xl flex items-center justify-center">
-                    <p>${formatMoneda(reporteCompleto?.sumaReportes)}</p>
+                    <p>${formatMoneda(metaDashboard.sumaAportes)}</p>
                   </CardFooter>
                 </>
                 :
