@@ -14,6 +14,7 @@ import {
 import { formatDate } from "@/Services/formatDate";
 import { formatMoneda } from "@/Services/formatMoneda";
 import { ReportesAhorro } from "@/components/ReportesAhorro";
+import { toast } from "sonner";
 
 export const Ahorros = () => {
 
@@ -22,6 +23,23 @@ export const Ahorros = () => {
 
   if(!metasAhorro || loadingAhorros){
     return (  <Spinner /> )
+  }
+
+  const setDashboard = async (id: string) => {
+    
+    try {
+      const response = await setMetaDashboard(id)
+
+      if(response?.status === "success"){
+        toast.success(response.message)
+      }
+      else{
+        throw new Error(response?.message ||`Error al actualizar meta dashboard`)
+      }
+    }
+    catch(error: any){
+      toast.error(error?.message || 'Ocurrio un error')
+    }
   }
 
   return ( 
@@ -42,8 +60,8 @@ export const Ahorros = () => {
                 <CardHeader>
                   <CardTitle>{meta.motivo}</CardTitle>
                   <CardDescription>{formatDate(meta.fecha)}</CardDescription>
-                  <CardAction className={`${meta.cumplida ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900'} px-2 rounded-2xl text-xs`}>
-                    {meta.cumplida ? 'cumplida' : 'sin cumplir'}
+                  <CardAction className={`${meta.cumplida ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900'} px-2 rounded-2xl text-xs font-medium`}>
+                    {meta.cumplida ? 'cumplida' : 'en proceso'}
                   </CardAction>
                 </CardHeader>
                 <CardContent className="">
@@ -61,11 +79,14 @@ export const Ahorros = () => {
                   </p>
                   
                 </CardContent>
-                <CardFooter className="space-x-4">
-                  <Button onClick={() => setMetaElegida(meta._id)} disabled={metaElegida === meta._id}>Ver</Button>
-                  {metaDashboard?._id !== meta._id && 
-                    <Button variant="blue" onClick={() => setMetaDashboard(meta._id)} >Mostrar en Dashboard</Button>
-                  }
+                <CardFooter>
+                  <div className="container space-x-2 space-y-2" >
+                    <Button size="sm" onClick={() => setMetaElegida(meta._id)} disabled={metaElegida === meta._id}>Ver</Button>
+                    <Button size="sm" variant="destructive" >Eliminar</Button>
+                    {metaDashboard?._id !== meta._id && 
+                      <Button size="sm" variant="blue" onClick={() => setDashboard(meta._id)} >Meta dashboard</Button>
+                    }
+                  </div>
                 </CardFooter>
             </Card>
             ))}

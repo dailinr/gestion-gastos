@@ -8,6 +8,7 @@ export const MetaAhorroSchema = z.object({
     cumplida: z.boolean(),
     sumaAportes: z.number(),
     diferencia: z.number(),
+    dashboard: z.boolean()
 })
 
 export const MetasAhorroSchema = z.array(MetaAhorroSchema)
@@ -42,4 +43,10 @@ export const AddAporteResponseSchema = object({
     mensaje: z.string(),
     aporte: AporteAhorroSchema.omit({ meta: true }),
     meta: MetaAhorroSchema
+})
+
+export const ResponseMetaDashboard = z.object({
+    status: z.string(),
+    message: z.string(),
+    metaDashboard: MetaAhorroSchema
 })

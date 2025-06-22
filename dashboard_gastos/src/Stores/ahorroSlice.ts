@@ -1,5 +1,5 @@
-import { addAporteAhorro, metaExist, reporteAhorros } from "@/Services/ahorro-service"
-import type { AporteDraft, AporteResponse, MetaAhorro, ReporteCompleto } from "@/types"
+import { addAporteAhorro, metaExist, reporteAhorros, setMetaDashboardPersistente } from "@/Services/ahorro-service"
+import type { AporteDraft, AporteResponse, MetaAhorro, ReporteCompleto, ResponseMetaDashboard } from "@/types"
 import type { StateCreator } from "zustand"
 
 export type ahorroSliceType = {
@@ -15,7 +15,7 @@ export type ahorroSliceType = {
    fetchMetaExist: () => Promise<void>
    fetchReportes: () => Promise<void>
    fetchAddAportes: (data: AporteDraft) => Promise<AporteResponse | undefined>
-   setMetaDashboard: (id: MetaAhorro['_id']) => Promise<void>
+   setMetaDashboard: (id: MetaAhorro['_id']) => Promise<ResponseMetaDashboard | undefined>
    setProgress: () => void
 }
 
@@ -31,7 +31,7 @@ export const createAhorroSlice: StateCreator<ahorroSliceType> = (set, get) => ({
 
    fetchMetaExist: async () => {
       set({ loadingAhorros: true })
-      const response = await metaExist(undefined)
+      const response = await metaExist()
 
       set({
          metaExist: response?.existe,
@@ -44,6 +44,25 @@ export const createAhorroSlice: StateCreator<ahorroSliceType> = (set, get) => ({
       }
    
       set({ loadingAhorros: false })
+   },
+
+   setMetaDashboard: async(id) => {
+      set({ loadingAhorros: true })
+
+      const responseMeta = await setMetaDashboardPersistente(id); // POST para guardar en BD
+      const response = await metaExist();    // Obtener ya marcada desde BD
+
+      set({
+         metaExist: response?.existe,
+         metasAhorro: response?.metasAhorro,
+         metaDashboard: response?.metaDashboard
+      })
+
+      if(get().metaExist){
+         get().setProgress()
+      }
+      set({ loadingAhorros: false })
+      return responseMeta
    },
 
    setMetaElegida: (meta) => {
@@ -63,24 +82,6 @@ export const createAhorroSlice: StateCreator<ahorroSliceType> = (set, get) => ({
 
    fetchAddAportes: async (data) => {
       return await addAporteAhorro(data)
-   },
-
-   setMetaDashboard: async(id) => {
-      set({ loadingAhorros: true })
-      const response = await metaExist(id)
-
-      set({
-         metaExist: response?.existe,
-         metasAhorro: response?.metasAhorro,
-         metaDashboard: response?.metaDashboard
-      })
-
-      if(get().metaExist){
-         get().setProgress()
-      }
-   
-      set({ loadingAhorros: false })
-      // const metaDashboard = get().metasAhorro.find(meta => meta._id === (id ? id : get().metaDashboard))
    },
 
    setProgress: () => {
