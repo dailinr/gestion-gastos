@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table"
 import { formatDateGrap } from "@/Services/formatDate"
 import type { Recursos, RecursoData } from "@/types"
-import { ModalConfirma } from "./ModalConfirma"
+import { DialogEliminar} from "./DialogEliminar"
 import { categories, categoriesIngresos } from "@/data/categories"
 import { ModalForm } from "./RecursoForm"
 import { formatMoneda } from "@/Services/formatMoneda"
@@ -48,7 +48,7 @@ export const TableData = ({ data, resourceType, pageContextPath }: TableDataProp
                     <TableCell>{d.descripcion}</TableCell>
                     <TableCell>${formatMoneda(d.valor)}</TableCell>
                     <TableCell className="flex justify-end pr-8 gap-2">
-                        <ModalConfirma ruta={resourceType} id={d._id} />
+                        <DialogEliminar ruta={resourceType} id={d._id} />
                         <ModalForm
                             formType="editar"
                             entityId={d._id} 

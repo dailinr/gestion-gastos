@@ -1,5 +1,5 @@
 import { AporteDraftSchema, MetaDraftSchema, ReporteAhorrosSchema, ResponseMetaSchema } from "@/Schemas/ahorroSchema";
-import type { AporteDraft, AporteResponse, MetaAhorro, MetaDraft, MetaResponse, ResponseMetaDashboard } from "@/types";
+import type { AporteDraft, AporteResponse, EliminarMetaResponse, MetaAhorro, MetaDraft, MetaResponse, ResponseMetaDashboard } from "@/types";
 import axios from "axios";
 
 export async function metaExist() {
@@ -127,6 +127,31 @@ export async function addMetaAhorro(data: MetaDraft) {
     catch (error: any) {
         if (error.response) {
             console.log("error: ", error.response.data)
+            return error.response
+        } 
+        else {
+            console.error("Error desconocido:", error);
+            throw error;
+        }
+    }
+}
+
+export async function eliminarMeta(id: string){
+    
+    const url = `${import.meta.env.VITE_API_URL}ahorros/eliminar-meta/${id}`
+
+    if(!id || typeof(id) !== 'string'){
+        throw new Error("Datos invalidos")
+    }
+
+    try {
+        const {data: response} = await axios.delete<EliminarMetaResponse>(url);
+        console.log(response)
+        return response
+    } 
+    catch (error: any) {
+        if (error.response) {
+            console.log(error.response.data)
             return error.response
         } 
         else {

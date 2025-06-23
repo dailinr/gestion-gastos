@@ -42,8 +42,8 @@ export const DialogMeta = () => {
                 throw new Error(response?.message ||`Error al agregar meta de ahorro`)
             }
                 
-                await fetchMetaExist()
-            }
+            await fetchMetaExist()
+        }
         catch(error: any){
             toast.error(error?.message || 'Ocurrio un error')
         }

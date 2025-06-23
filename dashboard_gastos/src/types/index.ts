@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { CuentaSemanaSchema, RecursoResponseSchema } from '@/Schemas/cuentaSchema'
 import type { Paginacion, RecursoDraftSchema, RecursoSchemaNuevo, RecursosPaginacionSchema, RecursosSchema } from '@/Schemas/recursoSchema'
-import type { AddAporteResponseSchema, AddMetaResponseSchema, AporteAhorroSchema, AporteDraftSchema, MetaAhorroSchema, MetaDraftSchema, ReporteAhorrosSchema, ResponseMetaDashboard } from '@/Schemas/ahorroSchema'
+import type { AddAporteResponseSchema, AddMetaResponseSchema, AporteAhorroSchema, AporteDraftSchema, MetaAhorroSchema, MetaDraftSchema, ReporteAhorrosSchema, ResponseEliminarMeta, ResponseMetaDashboard } from '@/Schemas/ahorroSchema'
 
 export type Recurso = {
   id: number
@@ -70,3 +70,4 @@ export type AporteResponse = z.infer<typeof AddAporteResponseSchema>
 export type ResponseMetaDashboard = z.infer<typeof ResponseMetaDashboard>
 export type MetaDraft = z.infer<typeof MetaDraftSchema>
 export type MetaResponse = z.infer<typeof AddMetaResponseSchema>
+export type EliminarMetaResponse = z.infer<typeof ResponseEliminarMeta>

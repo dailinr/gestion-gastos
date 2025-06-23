@@ -13,7 +13,7 @@ import { useAppStore } from "@/Stores/useAppStore"
 import type { RecursoData } from "@/types"
 import { toast } from "sonner"
 
-export function ModalConfirma({ruta, id} : {ruta: string, id: RecursoData['_id']}) {
+export function DialogEliminar({ruta, id} : {ruta: string, id: RecursoData['_id']}) {
 
     const {eliminarRecurso, setCurrentPage, currentPage, fetchSemana} = useAppStore()
     

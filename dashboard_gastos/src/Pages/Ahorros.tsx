@@ -16,11 +16,15 @@ import { formatMoneda } from "@/Services/formatMoneda";
 import { ReportesAhorro } from "@/components/ReportesAhorro";
 import { toast } from "sonner";
 import { DialogMeta } from "@/components/FormMetaAhorro";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { DialogEliminarMeta } from "@/components/DialogEliminarMeta";
 
 export const Ahorros = () => {
 
   const { metaExist, metaDashboard, metasAhorro, metaElegida, 
     setMetaElegida, loadingAhorros, setMetaDashboard } = useAppStore()
+
+  const isMobile = useIsMobile()
 
   if(loadingAhorros){
     return (  <Spinner /> )
@@ -51,15 +55,15 @@ export const Ahorros = () => {
         <Spinner />
       )
       :(
-      <div className="w-full h-full grid lg:grid-cols-[38%_1fr] lg:gap-x-4">
+      <div className="w-full h-full grid lg:grid-cols-[38%_1fr] lg:gap-x-4 ">
 
         <div className="flex flex-col overflow-hidden">
           <div className="flex justify-between px-4">
-            <h1 className="text-2xl font-semibold mb-4">Metas de ahorro</h1>
+            <h1 className="text-xl lg:text-2xl font-semibold mb-4">Metas de ahorro</h1>
             {metasAhorro.length < 3 &&  <DialogMeta /> }
           </div>
           
-          <section className="space-y-3 overflow-y-auto flex-1  px-4 ">
+          <section className="space-y-4 overflow-y-auto flex-1  lg:px-4 ">
             {metasAhorro.map(meta => (
               <Card key={meta._id} >
                 <CardHeader>
@@ -77,9 +81,9 @@ export const Ahorros = () => {
                 <CardFooter>
                   <div className="container space-x-2 space-y-2" >
                     <Button size="sm" onClick={() => setMetaElegida(meta._id)} disabled={metaElegida === meta._id}>Ver</Button>
-                    <Button size="sm" variant="destructive" >Eliminar</Button>
+                    <DialogEliminarMeta id={meta._id} />
                     {metaDashboard?._id !== meta._id && 
-                      <Button size="sm" variant="blue" onClick={() => setDashboard(meta._id)}>Mostrar en dashboard</Button>
+                      <Button size="sm" variant="blue" onClick={() => setDashboard(meta._id)}>{isMobile ? 'Dashboard' : 'Mostrar dashboard'}</Button>
                     }
                   </div>
                 </CardFooter>
@@ -88,7 +92,7 @@ export const Ahorros = () => {
           </section>
         </div>
 
-        <div className="lg:border-l-2 px-2 relative  flex flex-col overflow-hidden">
+        <div className="lg:border-l-2 relative lg:px-2  flex flex-col overflow-hidden">
           {metaElegida === ''? (
 
             <div className="flex flex-col py-6 justify-center items-center h-full space-y-4">
@@ -98,7 +102,7 @@ export const Ahorros = () => {
             </div>
           ):
           (
-            <ReportesAhorro />
+            <ReportesAhorro isMobile={isMobile} />
           )}
         </div>
 

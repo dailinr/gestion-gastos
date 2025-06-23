@@ -59,3 +59,9 @@ export const ResponseMetaDashboard = z.object({
     message: z.string(),
     metaDashboard: MetaAhorroSchema
 })
+
+export const ResponseEliminarMeta = z.object({
+    status: z.string(),
+    mensaje: z.string(),
+    metaEliminada: MetaAhorroSchema
+})

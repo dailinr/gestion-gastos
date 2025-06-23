@@ -1,5 +1,5 @@
-import { addAporteAhorro, addMetaAhorro, metaExist, reporteAhorros, setMetaDashboardPersistente } from "@/Services/ahorro-service"
-import type { AporteDraft, AporteResponse, MetaAhorro, MetaDraft, MetaResponse, ReporteCompleto, ResponseMetaDashboard } from "@/types"
+import { addAporteAhorro, addMetaAhorro, eliminarMeta, metaExist, reporteAhorros, setMetaDashboardPersistente } from "@/Services/ahorro-service"
+import type { AporteDraft, AporteResponse, EliminarMetaResponse, MetaAhorro, MetaDraft, MetaResponse, ReporteCompleto, ResponseMetaDashboard } from "@/types"
 import type { StateCreator } from "zustand"
 
 export type ahorroSliceType = {
@@ -16,6 +16,7 @@ export type ahorroSliceType = {
    fetchReportes: () => Promise<void>
    fetchAddMeta: (data: MetaDraft) => Promise<MetaResponse | undefined>
    fetchAddAportes: (data: AporteDraft) => Promise<AporteResponse | undefined>
+   fetchEliminarMeta: (id: string) => Promise<EliminarMetaResponse | undefined>
    setMetaDashboard: (id: MetaAhorro['_id']) => Promise<ResponseMetaDashboard | undefined>
    setProgress: () => void
 }
@@ -89,6 +90,10 @@ export const createAhorroSlice: StateCreator<ahorroSliceType> = (set, get) => ({
 
    fetchAddAportes: async (data) => {
       return await addAporteAhorro(data)
+   },
+
+   fetchEliminarMeta: async (id: string) => {
+      return await eliminarMeta(id)
    },
 
    setProgress: () => {
