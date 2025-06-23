@@ -112,7 +112,7 @@ export async function addMetaAhorro(data: MetaDraft) {
     const url = `${import.meta.env.VITE_API_URL}ahorros/add-meta`
 
     const parsed = MetaDraftSchema.safeParse(data)
-    console.log(parsed)
+    // console.log(parsed)
 
     if(!parsed.success){
         throw new Error("Datos invalidos")

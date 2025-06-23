@@ -76,7 +76,6 @@ export const createAhorroSlice: StateCreator<ahorroSliceType> = (set, get) => ({
       if(get().metaExist){
          if (get().metaElegida !== '') {
             const response = await reporteAhorros(get().metaElegida)
-            console.log(response)
             set({ reporteCompleto: response })
          }
          

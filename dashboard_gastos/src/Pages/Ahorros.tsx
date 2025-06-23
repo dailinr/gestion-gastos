@@ -51,7 +51,7 @@ export const Ahorros = () => {
         <Spinner />
       )
       :(
-      <div className="w-full h-full grid lg:grid-cols-[38%_1fr] gap-x-4">
+      <div className="w-full h-full grid lg:grid-cols-[38%_1fr] lg:gap-x-4">
 
         <div className="flex flex-col overflow-hidden">
           <div className="flex justify-between px-4">
