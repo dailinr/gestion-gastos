@@ -34,10 +34,10 @@ const chartConfig = {
 
 export function Component() {
 
-  const { cuentaActual, resumeSemana } = useAppStore()
+  const { cuentaActual, resumeSemana, cargandoDashboard } = useAppStore()
   const chartData = resumeSemana
 
-  if( !cuentaActual.cuenta || !resumeSemana ){
+  if( cargandoDashboard ){
     return ( <Spinner />)
   }
 

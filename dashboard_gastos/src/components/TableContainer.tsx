@@ -11,7 +11,7 @@ import { formatMoneda } from "@/Services/formatMoneda"
 
 export const TableContainer = () => {
    const { pathname } = useLocation();
-   const { filterGastos, filterIngresos,  recursosCompleto,
+   const { filterGastos, fetchRecursos, filterIngresos,  recursosCompleto,
       setCurrentPage, currentPage, isLoading, filterDate} = useAppStore()
 
    // Determinar el tipo de recurso basado en el pathname real de la página
@@ -19,6 +19,10 @@ export const TableContainer = () => {
    const pageTitle = pageResourceType === 'gasto' ? 'Gastos' : 'Ingresos';
 
    const [date, setDate] = useState<Date>()
+
+   useEffect(() => {
+      fetchRecursos()
+   }, [])
    
    // Llamar a filterDate cuando cambia `date`
    useEffect(() => {
@@ -29,7 +33,6 @@ export const TableContainer = () => {
       setDate(undefined)
       if(!isLoading && recursosCompleto.paginacion){
          if(currentPage !== recursosCompleto?.paginacion?.totalPages) setCurrentPage(recursosCompleto?.paginacion?.totalPages, 1)
-         
       }
       return 
    }, [pathname])

@@ -14,7 +14,7 @@ import { DonutChart } from "../components/DonaChart"
 import { useAppStore } from "@/Stores/useAppStore"
 import type { Category } from "@/types"
 import { Component as BarChart } from "../components/BarChart"
-import { useEffect} from "react"
+import { useEffect } from "react"
 import { Spinner } from "@/components/Spinner"
 import { formatMoneda } from "@/Services/formatMoneda"
 import { CardCategories } from "@/components/CardCategories"
@@ -22,9 +22,9 @@ import { Link } from "react-router-dom"
 
 export const Dashboard = () => {
   
-  const { cuentaActual, categoriesSemana, setCategories, 
-    loadingAhorros, metaDashboard, progressAhorro,
-    gastosRecientes, setGastosRecientes, setResumeSemana, 
+  const { cargandoDashboard, loadingAhorros,
+    data, cuentaActual, metaDashboard, progressAhorro, 
+    setCategories, setGastosRecientes, setResumeSemana, 
   } = useAppStore()
 
   useEffect(() => {
@@ -34,12 +34,12 @@ export const Dashboard = () => {
     setResumeSemana()
   },[cuentaActual])
   
-  const cards : Category[] = cuentaActual ? [
+  const cards : Category[] = data ? [
     {
       id: 1,
       name: "Ingresos",
       icon: "business-finance-corporate-26-svgrepo-com",
-      amount: cuentaActual.totalIngresos,
+      amount: data?.totalIngresos,
       color: "bg-[#C7E9F9]",
       colorText: "text-[#C7E9F9]",
       hex: "black"
@@ -48,7 +48,7 @@ export const Dashboard = () => {
       id: 2,
       name: "Gastos",
       icon: "business-finance-corporate-11-svgrepo-com",
-      amount: cuentaActual.totalGastos,
+      amount: data?.totalGastos,
       color: "bg-[#FFD9D9]",
       colorText: "text-[#FFD9D9]",
       hex: "black"
@@ -57,7 +57,7 @@ export const Dashboard = () => {
       id: 3,
       name: "Acumulado",
       icon: "business-finance-corporate-22-svgrepo-com",
-      amount: cuentaActual.totalSemanal,
+      amount: data?.totalAcumulado,
       color: "bg-[#CFF3AF]",
       colorText: "text-[#CFF3AF]",
       hex: "black"
@@ -78,7 +78,7 @@ export const Dashboard = () => {
 
             {/* Grafica resumen de gastos   */}
             <CardBoard className=" py-2 px-4 h-full  flex flex-col overflow-auto">
-              {!cuentaActual.gastos ? (
+              {cargandoDashboard ? (
                 <Spinner />
               ): 
               (<>
@@ -92,10 +92,10 @@ export const Dashboard = () => {
 
                 <CardContent className="px-0 md:flex gap-x-3">
                   <div className="w-full">
-                    <DonutChart categories={categoriesSemana} />
+                    <DonutChart categories={data?.categorias} />
                   </div>
-                  <div className="flex flex-col mx-auto mr-0">
-                    {categoriesSemana.map(cat => cat.amount > 0 && (
+                  <div className="hidden md:flex flex-col mx-auto mr-0">
+                    {data?.categorias.map(cat => cat.amount > 0 && (
 
                       <div key={cat.id} className={`flex items-center`}>
                         <i className={`bx bxs-circle ${cat.color} text-transparent text-[0.5rem] mr-1`}/>
@@ -148,10 +148,10 @@ export const Dashboard = () => {
             <p className="text-gray-500 mb-2 font-semibold text-[0.75rem]">última semana</p>
             <div className="flex-1 overflow-auto ">
               <div className="flex flex-wrap gap-y-4 h-full items-center justify-between ">
-                { !cuentaActual.gastos ? (
+                { cargandoDashboard ? (
                   <Spinner />
                 ): 
-                (categoriesSemana.map(category => {
+                (data?.categorias.map(category => {
                   return <CardCategories key={category.id} data={category} />
                 }))}
               </div>
@@ -174,13 +174,13 @@ export const Dashboard = () => {
             </Link>
             <h1 className="text-md font-semibold px-2 py-1">Gastos Recientes</h1>
               
-            {!cuentaActual.gastos ? (
+            { cargandoDashboard ? (
               <Spinner />
-            ): (gastosRecientes.length === 0 ? 
+            ): (data?.recientes.length === 0 ? 
               <p className="text-xl text-center py-20">No hay gastos recientes</p>
             :
             (<div className="overflow-auto px-2">
-              {gastosRecientes.map(gasto => (
+              {data?.recientes.map(gasto => (
                 <div key={gasto._id} className="border-b border-b-gray-200 py-2 flex">
                   
                   <div className={` ${gasto.color} rounded-full p-3 mr-3 md:mr-2 mb-2 md:mb-0 flex-shrink-0`}>

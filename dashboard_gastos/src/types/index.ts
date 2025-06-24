@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { CuentaSemanaSchema, RecursoResponseSchema } from '@/Schemas/cuentaSchema'
+import { CuentaMesSchema, CuentaSemanaSchema, RecursoResponseSchema } from '@/Schemas/cuentaSchema'
 import type { Paginacion, RecursoDraftSchema, RecursoSchemaNuevo, RecursosPaginacionSchema, RecursosSchema } from '@/Schemas/recursoSchema'
 import type { AddAporteResponseSchema, AddMetaResponseSchema, AporteAhorroSchema, AporteDraftSchema, MetaAhorroSchema, MetaDraftSchema, ReporteAhorrosSchema, ResponseEliminarMeta, ResponseMetaDashboard } from '@/Schemas/ahorroSchema'
 
@@ -71,3 +71,16 @@ export type ResponseMetaDashboard = z.infer<typeof ResponseMetaDashboard>
 export type MetaDraft = z.infer<typeof MetaDraftSchema>
 export type MetaResponse = z.infer<typeof AddMetaResponseSchema>
 export type EliminarMetaResponse = z.infer<typeof ResponseEliminarMeta>
+
+
+export type CuentaMes = z.infer<typeof CuentaMesSchema>
+
+export type DataDashboard = {
+  totalIngresos: number
+  totalGastos: number
+  totalAcumulado: number
+  categorias: Category[]
+  recientes: GastoReciente[]
+  resume: ResumeSemana[]
+  // gastos: RecursoData | RecursoData & { diaSemana: string }
+}

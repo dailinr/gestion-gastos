@@ -1,37 +1,20 @@
-// import { Building } from "lucide-react";
 import type { Category } from "@/types"; 
 import { Spinner } from "./Spinner";
-import { useAppStore } from "@/Stores/useAppStore";
 import { formatMoneda } from "@/Services/formatMoneda";
-// import { BanknoteArrowDown, ChartColumnBig } from "lucide-react";
+import { useAppStore } from "@/Stores/useAppStore";
 
 type cardProps = {
   data: Category
 };
 
-// const items = [
-//   {
-//     id: 'ingresos',
-//     icon: ChartColumnBig,
-//   },
-//   {
-//     id: 'gastos',
-//     icon: BanknoteArrowDown,
-//   },
-//   {
-//     id: 'acumulado',
-//     icon: BanknoteArrowDown,
-//   }, 
-// ]
-
-export const Card = ({ data}: cardProps) => {
-
-  const { cuentaActual } = useAppStore()
+export const Card = ({ data }: cardProps) => {
+  
+  const { cargandoDashboard } = useAppStore()
 
   return (
     <div className='bg-white rounded-xl shadow p-3 lg:p-5 flex lg:flex-row flex-col items-center justify-between overflow-y-hidden overflow-x-auto h-auto lg:h-[6.875rem]} ' >
       
-      {!cuentaActual.cuenta ? (
+      {cargandoDashboard ? (
         <Spinner /> 
       ) 
       :
@@ -40,9 +23,6 @@ export const Card = ({ data}: cardProps) => {
         
           <div className={`w-5 h-5 lg:w-7 lg:h-7 text-black`}>
             <img src={`${import.meta.env.BASE_URL}${data.icon}.svg`} alt={data.icon} />
-            {/*items.map(item => (
-              <item.icon key={(items.find(i => i.id === data.id))?.id} />)
-            */}
           </div>
         </div>
 

@@ -18,15 +18,20 @@ export function DialogEliminarMeta({id} : {id: string}) {
     
     const handleEliminar = async (id : string) => {
         
+      try{
         const response = await fetchEliminarMeta(id)
 
         if(response?.status === "success"){
-            toast.success(response.mensaje)
+          toast.success(response.mensaje)
         }
         else{
-            toast.error(response?.mensaje)
+          toast.error(response?.mensaje ||`Error al eliminar meta de ahorro`)
         }
         await fetchMetaExist()
+      }
+      catch(error: any){
+        toast.error(error?.message || 'Ocurrio un error')
+      }
     }
 
   return (

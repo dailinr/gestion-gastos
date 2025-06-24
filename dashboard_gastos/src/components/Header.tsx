@@ -17,7 +17,7 @@ export const Header = ({ isHome, pathname }: headerProps) => {
   const classOption = "inline-flex w-full px-1 bg-gray-200 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
   const keyRuta = pathname === '/' ? null : (pathname === '/gastos' ? 'gastos' : 'ingresos')
   
-  const {fetchBuscar, fetchBuscarGlobal, cuentaActual} = useAppStore()
+  const {fetchBuscar, fetchBuscarGlobal, cuentaActual, setTab} = useAppStore()
   const buscarOptions = [ { modo: 'Semana'}, { modo: 'Todas'} ]
   const [buscar, setBuscar] = useState({
     modo: 'Semana',
@@ -82,12 +82,12 @@ export const Header = ({ isHome, pathname }: headerProps) => {
               </p>
             </div>
 
-            <Tabs defaultValue="account" className='hidden md:block' >
-                  <TabsList className="mx-auto bg-[#DFDFDF] ">
-                      <TabsTrigger value="account">Dashboard resumen Semana</TabsTrigger>
-                      {/* <TabsTrigger value="password">Mes</TabsTrigger> */}
-                  </TabsList>
-              </Tabs> 
+            <Tabs defaultValue="semana" className='hidden md:block' >
+              <TabsList className="mx-auto bg-[#DFDFDF] ">
+                <TabsTrigger onClick={() => setTab("semana")} value="semana">Semana</TabsTrigger>
+                <TabsTrigger onClick={() => setTab("mes")} value="mes">Mes</TabsTrigger>
+              </TabsList>
+            </Tabs> 
           </>
         ) :
         (<>

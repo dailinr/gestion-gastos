@@ -1,15 +1,19 @@
 import { categories } from "@/data/categories"
-import {getSemana } from "@/Services/cuenta-service"
-import type { Category, CuentaActual, GastoReciente, ResumeSemana } from "@/types"
+import {getMes, getSemana } from "@/Services/cuenta-service"
+import type { Category, CuentaActual, CuentaMes, DataDashboard, GastoReciente, ResumeSemana } from "@/types"
 import type { StateCreator } from "zustand"
 
 export type cuentaSliceType = {
     cuentaActual: CuentaActual
-    // isLoading: boolean
+    mesActual: CuentaMes
+    data: DataDashboard
+    cargandoDashboard: boolean
     categoriesSemana: Category[]
     gastosRecientes: GastoReciente[]
     resumeSemana: ResumeSemana[]
+    setTab: (modo: string) => Promise<void>
     fetchSemana: () => Promise<void>
+    fetchMes: () => Promise<void>
     setCategories: () => void
     setGastosRecientes: () => void
     setResumeSemana: () => void
@@ -17,16 +21,56 @@ export type cuentaSliceType = {
 
 export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => ({
     cuentaActual: {} as CuentaActual,
+    mesActual: {} as CuentaMes,
+    data: {} as DataDashboard,
     categoriesSemana: [],
     gastosRecientes: [],
     resumeSemana: [],
+    cargandoDashboard: true,
     // isLoading: true,
+
+    setTab: async (modo) => { 
+        set({ cargandoDashboard: true })
+        let data : DataDashboard
+
+        if(modo === 'mes') {
+            await get().fetchMes()
+            const mes = get().mesActual
+            data = {
+                totalIngresos: mes.totalIngresos,
+                totalGastos: mes.totalGastos,
+                totalAcumulado: mes.totalMensual,
+                categorias: get().categoriesSemana,
+                recientes: get().gastosRecientes,
+                resume: get().resumeSemana,
+            }
+        }
+        else{
+            const semana = get().cuentaActual
+
+            data = {
+                totalIngresos: semana.totalIngresos,
+                totalGastos: semana.totalGastos,
+                totalAcumulado: semana.totalSemanal,
+                categorias: get().categoriesSemana,
+                recientes: get().gastosRecientes,
+                resume: get().resumeSemana,
+            }
+        }
+        set({ data })
+        set({ cargandoDashboard: false })
+    },
 
     fetchSemana: async () => {
         const cuentaActual = await getSemana()
-        set({
-            cuentaActual
-        })
+        
+        set({ cuentaActual })
+    },
+
+    fetchMes: async () => {
+        const mesActual = await getMes()
+
+        set({ mesActual })
     },
 
     setCategories: () => {
