@@ -14,7 +14,6 @@ import { DonutChart } from "../components/DonaChart"
 import { useAppStore } from "@/Stores/useAppStore"
 import type { Category } from "@/types"
 import { Component as BarChart } from "../components/BarChart"
-import { useEffect } from "react"
 import { Spinner } from "@/components/Spinner"
 import { formatMoneda } from "@/Services/formatMoneda"
 import { CardCategories } from "@/components/CardCategories"
@@ -22,17 +21,11 @@ import { Link } from "react-router-dom"
 
 export const Dashboard = () => {
   
-  const { cargandoDashboard, loadingAhorros,
-    data, cuentaActual, metaDashboard, progressAhorro, 
-    setCategories, setGastosRecientes, setResumeSemana, 
+  const { cargandoDashboard, loadingAhorros, modo,
+    data,  metaDashboard, progressAhorro, 
   } = useAppStore()
 
-  useEffect(() => {
-    
-    setCategories()
-    setGastosRecientes()
-    setResumeSemana()
-  },[cuentaActual])
+  let legend = modo === 'mes' ? 'último mes' : 'última semana'
   
   const cards : Category[] = data ? [
     {
@@ -77,24 +70,24 @@ export const Dashboard = () => {
           <div className="col-span-3 grid grid-cols-2 gap-4 h-full">
 
             {/* Grafica resumen de gastos   */}
-            <CardBoard className=" py-2 px-4 h-full  flex flex-col overflow-auto">
+            <CardBoard className={` py-2 px-4 h-full ${modo === 'mes' ?  'gap-3 lg:gap-0': 'gap-6' }  flex flex-col overflow-auto`}>
               {cargandoDashboard ? (
                 <Spinner />
               ): 
               (<>
-                <CardHeader className="px-0 gap-0">
+                <CardHeader className="px-0 gap-0 border-amber-950">
                   <CardTitle className="text-md font-semibold pt-1">Resumen de Gastos</CardTitle>
-                  <CardDescription className="text-gray-500 font-semibold mb-0 text-[12px]">última semana</CardDescription>
+                  <CardDescription className="text-gray-500 font-semibold mb-0 text-[12px]">{legend}</CardDescription>
                   {/* <CardAction>
                     <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
                   </CardAction> */}
                 </CardHeader>
 
-                <CardContent className="px-0 md:flex gap-x-3">
-                  <div className="w-full">
+                <CardContent className={`px-0 md:flex gap-x-3 `}>
+                  <div className="w-full min-w-[100px]">
                     <DonutChart categories={data?.categorias} />
                   </div>
-                  <div className="hidden md:flex flex-col mx-auto mr-0">
+                  <div className="hidden lg:flex flex-col mx-auto mr-0">
                     {data?.categorias.map(cat => cat.amount > 0 && (
 
                       <div key={cat.id} className={`flex items-center`}>
@@ -145,7 +138,7 @@ export const Dashboard = () => {
           <div className="bg-white col-span-3 rounded-xl shadow-2xl px-4 py-2 h-full relative flex flex-col">
             {/* <i className='bx bx-right-arrow-alt text-xl absolute right-4 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i> */}
             <h1 className="text-md font-semibold pt-1">Gastos por Categoria</h1>
-            <p className="text-gray-500 mb-2 font-semibold text-[0.75rem]">última semana</p>
+            <p className="text-gray-500 mb-2 font-semibold text-[0.75rem]">{legend}</p>
             <div className="flex-1 overflow-auto ">
               <div className="flex flex-wrap gap-y-4 h-full items-center justify-between ">
                 { cargandoDashboard ? (

@@ -88,6 +88,8 @@ export const Header = ({ isHome, pathname }: headerProps) => {
                 <TabsTrigger onClick={() => setTab("mes")} value="mes">Mes</TabsTrigger>
               </TabsList>
             </Tabs> 
+
+            <div></div>
           </>
         ) :
         (<>

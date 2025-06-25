@@ -40,7 +40,7 @@ export const CuentaSemanaSchema = z.object({
 })
 
 export const CuentaMesSchema = CuentaSemanaSchema.pick({ 
-    totalGastos: true, totalIngresos: true,
+    totalGastos: true, totalIngresos: true, categoriasGastos: true
 }).extend({
     totalMensual: z.number(),
     fechas: z.array( z.string() ),

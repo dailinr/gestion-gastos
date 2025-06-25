@@ -4,11 +4,12 @@ import type { Category, CuentaActual, CuentaMes, DataDashboard, GastoReciente, R
 import type { StateCreator } from "zustand"
 
 export type cuentaSliceType = {
+    modo: string
     cuentaActual: CuentaActual
     mesActual: CuentaMes
     data: DataDashboard
     cargandoDashboard: boolean
-    categoriesSemana: Category[]
+    categoriesDashboard: Category[]
     gastosRecientes: GastoReciente[]
     resumeSemana: ResumeSemana[]
     setTab: (modo: string) => Promise<void>
@@ -20,10 +21,11 @@ export type cuentaSliceType = {
 }
 
 export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => ({
+    modo: 'semana',
     cuentaActual: {} as CuentaActual,
     mesActual: {} as CuentaMes,
     data: {} as DataDashboard,
-    categoriesSemana: [],
+    categoriesDashboard: [],
     gastosRecientes: [],
     resumeSemana: [],
     cargandoDashboard: true,
@@ -31,16 +33,22 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
 
     setTab: async (modo) => { 
         set({ cargandoDashboard: true })
+
+        set({ modo })
         let data : DataDashboard
 
-        if(modo === 'mes') {
-            await get().fetchMes()
+        get().setCategories()
+        get().setGastosRecientes()
+        get().setResumeSemana()
+
+        if(get().modo === 'mes') {
+            // await get().fetchMes()
             const mes = get().mesActual
             data = {
                 totalIngresos: mes.totalIngresos,
                 totalGastos: mes.totalGastos,
                 totalAcumulado: mes.totalMensual,
-                categorias: get().categoriesSemana,
+                categorias: get().categoriesDashboard,
                 recientes: get().gastosRecientes,
                 resume: get().resumeSemana,
             }
@@ -52,7 +60,7 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
                 totalIngresos: semana.totalIngresos,
                 totalGastos: semana.totalGastos,
                 totalAcumulado: semana.totalSemanal,
-                categorias: get().categoriesSemana,
+                categorias: get().categoriesDashboard,
                 recientes: get().gastosRecientes,
                 resume: get().resumeSemana,
             }
@@ -75,11 +83,14 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
 
     setCategories: () => {
 
-        const gastos = get().cuentaActual.categoriasGastos || []; // gastos individuales
+        const gastos = get().modo === 'semana' 
+            ? get().cuentaActual.categoriasGastos  // gastos individuales
+            : get().mesActual.categoriasGastos;
+
         const nombresBase = categories.map(c => c.name.toLowerCase()); // categorias frontend
         const sinMatch = gastos.filter(g => !nombresBase.includes(g.etiqueta.toLowerCase()));
 
-        const categoriesSemana = categories.map(({ name, ...rest }) => {
+        const categoriesDashboard = categories.map(({ name, ...rest }) => {
             const nombre = name.toLowerCase();
             const match = gastos.find(g => g.etiqueta.toLowerCase() === nombre);
 
@@ -93,7 +104,7 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
             };
         });
 
-        set({ categoriesSemana });
+        set({ categoriesDashboard });
     },
 
     setGastosRecientes: () => {

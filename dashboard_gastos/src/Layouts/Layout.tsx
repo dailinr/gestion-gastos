@@ -15,7 +15,7 @@ export const Layout = () => {
   const {pathname} = useLocation();
   const isHome = useMemo(() => pathname === '/', [pathname]);
   
-  const { fetchSemana, fetchMetaExist, setTab } = useAppStore()
+  const { fetchSemana, fetchMetaExist, fetchMes, setTab } = useAppStore()
 
   const isMobile = useIsMobile()
 
@@ -23,6 +23,7 @@ export const Layout = () => {
     Promise.all([
       fetchSemana(), 
       fetchMetaExist(), 
+      fetchMes() // opcional
     ])
     .then(() => {
       setTab("semana")
