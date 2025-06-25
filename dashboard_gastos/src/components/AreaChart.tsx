@@ -25,35 +25,36 @@ import { formatDateMes } from "@/Services/formatDate"
 
 export const description = "An area chart with a legend"
 
-const chartData = [
-  { month: "January", desktop: 186, mobile: 80 },
-  { month: "February", desktop: 305, mobile: 200 },
-  { month: "March", desktop: 237, mobile: 120 },
-  { month: "April", desktop: 73, mobile: 190 },
-  { month: "May", desktop: 209, mobile: 130 },
-  { month: "June", desktop: 214, mobile: 140 },
-]
+// const chartData = [
+//   { month: "January", desktop: 186, mobile: 80 },
+//   { month: "February", desktop: 305, mobile: 200 },
+//   { month: "March", desktop: 237, mobile: 120 },
+//   { month: "April", desktop: 73, mobile: 190 },
+//   { month: "May", desktop: 209, mobile: 130 },
+//   { month: "June", desktop: 214, mobile: 140 },
+// ]
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  ingreso: {
+    label: "Ingresos",
     color: "#a5b4fc",
   },
-  mobile: {
-    label: "Mobile",
+  gasto: {
+    label: "Gastos",
     color: "#4f46e5",
   },
 } satisfies ChartConfig
 
 export function AreaChartComponent() {
 
-    const fechaActual = new Date
+  const fechaActual = new Date
 
-    const { cargandoDashboard } = useAppStore()
+  const { cargandoDashboard, data } = useAppStore()
+  const chartData = data.resume
 
-    if ( cargandoDashboard ){
-        return ( <Spinner />)
-    }
+  if ( cargandoDashboard ){
+    return ( <Spinner />)
+  }
 
   return (
     <Card className=" pt-5 pb-4 h-full">
@@ -63,7 +64,7 @@ export function AreaChartComponent() {
           {formatDateMes(fechaActual.toString())}
         </CardDescription>
       </CardHeader>
-      <CardContent  className="w-full overflow-auto py-0">
+      <CardContent  className="w-full overflow-auto py-0 ">
         <ChartContainer config={chartConfig} className=" h-full w-full">
           <AreaChart
             accessibilityLayer
@@ -75,30 +76,30 @@ export function AreaChartComponent() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="rango"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => value.slice(0, 2)}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="line" />}
             />
             <Area
-              dataKey="mobile"
+              dataKey="gasto"
               type="natural"
-              fill="var(--color-mobile)"
+              fill="var(--color-gasto)"
               fillOpacity={0.4}
-              stroke="var(--color-mobile)"
+              stroke="var(--color-gasto)"
               stackId="a"
             />
             <Area
-              dataKey="desktop"
+              dataKey="ingreso"
               type="natural"
-              fill="var(--color-desktop)"
+              fill="var(--color-ingreso)"
               fillOpacity={0.4}
-              stroke="var(--color-desktop)"
+              stroke="var(--color-ingreso)"
               stackId="a"
             />
             <ChartLegend content={<ChartLegendContent />} />

@@ -26,7 +26,7 @@ export const Layout = () => {
       fetchMes() // opcional
     ])
     .then(() => {
-      setTab("semana")
+      setTab("mes")
     })
   }, [])
 

@@ -1,6 +1,6 @@
 import { categories } from "@/data/categories"
 import {getMes, getSemana } from "@/Services/cuenta-service"
-import type { Category, CuentaActual, CuentaMes, DataDashboard, GastoReciente, ResumeSemana } from "@/types"
+import type { Category, CuentaActual, CuentaMes, DataDashboard, GastoReciente, ResumenMes, ResumeSemana } from "@/types"
 import type { StateCreator } from "zustand"
 
 export type cuentaSliceType = {
@@ -11,7 +11,7 @@ export type cuentaSliceType = {
     cargandoDashboard: boolean
     categoriesDashboard: Category[]
     gastosRecientes: GastoReciente[]
-    resumeSemana: ResumeSemana[]
+    resume: ResumeSemana[] | ResumenMes
     setTab: (modo: string) => Promise<void>
     fetchSemana: () => Promise<void>
     fetchMes: () => Promise<void>
@@ -21,15 +21,14 @@ export type cuentaSliceType = {
 }
 
 export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => ({
-    modo: 'semana',
+    modo: '',
     cuentaActual: {} as CuentaActual,
     mesActual: {} as CuentaMes,
     data: {} as DataDashboard,
     categoriesDashboard: [],
     gastosRecientes: [],
-    resumeSemana: [],
+    resume: [],
     cargandoDashboard: true,
-    // isLoading: true,
 
     setTab: async (modo) => { 
         set({ cargandoDashboard: true })
@@ -50,7 +49,7 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
                 totalAcumulado: mes.totalMensual,
                 categorias: get().categoriesDashboard,
                 recientes: get().gastosRecientes,
-                resume: get().resumeSemana,
+                resume: get().mesActual.resumenMensual,
             }
         }
         else{
@@ -62,7 +61,7 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
                 totalAcumulado: semana.totalSemanal,
                 categorias: get().categoriesDashboard,
                 recientes: get().gastosRecientes,
-                resume: get().resumeSemana,
+                resume: get().resume,
             }
         }
         set({ data })
@@ -162,7 +161,7 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
             }
         });
 
-        set({ resumeSemana });
+        set({ resume: resumeSemana });
 
     },
 

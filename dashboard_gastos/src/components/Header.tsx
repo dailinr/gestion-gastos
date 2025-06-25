@@ -5,6 +5,7 @@ import { formatDate } from '@/Services/formatDate';
 import { useAppStore } from '@/Stores/useAppStore';
 import { useDebounce } from '@/hooks/useDebounce';
 import { formatMoneda } from '@/Services/formatMoneda';
+import { Spinner } from './Spinner';
 
 type headerProps = {
   isHome: boolean
@@ -17,7 +18,7 @@ export const Header = ({ isHome, pathname }: headerProps) => {
   const classOption = "inline-flex w-full px-1 bg-gray-200 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
   const keyRuta = pathname === '/' ? null : (pathname === '/gastos' ? 'gastos' : 'ingresos')
   
-  const {fetchBuscar, fetchBuscarGlobal, cuentaActual, setTab} = useAppStore()
+  const {fetchBuscar, fetchBuscarGlobal, cuentaActual, setTab, modo } = useAppStore()
   const buscarOptions = [ { modo: 'Semana'}, { modo: 'Todas'} ]
   const [buscar, setBuscar] = useState({
     modo: 'Semana',
@@ -82,12 +83,16 @@ export const Header = ({ isHome, pathname }: headerProps) => {
               </p>
             </div>
 
-            <Tabs defaultValue="semana" className='' >
-              <TabsList className="mx-auto bg-[#DFDFDF] ">
-                <TabsTrigger onClick={() => setTab("semana")} value="semana">Semana</TabsTrigger>
-                <TabsTrigger onClick={() => setTab("mes")} value="mes">Mes</TabsTrigger>
-              </TabsList>
-            </Tabs> 
+            {modo === ''? 
+              <Spinner />
+            :
+              <Tabs defaultValue={modo} >
+                <TabsList className="mx-auto bg-[#DFDFDF] ">
+                  <TabsTrigger onClick={() => setTab("semana")} value="semana">Semana</TabsTrigger>
+                  <TabsTrigger onClick={() => setTab("mes")} value="mes">Mes</TabsTrigger>
+                </TabsList>
+              </Tabs>
+            }
 
             <div className='hidden md:block'></div>
           </>

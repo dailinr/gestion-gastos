@@ -39,11 +39,17 @@ export const CuentaSemanaSchema = z.object({
     categoriasGastos: CategorySemanaSchema
 })
 
+export const resumenMensual = z.array(
+    z.object({
+        rango: z.string(),
+        ingreso: z.number(),
+        gasto: z.number()
+    })
+)
+
 export const CuentaMesSchema = CuentaSemanaSchema.pick({ 
     totalGastos: true, totalIngresos: true, categoriasGastos: true
 }).extend({
     totalMensual: z.number(),
-    fechas: z.array( z.string() ),
-    gastos: z.array( RecursoSemanaSchema.omit({ diaSemana: true }) ),
-    ingresos: z.array( RecursoSemanaSchema.omit({ diaSemana: true }) ),
+    resumenMensual: resumenMensual
 })
