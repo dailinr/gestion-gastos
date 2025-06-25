@@ -13,6 +13,8 @@ import {
 import type { ChartConfig } from "@/components/ui/chart"
 import {
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart"
@@ -45,13 +47,12 @@ export function Component() {
   const fechaFinal = formatDateGrap(cuentaActual.cuenta?.fechaFinal?.toString() || "")
 
   return (
-    // <div >
-    <Card className=" h-full ">
+    <Card className=" pt-5 pb-4 h-full ">
       <CardHeader>
         <CardTitle>Grafica resumen de la semana</CardTitle>
         <CardDescription>{fechaInicial} - {fechaFinal}</CardDescription>
       </CardHeader>
-      <CardContent className="w-full  overflow-auto">
+      <CardContent className="w-full  overflow-auto py-0">
         <ChartContainer config={chartConfig} className="h-full w-full">
           <BarChart accessibilityLayer data={chartData}>
             <CartesianGrid vertical={false} />
@@ -68,6 +69,7 @@ export function Component() {
             />
             <Bar dataKey="ingreso" fill="var(--color-ingreso)" radius={4} />
             <Bar dataKey="gasto" fill="var(--color-gasto)" radius={4} />
+            <ChartLegend content={<ChartLegendContent />} />
           </BarChart>
         </ChartContainer>
       </CardContent>
@@ -80,6 +82,5 @@ export function Component() {
         </div>
       </CardFooter> */}
       </Card>
-    // </div>
   )
 }

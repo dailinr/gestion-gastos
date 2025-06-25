@@ -33,8 +33,8 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
 
     setTab: async (modo) => { 
         set({ cargandoDashboard: true })
-
         set({ modo })
+        
         let data : DataDashboard
 
         get().setCategories()

@@ -18,6 +18,7 @@ import { Spinner } from "@/components/Spinner"
 import { formatMoneda } from "@/Services/formatMoneda"
 import { CardCategories } from "@/components/CardCategories"
 import { Link } from "react-router-dom"
+import { AreaChartComponent as  AreaChart } from "../components/AreaChart"
 
 export const Dashboard = () => {
   
@@ -61,7 +62,8 @@ export const Dashboard = () => {
     <main className="flex-1 grid grid-cols-1 md:grid-cols-[57%_1fr] gap-4 md:overflow-hidden">
 
       <div className="h-full overflow-auto">
-        <div className="grid grid-rows-[6.875rem_12.5rem_minmax(0,_1fr)] grid-cols-3 gap-4 h-full">
+        {/* <div className="grid grid-rows-[6.875rem_12.5rem_minmax(0,_1fr)] grid-cols-3 gap-4 h-full"> */}
+        <div className="grid grid-rows-[7rem_13rem_minmax(0,_1fr)] grid-cols-3 gap-4 h-full">
           {cards.map(card => (
             // <CardValues key={card.id} data={card} />
             <Card key={card.id} data={card} />
@@ -70,7 +72,7 @@ export const Dashboard = () => {
           <div className="col-span-3 grid grid-cols-2 gap-4 h-full">
 
             {/* Grafica resumen de gastos   */}
-            <CardBoard className={` py-2 px-4 h-full ${modo === 'mes' ?  'gap-3 lg:gap-0': 'gap-6' }  flex flex-col overflow-auto`}>
+            <CardBoard className={` pt-2 pb-3 px-4 h-full ${modo === 'mes' ?  'gap-3 lg:gap-0': 'gap-6' }  flex flex-col overflow-auto`}>
               {cargandoDashboard ? (
                 <Spinner />
               ): 
@@ -83,8 +85,8 @@ export const Dashboard = () => {
                   </CardAction> */}
                 </CardHeader>
 
-                <CardContent className={`px-0 md:flex gap-x-3 `}>
-                  <div className="w-full min-w-[100px]">
+                <CardContent className={`px-0 md:flex h-full gap-x-3 `}>
+                  <div className="w-full min-w-[100px] flex-1">
                     <DonutChart categories={data?.categorias} />
                   </div>
                   <div className="hidden lg:flex flex-col mx-auto mr-0">
@@ -102,7 +104,7 @@ export const Dashboard = () => {
             </CardBoard>
   
             {/* Progreso de ahorros */}
-            <CardBoard className=" py-2 px-4 h-full  flex flex-col overflow-auto">
+            <CardBoard className=" py-2 px-4 h-full   flex flex-col overflow-auto">
               { loadingAhorros ? (
                 <Spinner />
               ):
@@ -115,14 +117,15 @@ export const Dashboard = () => {
                     <Link to="/ahorros"> <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'/> </Link>
                   </CardAction>
                 </CardHeader>
-                {metaDashboard ?  <>
-                  <CardContent className="px-0">
-                    <Progress value={progressAhorro} /> 
-                  </CardContent>
-                  <CardFooter className="w-full h-[2.813rem] rounded-lg bg-[#efeff9] text-xl flex items-center justify-center">
-                    <p>${formatMoneda(metaDashboard.sumaAportes)}</p>
-                  </CardFooter>
-                </>
+                {metaDashboard ?  
+                  <div className="flex-1 py-2 flex flex-col justify-between">
+                    <CardContent className="px-0">
+                      <Progress value={progressAhorro} /> 
+                    </CardContent>
+                    <CardFooter className="w-full h-[2.813rem] rounded-lg bg-[#efeff9] text-xl flex items-center justify-center">
+                      <p>${formatMoneda(metaDashboard.sumaAportes)}</p>
+                    </CardFooter>
+                  </div>
                 :
                   <div className="text-center pt-6">
                     <p className="font-semibold text-gray-600 ">No has definido una meta</p>
@@ -130,9 +133,7 @@ export const Dashboard = () => {
                 }
                 </>
               )}
-              
             </CardBoard>
-
           </div> 
   
           <div className="bg-white col-span-3 rounded-xl shadow-2xl px-4 py-2 h-full relative flex flex-col">
@@ -158,7 +159,7 @@ export const Dashboard = () => {
         <div className="grid grid-rows-2 h-full gap-4  ">
   
           <section className="w-full h-full shadow bg-white rounded-xl flex flex-col justify-center">
-            <BarChart />
+            {modo === 'semana' ? <BarChart /> : <AreaChart /> }
           </section>
   
           <section className="w-full h-full shadow-xl flex flex-col bg-white rounded-xl px-2 py-2 relative ">

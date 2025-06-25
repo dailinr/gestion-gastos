@@ -82,14 +82,14 @@ export const Header = ({ isHome, pathname }: headerProps) => {
               </p>
             </div>
 
-            <Tabs defaultValue="semana" className='hidden md:block' >
+            <Tabs defaultValue="semana" className='' >
               <TabsList className="mx-auto bg-[#DFDFDF] ">
                 <TabsTrigger onClick={() => setTab("semana")} value="semana">Semana</TabsTrigger>
                 <TabsTrigger onClick={() => setTab("mes")} value="mes">Mes</TabsTrigger>
               </TabsList>
             </Tabs> 
 
-            <div></div>
+            <div className='hidden md:block'></div>
           </>
         ) :
         (<>
