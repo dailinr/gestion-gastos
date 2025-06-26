@@ -51,7 +51,7 @@ export function DialogAhorro() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <div className='bg-primary hover:bg-primary/90 shadow border-2 rounded-full p-3 w-min absolute left-0 md:left-4 bottom-8 cursor-pointer'>
+        <div className='bg-primary hover:bg-primary/90 shadow border-2 rounded-full p-3 w-min absolute left-0 md:left-4 md:bottom-8 bottom-16 cursor-pointer'>
           <svg data-slot="icon" fill="none" className='size-10' stroke-width="3" stroke="white" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
           </svg>
