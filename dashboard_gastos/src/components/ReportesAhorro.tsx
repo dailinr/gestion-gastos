@@ -4,7 +4,7 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card"
-import { formatDate, formatDateGrap } from '@/Services/formatDate'
+import { formatDate, formatDateTable } from '@/Services/formatDate'
 import { formatMoneda } from '@/Services/formatMoneda'
 import { DialogAhorro } from './FormAhorro'
 import { useEffect } from 'react'
@@ -48,7 +48,7 @@ export const ReportesAhorro = ({isMobile} : {isMobile: boolean}) => {
                       <img src={`${import.meta.env.BASE_URL}dollar-finance-money-15-svgrepo-com.svg`} alt="icon ahorro" />
                     </div>
                   </div>
-                  <p>{isMobile ? formatDateGrap(aporte.fecha) : formatDate(aporte.fecha)}</p>
+                  <p>{isMobile ? formatDateTable(aporte.fecha) : formatDate(aporte.fecha)}</p>
                 </div>
                 <p className="text-lg font-semibold">
                   ${formatMoneda(aporte.valor)}
