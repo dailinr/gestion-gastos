@@ -38,11 +38,10 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
 
         get().setCategories()
         get().setGastosRecientes()
-        get().setResumeSemana()
 
         if(get().modo === 'mes') {
-            // await get().fetchMes()
             const mes = get().mesActual
+
             data = {
                 totalIngresos: mes.totalIngresos,
                 totalGastos: mes.totalGastos,
@@ -53,6 +52,7 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
             }
         }
         else{
+            get().setResumeSemana()
             const semana = get().cuentaActual
 
             data = {
@@ -135,10 +135,10 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
 
         const cuenta = get().cuentaActual;
         if (!cuenta) return;
-
+        
         // const diasSemana =  ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-        const diasSpanish = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo']
-        const normalizeDay = (day:string) => day.toLowerCase().trim();
+        const diasSpanish = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+        const normalizeDay = (day: string) => day.toLowerCase().trim();
         const normalizedDiasSemana = diasSpanish.map(normalizeDay);
 
         const ingresos = cuenta.ingresos || [];
@@ -149,7 +149,6 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
                 .filter((ingreso) => normalizeDay(ingreso.diaSemana) === dia) // Normalizar para comparar
                 .reduce((acc, ingreso) => acc + ingreso.valor, 0); // se calcula el acumulado del dia
             
-
             const gastosDia = gastos
                 .filter((gasto) => normalizeDay(gasto.diaSemana) === dia) // Normalizar para comparar
                 .reduce((acc, gasto) => acc + gasto.valor, 0);
@@ -162,7 +161,6 @@ export const createCuentaSlice : StateCreator<cuentaSliceType> = (set, get) => (
         });
 
         set({ resume: resumeSemana });
-
     },
 
 })

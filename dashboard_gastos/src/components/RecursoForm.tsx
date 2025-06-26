@@ -49,8 +49,10 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
   const resourceName = pageContextPath === '/gastos' ? 'Gasto' : 'Ingreso'; // para títulos y mensajes
   const categoriesSelect = resourceName === 'Gasto' ? categories : categoriesIngresos;
 
-  const { fetchAddRecurso, setCurrentPage,  setIdActivo,
-    fetchEditarRecurso, filterGastos, filterIngresos, currentPage, fetchSemana, cuentaActual } = useAppStore();
+  const { 
+    fetchAddRecurso, setCurrentPage,  setIdActivo, fetchMes, modo, setTab,
+    fetchEditarRecurso, filterGastos, filterIngresos, currentPage, fetchSemana, recursosCompleto,
+  } = useAppStore();
 
   // Seleccionar el recurso correcto del store
   const currentResourceStore: Recursos | undefined = useMemo(() => {
@@ -120,13 +122,14 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
       }
       await setCurrentPage(currentPage, 1); // refrescar datos en la tabla
       await fetchSemana()
+      await fetchMes()
+      await setTab(modo)
       setIsDialogOpen(false); // cerrar el diálogo
 
     } catch (error: any) {
       toast.error(error.message || `Ocurrió un error.`);
     }
   };
-    
 
   return (
     <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -150,11 +153,16 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
         <DialogHeader>
           <DialogTitle> {isEditar ? 'Editar ' : 'Nuevo '} {resourceName}</DialogTitle>
           <DialogDescription>
-            {pageContextPath === '/gastos' 
-              ? `Dinero disponible: <span className="font-bold">$${formatMoneda(cuentaActual.totalSemanal)}</span>`
-              : 'Guardalo cuando hayas terminado' 
-            }
+            {pageContextPath === '/gastos' ? (
+              <>
+                Dinero disponible:{" "}
+                <span className="font-bold">${formatMoneda(recursosCompleto.acumulado)}</span>
+              </>
+            ) : (
+              'Guardalo cuando hayas terminado'
+            )}
           </DialogDescription>
+
         </DialogHeader>
 
         <div className="py-3 space-y-6">
@@ -173,14 +181,14 @@ export function ModalForm({ formType, pageContextPath, entityId }: ModalFormProp
                 },
                 validate: (valorActual) => {
                   if (pageContextPath === '/gastos') {
-                    const disponible = cuentaActual.totalSemanal + prevAmount ;
+                    const disponible = recursosCompleto.acumulado + prevAmount ;
                     if (valorActual > disponible) {
                       return "El gasto no puede ser mayor a su dinero disponible";
                     }
                   }
                   else {
                     if(entityId){
-                      const acumActual = cuentaActual.totalSemanal - prevAmount ;
+                      const acumActual = recursosCompleto.acumulado - prevAmount ;
                       if ((acumActual + valorActual) < 0) {
                         return "El ingreso actualizado no puede ser menor al dinero disponible"
                       }

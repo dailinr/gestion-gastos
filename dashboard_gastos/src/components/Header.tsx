@@ -94,7 +94,7 @@ export const Header = ({ isHome, pathname }: headerProps) => {
               </Tabs>
             }
 
-            <div className='hidden md:block'></div>
+            {/* <div className='hidden md:block'></div> */}
           </>
         ) :
         (<>
@@ -129,7 +129,7 @@ export const Header = ({ isHome, pathname }: headerProps) => {
         </form>
 
         {/* mostrar solo en modo escritorio */}
-        {pathname === '/gastos' || pathname === 'ingresos' && ( 
+        {(pathname === '/gastos' || pathname === '/ingresos') && ( 
           <div className='hidden md:block lg:block'> 
             <h2 className='text-lg '>Total semanal: {''}
               <span className='font-semibold'>${formatMoneda(keyRuta === 'gastos' ? 

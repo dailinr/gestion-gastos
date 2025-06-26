@@ -118,7 +118,7 @@ export const Dashboard = () => {
                   </CardAction>
                 </CardHeader>
                 {metaDashboard ?  
-                  <div className="flex-1 py-2 flex flex-col justify-between">
+                  <div className="flex-1 md:py-2 flex flex-col justify-between">
                     <CardContent className="px-0">
                       <Progress value={progressAhorro} /> 
                     </CardContent>

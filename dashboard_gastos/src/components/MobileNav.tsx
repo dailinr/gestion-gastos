@@ -28,7 +28,7 @@ const itemsMobile = [
 export function MobileNav() {
   return (
     // Contenedor fijo en la parte inferior de la pantalla
-    <nav className="fixed bottom-0 left-0 z-50 w-full h-16 bg-white border-t">
+    <nav className="z-50 w-full h-16 bg-white border-t fixed bottom-0 left-0 ">
       {/* Grid para distribuir los elementos equitativamente */}
       <div className="grid h-full grid-cols-4 ">
         {itemsMobile.map((item) => (

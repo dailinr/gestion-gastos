@@ -37,6 +37,7 @@ export const Resultados = z.array(
 )
 
 export const RecursosPaginacionSchema = z.object({
+    acumulado: z.number(),
     paginacion: Paginacion,
     resultados: Resultados,
 })

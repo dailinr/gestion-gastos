@@ -18,7 +18,6 @@ import { toast } from "sonner";
 import { DialogMeta } from "@/components/FormMetaAhorro";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { DialogEliminarMeta } from "@/components/DialogEliminarMeta";
-import { useEffect } from "react";
 
 export const Ahorros = () => {
 
@@ -26,11 +25,7 @@ export const Ahorros = () => {
     setMetaElegida, loadingAhorros, setMetaDashboard } = useAppStore()
 
   const isMobile = useIsMobile()
-
-  useEffect(() => {
-    toast.info('Solo puden haber máximo 3 metas activas')
-  }, [])
-
+  
   if(loadingAhorros){
     return (  <Spinner /> )
   }
@@ -60,7 +55,7 @@ export const Ahorros = () => {
         <Spinner />
       )
       :(
-      <div className="w-full h-full grid lg:grid-cols-[38%_1fr] lg:gap-x-4 ">
+      <div className="w-full h-[calc(100vh-5rem)] lg:h-full grid grid-rows-[1fr_1fr] gap- md:grid-cols-[38%_1fr] md:gap-x-4 md:grid-rows-1">
 
         <div className="flex flex-col overflow-hidden">
           <div className="flex justify-between px-4">
