@@ -60,16 +60,16 @@ export const categories : Category[] = [
         name: "Salud",
         icon: "bx bx-first-aid",
         amount: 0,
-        color: 'bg-[#7A6860]',
+        color: 'bg-[#a8a29e]',
         colorText: "text-black",
-       hex: "#7A6860"
+       hex: "#a8a29e"
     },
     {
         id: 8,
         name: "Servicios",
         icon: "bx bx-bulb",
         amount: 0,
-        color: 'bg-[#F66868]',
+        color: 'bg-[#fca5a5]',
         colorText: "text-black",
        hex: "#F66868"
     },
@@ -105,9 +105,9 @@ export const categories : Category[] = [
         name: "Otros",
         icon: "bx bx-plus-circle",
         amount: 0,
-        color: 'bg-[#B2967D]',
+        color: 'bg-[#bef264]',
         colorText: "text-black",
-       hex: "#B2967D"
+       hex: "#bef264"
     },
 ]
 

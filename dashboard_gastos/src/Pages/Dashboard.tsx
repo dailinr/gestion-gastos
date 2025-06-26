@@ -136,10 +136,15 @@ export const Dashboard = () => {
             </CardBoard>
           </div> 
   
-          <div className="bg-white col-span-3 rounded-xl shadow-2xl px-4 py-2 h-full relative flex flex-col">
-            {/* <i className='bx bx-right-arrow-alt text-xl absolute right-4 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i> */}
-            <h1 className="text-md font-semibold pt-1">Gastos por Categoria</h1>
-            <p className="text-gray-500 mb-2 font-semibold text-[0.75rem]">{legend}</p>
+          {/* Gastos por categorias */}
+          <CardBoard className="p-2 gap-0 col-span-3 ">
+            <CardHeader className="px-2 gap-0">
+              <CardTitle className="text-md font-semibold pt-1">Gastos Recientes</CardTitle>
+              <p className="text-gray-500 mb-2 font-semibold text-[0.80rem]">{legend}</p> 
+              <CardAction>
+                <Link to="/gastos"> <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'/> </Link>
+              </CardAction>
+            </CardHeader>
             <div className="flex-1 overflow-auto ">
               <div className="flex flex-wrap gap-y-4 h-full items-center justify-between ">
                 { cargandoDashboard ? (
@@ -150,7 +155,7 @@ export const Dashboard = () => {
                 }))}
               </div>
             </div>
-          </div>
+          </CardBoard>
           
         </div>
       </div>
@@ -162,11 +167,14 @@ export const Dashboard = () => {
             {modo === 'semana' ? <BarChart /> : <AreaChart /> }
           </section>
   
-          <section className="w-full h-full shadow-xl flex flex-col bg-white rounded-xl px-2 py-2 relative ">
-            <Link to={"/gastos"} >
-              <i className='bx bx-right-arrow-alt text-xl absolute right-6 cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'></i>
-            </Link>
-            <h1 className="text-md font-semibold px-2 py-1">Gastos Recientes</h1>
+          {/* <section className="w-full h-full shadow-xl flex flex-col bg-white rounded-xl px-2 py-2 relative "> */}
+          <CardBoard className="p-2 gap-0">
+            <CardHeader className="px-2 ">
+              <CardTitle className="text-md font-semibold pt-1">Gastos Recientes</CardTitle>
+              <CardAction>
+                <Link to="/gastos"> <i className='bx bx-right-arrow-alt text-xl cursor-pointer text-[#9B9B9B] border border-[#9B9B9B] p-1 rounded-full'/> </Link>
+              </CardAction>
+            </CardHeader>
               
             { cargandoDashboard ? (
               <Spinner />
@@ -193,7 +201,7 @@ export const Dashboard = () => {
               ))}
             </div>)
             )}
-          </section>
+          </CardBoard>
   
         </div>
       </div>
