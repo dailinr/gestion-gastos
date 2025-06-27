@@ -18,7 +18,7 @@ export const Header = ({ isHome, pathname }: headerProps) => {
   const classOption = "inline-flex w-full px-1 bg-gray-200 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
   const keyRuta = pathname === '/' ? null : (pathname === '/gastos' ? 'gastos' : 'ingresos')
   
-  const {fetchBuscar, fetchBuscarGlobal, cuentaActual, setTab, modo } = useAppStore()
+  const {fetchBuscar, fetchBuscarGlobal, recursosCompleto, setTab, modo } = useAppStore()
   const buscarOptions = [ { modo: 'Semana'}, { modo: 'Todas'} ]
   const [buscar, setBuscar] = useState({
     modo: 'Semana',
@@ -132,8 +132,10 @@ export const Header = ({ isHome, pathname }: headerProps) => {
         {(pathname === '/gastos' || pathname === '/ingresos') && ( 
           <div className='hidden md:block lg:block'> 
             <h2 className='text-lg '>Total semanal: {''}
-              <span className='font-semibold'>${formatMoneda(keyRuta === 'gastos' ? 
-                cuentaActual.totalGastos : cuentaActual.totalIngresos)}</span>
+              <span className='font-semibold'>
+                ${formatMoneda(keyRuta === 'gastos' ? 
+                recursosCompleto.resultados?.[0]?.totalGastos : recursosCompleto.resultados?.[0]?.totalIngresos )}
+              </span>
             </h2>
           </div>
         )}
